@@ -1,0 +1,28 @@
+{
+  "name": "@triskel/loader",
+  "version": "1.1.4",
+  "description": "@triskel loader for webpack and rollup",
+  "main": "loader.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kiltjs/triskeljs.git"
+  },
+  "keywords": [
+    "html",
+    "parser",
+    "renderer",
+    "minifier"
+  ],
+  "author": "Jesús Germade <jesus@germade.es>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kiltjs/triskeljs/issues"
+  },
+  "homepage": "https://github.com/kiltjs/triskeljs#readme",
+  "dependencies": {
+    "json5": "2.1.1"
+  }
+}
