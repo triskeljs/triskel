@@ -4,6 +4,7 @@ import sinon from 'sinon'
 import { runErrorCase } from '../_common/test.helpers'
 
 import {
+  createConText,
   ConText,
 } from './con-text'
 
@@ -11,7 +12,41 @@ import {
 describe(__filename.substr(process.cwd().length), function () {
   // --------------------------------------
 
+  describe('createConText', function () {
+
+    [
+      [() => createConText(null), Error, TypeError, /target should be an \(non-null\) Object or a Function/],
+      [() => createConText(123), Error, TypeError, /target should be an \(non-null\) Object or a Function/],
+
+    ].forEach((test_case) => runErrorCase.apply(null, test_case))
+
+    it('target', function () {
+
+      const target = {}
+
+      assert.strictEqual(createConText(target), target)
+
+    })
+
+    it('no target', function () {
+
+      assert.strictEqual(typeof createConText(), 'object')
+
+    })
+
+  })
+
   describe('ConText', function () {
+
+    [
+      [() => new ConText(null), Error, /can not use target with constructor/],
+      [() => new ConText(123), Error, /can not use target with constructor/],
+
+      [() => ConText(), Error, TypeError, /target missing when not using constructor/],
+      [() => ConText(123), Error, TypeError, /target should be an \(non-null\) Object or a Function/],
+      [() => ConText(null), Error, TypeError, /target should be an \(non-null\) Object or a Function/],
+
+    ].forEach((test_case) => runErrorCase.apply(null, test_case))
 
     it('new', function () {
 
@@ -146,12 +181,23 @@ describe(__filename.substr(process.cwd().length), function () {
 
       it(`${expression}, ${JSON.stringify(expected_result)}`, () => {
 
-        const processData = new ConText()
+        const TEXT = new ConText()
           .defineFilter(filter_definitions || {})
-          .eval(expression)
 
         assert.deepStrictEqual(
-          processData(data),
+          TEXT.eval(expression, data),
+          expected_result,
+        )
+
+      })
+
+      it(`${expression} (curring), ${JSON.stringify(expected_result)}`, () => {
+
+        const TEXT = new ConText()
+          .defineFilter(filter_definitions || {})
+
+        assert.deepStrictEqual(
+          TEXT.eval(expression)(data),
           expected_result,
         )
 
@@ -168,5 +214,55 @@ describe(__filename.substr(process.cwd().length), function () {
     ].forEach((test_case) => _runTestCase.apply(null, test_case))
 
   })
+
+  describe('TEXT.interpolate', function () {
+
+    [
+      [() => {
+        new ConText().interpolate(null)
+      }, Error, /expression should be a String/],
+
+    ].forEach((test_case) => runErrorCase.apply(null, test_case))
+
+
+    function _runTestCase(expression, data, expected_result, filter_definitions) {
+
+      it(`${expression}, ${JSON.stringify(expected_result)}`, () => {
+
+        const TEXT = new ConText()
+          .defineFilter(filter_definitions || {})
+
+        assert.deepStrictEqual(
+          TEXT.interpolate(expression, data),
+          expected_result,
+        )
+
+      })
+
+      it(`${expression} (curring), ${JSON.stringify(expected_result)}`, () => {
+
+        const TEXT = new ConText()
+          .defineFilter(filter_definitions || {})
+
+        assert.deepStrictEqual(
+          TEXT.interpolate(expression)(data),
+          expected_result,
+        )
+
+      })
+
+    }
+
+    [
+
+      ['{{ foo }}', { foo: 'bar' }, 'bar'],
+      ['[{{ foo | bar }}]', { foo: 'bar' }, '[bar:bar]', { bar: (input) => input + ':bar' }],
+      ['::[{{ foo | bar: { key: bar } }}]', { foo: 'bar', bar: 123 }, '::[bar:123]', { bar: (input, data) => input + ':' + data.key }],
+
+    ].forEach((test_case) => _runTestCase.apply(null, test_case))
+
+  })
+
+  
 
 })

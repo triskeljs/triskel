@@ -18,10 +18,10 @@ export function removeStrings(text) {
 var match_var = /\.?[a-zA-Z_$][0-9a-zA-Z_$]*/g
 
 export function matchVars (expression, used_vars = Object.create(ecma_keywords) ) {
+  if( typeof expression !== 'string' ) throw new TypeError('expression should be a String')
+  
   return (
-    removeStrings(expression)
-      .match(match_var)
-      || []
+    removeStrings(expression).match(match_var) || []
   )
     .filter(function (var_name) {
       if(

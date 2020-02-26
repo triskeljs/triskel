@@ -4,8 +4,9 @@ function _mapExpression (expression) {
   return { expression }
 }
 
-export function tokenizeExpressions (text, mapExpression = _mapExpression) {
-  return text
+export function tokenizeExpressions (expression, mapExpression = _mapExpression) {
+  if (typeof expression !== 'string') throw new Error('expression should be a String')
+  return expression
     .split(/{{(.*?)}}/)
     .map( (token, i) => {
       return i%2
@@ -24,8 +25,9 @@ export function stringifyTokens (tokens, processExpression) {
     .join('')
 }
 
-export function interpolateText (text, mapExpression) {
-  const tokens = tokenizeExpressions(text, mapExpression)
+export function interpolateText (expression, mapExpression) {
+  if (typeof expression !== 'string') throw new Error('expression should be a String')
+  const tokens = tokenizeExpressions(expression, mapExpression)
 
   return function _renderText (mapToken) {
     return stringifyTokens(tokens, (token) => mapToken(token) )
