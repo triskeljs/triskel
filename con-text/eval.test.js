@@ -7,7 +7,7 @@ import {
   removeStrings,
   matchVars,
   parseExpression,
-  _getKeyFromData,
+  propGetter,
   evalExpression,
 } from './eval'
 
@@ -140,12 +140,12 @@ describe(__filename.substr(process.cwd().length), function () {
 
   })
 
-  describe('_getKeyFromData', function () {
+  describe('propGetter', function () {
 
     function _runTestCase(data, key, result) {
       it(`${data}[${key}] => ${JSON.stringify(result, null, '')}`, function () {
         assert.deepStrictEqual(
-          _getKeyFromData(data)(key),
+          propGetter(data)(key),
           result,
         )
       })
@@ -154,6 +154,8 @@ describe(__filename.substr(process.cwd().length), function () {
     [
 
       [{ foo: 'bar' }, 'foo', 'bar'],
+      [null, 'foo', undefined],
+      [[], 'foo', undefined],
       [[{ foo: 'bar' }], 'foo', 'bar'],
       [[{ foobar: 'bar' }], 'foo', undefined],
       [[{ foobar: 'bar' }, { barfoo: 'foo' }], 'foo', undefined],
@@ -166,8 +168,19 @@ describe(__filename.substr(process.cwd().length), function () {
 
     it(`(no data) => global getter`, function () {
       assert.deepStrictEqual(
-        _getKeyFromData(null)('Promise'),
+        propGetter(null)('Promise'),
         Promise,
+      )
+    })
+
+    it(`(no data, no global) => global getter`, function () {
+      assert.deepStrictEqual(
+        propGetter(null, null)('Promise'),
+        undefined,
+      )
+      assert.deepStrictEqual(
+        propGetter([], null)('Promise'),
+        undefined,
       )
     })
 

@@ -1,3 +1,7 @@
+/**
+ * @module con-text
+ */
+
 
 // https://stackoverflow.com/questions/1661197/what-characters-are-valid-for-javascript-variable-names/9337047#9337047
 
@@ -45,10 +49,18 @@ export function parseExpression (expression) {
   }
 }
 
-export function _dataScope (base, data_list) {
-  var scope = Object.create(base)
+/**
+ * Returns an multi-extended Object using prototype overlaping
+ * 
+ * @param {Array} data_list 
+ */
+export function dataScope (data_list) {
+  if (!data_list || !data_list.length) return {}
 
-  data_list.forEach( (data) => {
+  var scope = Object.create(data_list[0])
+
+  data_list.forEach( (data, i) => {
+    if (!i || !data) return
     scope = Object.create(scope)
     for (let key in data) scope[key] = data[key]
   })
@@ -56,23 +68,38 @@ export function _dataScope (base, data_list) {
   return scope
 }
 
-export function _getKeyFromData (data) {
-  const scope = _dataScope(global, data instanceof Array ? data : [data] )
+/**
+ * Provides a function for get properties from 1 or several data sources using fallback from last to first
+ * 
+ * @param {*} data 
+ * @param {Boolean} [fallback_to_global = true] 
+ */
+export function propGetter (data, fallback_to_global = true) {
+  const scope = dataScope(
+    fallback_to_global
+      ? [global].concat(data instanceof Array ? data : [data])
+      : data instanceof Array ? data : [data],
+  )
 
   return function _getValue (prop) {
     return scope[prop]
   }
 }
 
+/**
+ * 
+ * @param {String} expression 
+ * @param {*} data - data to be passed to the  
+ */
 export function evalExpression (expression, data) {
   const _parsed = parseExpression(expression)
   const var_names = _parsed.var_names
   const _runExpression = Function.apply(null, var_names.concat('return (' + _parsed.expression + ');') )
 
   return arguments.length > 1
-    ? _runExpression.apply(null, var_names.map(_getKeyFromData(data)) )
+    ? _runExpression.apply(null, var_names.map(propGetter(data)) )
     : function _evalExpression (_data) {
-      return _runExpression.apply(null, var_names.map(_getKeyFromData(_data)) )
+      return _runExpression.apply(null, var_names.map(propGetter(_data)) )
     }
 }
 
