@@ -53,6 +53,10 @@ coveralls:
 codecov:
 	nyc report --reporter=lcov && codecov
 
+# docs
+docs:
+	npx jsdoc --configure .jsdoc.json --verbose {${dirs}} -d docs
+
 # building
 build:
 	rm -rf dist
