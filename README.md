@@ -5,6 +5,8 @@
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+### Installation
+
 ``` sh
 npm install -D @triskel/app
 
