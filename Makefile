@@ -46,6 +46,9 @@ nyc-mocha: # make nyc-mocha NYC_REPORTERS="--reporter=lcov --reporter=text"
 
 test: lint nyc-mocha
 
+test-ci:
+	$(MAKE) test && nyc report --reporter=text-lcov | coveralls
+
 # building
 build:
 	rm -rf dist
