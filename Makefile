@@ -49,6 +49,9 @@ test: lint nyc-mocha
 coveralls:
 	nyc report --reporter=text-lcov | coveralls
 
+codecov:
+	nyc report --reporter=lcov && codecov
+
 # building
 build:
 	rm -rf dist
