@@ -1,6 +1,6 @@
 
-var tinyHTML = require('./tinyhtml'),
-    assert = require('assert')
+import tinyHTML from './tinyhtml'
+import assert from 'assert'
 
 /** define-property */
 describe(__filename.substr(process.cwd().length), function () {

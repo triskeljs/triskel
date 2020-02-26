@@ -1,6 +1,6 @@
 
-var parseHTML = require('../parser'),
-    assert = require('assert')
+import parseHTML from '../parser'
+import assert from 'assert'
 
 /** define-property */
 describe(__filename.substr(process.cwd().length), function () {
@@ -194,7 +194,7 @@ foo <!--<script template:type="text/javascript">
   <head></head>
   <body></body>
 <html>
-`
+`,
     }] }] )
 
   })
@@ -208,7 +208,7 @@ foo <!--<script template:type="text/javascript">
     `), [
       { $:'div',
         attrs: {
-          'class': '-img'
+          'class': '-img',
         },
         _: [
           { $: 'img',
@@ -216,9 +216,9 @@ foo <!--<script template:type="text/javascript">
               src: "data:image/svg+xml,%3Csvg width='118' height='120' viewBox='0 0 118 120' xmlns='http://www.w3.org/2000/svg'%3E%3Ctitle%3Einfo-lg%3C/title%3E%3Cg fill='%232B85C2' fill-rule='evenodd'%3E%3Ccircle opacity='.16' cx='63' cy='65' r='55'/%3E%3Cpath d='M56 76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm0-42c-1.657 0-3 1.347-3 3v24c0 1.657 1.347 3 3 3 1.657 0 3-1.347 3-3V37c0-1.657-1.347-3-3-3z'/%3E%3Cpath d='M110 55c0-30.376-24.624-55-54.495-55C24.625 0 0 24.624 0 55s24.624 55 55.505 55C85.375 110 110 85.376 110 55zM55.505 4C83.167 4 106 26.833 106 55s-22.833 51-50.495 51C26.833 106 4 83.167 4 55S26.833 4 55.505 4z'/%3E%3C/g%3E%3C/svg%3E" // eslint-disable-line
             },
             self_closed: true,
-          }
-        ]
-      }
+          },
+        ],
+      },
     ] )
 
   })

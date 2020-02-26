@@ -1,6 +1,6 @@
 
-var tinyHTML = require('./tinyhtml'),
-    assert = require('assert')
+import tinyHTML from './tinyhtml'
+import assert from 'assert'
 
 var snippet_script = `foo<script src="http://example.com/script.js">
     var hola = function caracola () {};
@@ -18,8 +18,8 @@ describe('parsing tags', function () {
       processors: {
         script: function (_tag) {
           return 'foobar'
-        }
-      }
+        },
+      },
     }), `foofoobarbar`, 'accesing attributes')
 
   })
@@ -30,8 +30,8 @@ describe('parsing tags', function () {
       processors: {
         script: function (tag) {
           tag._ = ''
-        }
-      }
+        },
+      },
     }), 'foo<script src="http://example.com/script.js"></script>bar', 'compress')
 
   })
@@ -42,8 +42,8 @@ describe('parsing tags', function () {
       processors: {
         script: function (tag, getContent, getAttrs) {
           tag._ = getAttrs()
-        }
-      }
+        },
+      },
     }), 'foo<script src="http://example.com/script.js"> src="http://example.com/script.js"</script>bar', 'compress')
 
   })
@@ -54,8 +54,8 @@ describe('parsing tags', function () {
       processors: {
         script: function (tag) {
           tag._ = 'var href = \'' + tag.attrs.src + '\';'
-        }
-      }
+        },
+      },
     }), `foo<script src="http://example.com/script.js">var href = 'http://example.com/script.js';</script>bar`, 'accesing attributes')
 
   })

@@ -36,10 +36,7 @@ lint: node_modules
 	eslint app --color
 
 mocha: node_modules
-	# npx mocha "{con-text,loader,parser,render,stringify,tinyhtml,app}/{,**/}*.test.js"
-	# mocha "app/{,**/}*.test.js" 
-	# mocha "app/tests/{render,render-app}.test.js" 
-	mocha "{_common,con-text}/{,**/}*.test.js" \
+	npx mocha "{_common,con-text,app,parser,loader,stringify,tinyhtml,template}/{,**/}*.test.js" \
 		--require @babel/register \
 		--require module-alias/register \
 		--color --full-trace

@@ -1,0 +1,33 @@
+{
+  "name": "@triskel/template",
+  "version": "1.0.9",
+  "description": "JS template engine",
+  "main": "template.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:triskeljs/template.git"
+  },
+  "keywords": [
+    "javascript",
+    "triskel",
+    "template",
+    "templates",
+    "demo"
+  ],
+  "author": "Jesús Manuel Germade Castiñeiras <jesus@germade.es>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/triskeljs/template/issues"
+  },
+  "homepage": "https://github.com/triskeljs/template",
+  "devDependencies": {
+    "eslint": "5.7.0",
+    "mocha": "5.2.0"
+  },
+  "dependencies": {
+    "@triskel/con-text": "1.1.3"
+  }
+}

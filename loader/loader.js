@@ -1,5 +1,5 @@
 
-var parseHTML = require('@triskel/parser'),
+var parseHTML = require('@triskel/parser').default,
 JSON5 = require('json5')
 
 function html2js (html, options) {

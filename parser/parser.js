@@ -85,9 +85,6 @@ function _fixTokens (tokens) {
 function _tokenize (html) {
   // var tokens = html.split(/(<[^>]+?>)/g);
 
-  // console.log('tokens', tokens );
-  // console.log('_fixTokens', _fixTokens( tokens ) );
-
   return _fixTokens( html.split(/(<[^>]+?>)/g) )
 }
 
@@ -209,4 +206,4 @@ function parseHTML (html, options) {
   return _cleanNodes(nodes)
 }
 
-module.exports = parseHTML
+export default parseHTML

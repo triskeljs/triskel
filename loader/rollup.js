@@ -26,9 +26,9 @@ function triskel(options = {}) {
 
       return {
         code: triskelLoader(html),
-        map: { mappings: '' }
+        map: { mappings: '' },
       }
-    }
+    },
   }
 }
 

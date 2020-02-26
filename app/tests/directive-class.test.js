@@ -81,7 +81,7 @@ describe('directive [data-if]', function () {
       },
     }])
 
-    assert.strictEqual(document.body.innerHTML, '<div data-class="{ _foo: \'-bar\', _bar: \'-foo\' }" class="_foo _foo-bar _bar _bar-foo"></div>')
+    assert.strictEqual(document.body.innerHTML, '<div data-class="{ _foo: &quot;-bar&quot;, _bar: &quot;-foo&quot; }" class="_foo _foo-bar _bar _bar-foo"></div>')
 
   })
 

@@ -8,8 +8,6 @@ import addDirectiveOn from './directives/on.js'
 import addDirectiveBind from './directives/bind.js'
 import addDirectiveClass from './directives/class.js'
 
-// console.log('ConText', ConText)
-
 export function createApp(options) {
   options = options || {}
 
@@ -52,11 +50,8 @@ export function createApp(options) {
     if( text_node ) return {
       replace_text: '',
       initNode: function (el) {
-        // console.log('node.text', arguments)
         var renderText = TEXT.interpolate(text_node),
             parent_el = el.parentElement || el.parentNode
-
-        console.log('renderText', renderText.toString() )
 
         if( parent_el && /{{.*}}/.test(text_node) ) parent_el.insertBefore( document.createComment(' text: ' + text_node + ' '), el )
 

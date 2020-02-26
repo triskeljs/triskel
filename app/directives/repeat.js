@@ -25,15 +25,12 @@ export default function dataRepeat (APP, TEXT, directive_ns) {
         start_comment = document.createComment(' : ' + this.attr_key.trim() + ' : ' + attr_value.trim() + ' ' ),
         matched_expressions = attr_value.match(/(\w+?(, *.+ *)?) in (.+)/)
 
-    // console.log('matched_expressions', matched_expressions)
-
     repeat_options.insert_before = close_comment
 
     if( !matched_expressions ) throw new Error('data-repeat invalid expression: ' + attr_value )
 
     var index_key = null,
         list_key = matched_expressions[1].replace(/, *(.+) */, function (_matched, _key) {
-          // console.log('index_key', _key)
           index_key = _key
           return ''
         }).trim(),
@@ -43,8 +40,6 @@ export default function dataRepeat (APP, TEXT, directive_ns) {
     function __matchesPreviousRepeat (data_item, i) {
       return data_item === previous_repeat[i].data_item
     }
-
-    // console.log('index_key', index_key)
 
     function _addListItem (data, data_item, index, _insert_before) {
       var _data = Object.create(data),
@@ -71,8 +66,6 @@ export default function dataRepeat (APP, TEXT, directive_ns) {
 
       _data[list_key] = data_item
       if(index_key) _data[index_key] = index
-
-      // console.log('_updateRenderedData', data_item, index)
 
       // parent_el.insertBefore(item.el, close_comment)
       item.rendered.updateData(_data)
@@ -129,7 +122,6 @@ export default function dataRepeat (APP, TEXT, directive_ns) {
         item_found = _findDataItem(previous_repeat, list[i], true)
 
         if( item_found ) parent_el.insertBefore(item_found.el, close_comment)
-        // if( item_found ) console.log('item_found', item_found)
         current_repeat.push( item_found ?
           _updateRenderedData(item_found, data, list[i++], index++) :
           _addListItem(data, list[i++], index++),

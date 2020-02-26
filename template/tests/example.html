@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="${ lang }">
+  <head>
+    <meta charset="utf-8">
+    <title>Hello world</title>
+  </head>
+  <body>
+
+  <p>Hi! My name is ${ profile.first_name }</p>
+
+  <ul>$each{ text in list }
+    <li>${ text }</li>{/}
+  </ul>
+
+  $if{ is_dev }<script type="application/javascript">
+    (function (h,s) {
+    s.type='text/javascript';s.src='//' + location.hostname + ':35729/livereload.js';h.appendChild(s);
+    })(document.getElementsByTagName('head')[0], document.createElement('script') );
+  </script>{/}
+
+  </body>
+</html>

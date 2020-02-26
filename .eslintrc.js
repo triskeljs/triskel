@@ -40,7 +40,14 @@ module.exports = {
   },
   'overrides': [
     {
-      files: ['{app,con-text,loader,parser,render,stringify,tinyhtml}/{,**/}*.js'],
+      files: ['loader/{,**/}*.js'],
+      'env': {
+        es6: true,
+        node: true,
+      },
+    },
+    {
+      files: ['{app,con-text,parser,render,stringify,tinyhtml}/{,**/}*.js'],
       excludedFiles: ['{,**/}*.test.js'],
       'env': {
         es6: true,
@@ -49,7 +56,7 @@ module.exports = {
     },
     {
       files: ['{,**/}*.test.js'],
-      globals: {
+      'globals': {
         console: true,
         process: true,
         describe: true,
