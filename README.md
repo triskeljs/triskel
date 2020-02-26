@@ -4,8 +4,8 @@
 [![Build Status](https://travis-ci.org/kiltjs/triskel.svg?branch=master)](https://travis-ci.org/kiltjs/triskel)
 [![Build Status](https://cloud.drone.io/api/badges/kiltjs/triskel/status.svg)](https://cloud.drone.io/kiltjs/triskel)
 [![codecov](https://codecov.io/gh/kiltjs/triskel/branch/master/graph/badge.svg)](https://codecov.io/gh/kiltjs/triskel)
-[![dependencies free](https://img.shields.io/badge/dependencies-free-informational?logo=javascript&style=flat&cacheSeconds=3600)](https://www.npmjs.com/package/@kilt/triskel)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![dependencies free](https://kiltjs.github.io/assets/images/badge-dependencies-free.svg)](https://www.npmjs.com/package/@kilt/triskel)
+[![GitHub license](https://kiltjs.github.io/assets/images/badge-license-mit.svg)](LICENSE)
 
 ### Installation
 
