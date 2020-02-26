@@ -1,7 +1,7 @@
 
 
 import assert from 'assert'
-import { runErrorCase } from '../_common/test.helpers'
+import { runErrorsTestSuite } from '../_common/test.helpers'
 
 import {
   defineFilter,
@@ -17,13 +17,13 @@ describe(__filename.substr(process.cwd().length), function () {
 
 describe('defineFilter', function () {
 
-  [
+  runErrorsTestSuite([
     [() => defineFilter(), TypeError, /filter_definitions should be an Object/],
     [() => defineFilter({}), TypeError, /filter_name should be a String/],
     [() => defineFilter({}, null), TypeError, /filter_name should be a String/],
     [() => defineFilter({}, 'foobar'), TypeError, /filterProcessor should be a Function/],
 
-  ].forEach( (test_case) => runErrorCase.apply(null, test_case) )
+  ])
 
   it ('should add filter', () => {
     const filter_definitions = {}
@@ -41,12 +41,12 @@ describe('defineFilter', function () {
 
 describe('filterProcessor', function () {
 
-  [
+  runErrorsTestSuite([
 
     [() => _processFilter(), Error, /missing filter_name/],
     [() => _processFilter.call({}, 'foobar'), Error, /filter 'foobar' is not defined/],
 
-  ].forEach( (test_case) => runErrorCase.apply(null, test_case) )
+  ])
 
   it('throws', function () {
     assert.throws( () => filterProcessor(), Error )
@@ -106,12 +106,12 @@ describe('splitPipes', function () {
 
 describe('parseExpressionFilters', function () {
 
-  [
+  runErrorsTestSuite([
 
     [() => parseExpressionFilters(), Error, /expression should be a String/],
     [() => parseExpressionFilters(null), Error, /expression should be a String/],
 
-  ].forEach( (test_case) => runErrorCase.apply(null, test_case) )
+  ])
 
   function _runTestCase (input, result) {
     it(`'${ input }'`, function () {

@@ -1,7 +1,7 @@
 
 import assert from 'assert'
 import sinon from 'sinon'
-import { runErrorCase } from '../_common/test.helpers'
+import { runErrorsTestSuite } from '../_common/test.helpers'
 
 import {
   createConText,
@@ -14,11 +14,12 @@ describe(__filename.substr(process.cwd().length), function () {
 
   describe('createConText', function () {
 
-    [
+    runErrorsTestSuite([
+
       [() => createConText(null), Error, TypeError, /target should be an \(non-null\) Object or a Function/],
       [() => createConText(123), Error, TypeError, /target should be an \(non-null\) Object or a Function/],
 
-    ].forEach((test_case) => runErrorCase.apply(null, test_case))
+    ])
 
     it('target', function () {
 
@@ -38,7 +39,8 @@ describe(__filename.substr(process.cwd().length), function () {
 
   describe('ConText', function () {
 
-    [
+    runErrorsTestSuite([
+
       [() => new ConText(null), Error, /can not use target with constructor/],
       [() => new ConText(123), Error, /can not use target with constructor/],
 
@@ -46,7 +48,7 @@ describe(__filename.substr(process.cwd().length), function () {
       [() => ConText(123), Error, TypeError, /target should be an \(non-null\) Object or a Function/],
       [() => ConText(null), Error, TypeError, /target should be an \(non-null\) Object or a Function/],
 
-    ].forEach((test_case) => runErrorCase.apply(null, test_case))
+    ])
 
     it('new', function () {
 
@@ -92,12 +94,12 @@ describe(__filename.substr(process.cwd().length), function () {
 
   describe('TEXT.parseExpression::processFilters()', function () {
 
-    [
+    runErrorsTestSuite([
       [() => {
         new ConText().parseExpression(' foo | bar ').processFilters()
       }, Error, /filter 'bar' is not defined/],
 
-    ].forEach((test_case) => runErrorCase.apply(null, test_case))
+    ])
 
 
     function _runTestCase(expression, data, expected_result, filter_definitions) {
@@ -169,12 +171,13 @@ describe(__filename.substr(process.cwd().length), function () {
 
   describe('TEXT.eval', function () {
 
-    [
+    runErrorsTestSuite([
+
       [() => {
         new ConText().eval(null)
       }, Error, /expression should be a String/],
 
-    ].forEach((test_case) => runErrorCase.apply(null, test_case))
+    ])
 
 
     function _runTestCase(expression, data, expected_result, filter_definitions) {
@@ -217,12 +220,12 @@ describe(__filename.substr(process.cwd().length), function () {
 
   describe('TEXT.interpolate', function () {
 
-    [
+    runErrorsTestSuite([
       [() => {
         new ConText().interpolate(null)
       }, Error, /expression should be a String/],
 
-    ].forEach((test_case) => runErrorCase.apply(null, test_case))
+    ])
 
 
     function _runTestCase(expression, data, expected_result, filter_definitions) {

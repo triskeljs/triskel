@@ -20,3 +20,7 @@ export function runErrorCase () {
   })
 
 }
+
+export function runErrorsTestSuite (test_suite) {
+  test_suite.forEach((test_case) => runErrorCase.apply(null, test_case))
+}

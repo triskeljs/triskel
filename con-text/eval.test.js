@@ -1,7 +1,7 @@
 
 
 import assert from 'assert'
-import { runErrorCase } from '../_common/test.helpers'
+import { runErrorsTestSuite } from '../_common/test.helpers'
 
 import {
   removeStrings,
@@ -58,12 +58,12 @@ describe(__filename.substr(process.cwd().length), function () {
 
   describe('matchVars', function () {
 
-    [
+    runErrorsTestSuite([
 
       [() => matchVars(), Error, /expression should be a String/],
       [() => matchVars(null), Error, /expression should be a String/],
 
-    ].forEach((test_case) => runErrorCase.apply(null, test_case))
+    ])
 
     function _runTestCase(expression, var_names) {
       it(`${expression} => [${var_names}]`, function () {
@@ -80,12 +80,12 @@ describe(__filename.substr(process.cwd().length), function () {
 
   describe('parseExpression', function () {
 
-    [
+    runErrorsTestSuite([
 
       [() => parseExpression(), Error, /expression should be a String/],
       [() => parseExpression(null), Error, /expression should be a String/],
 
-    ].forEach((test_case) => runErrorCase.apply(null, test_case))
+    ])
 
     function _runTestCase(expression, var_names) {
       it(`${expression} => [${var_names}]`, function () {
@@ -102,41 +102,14 @@ describe(__filename.substr(process.cwd().length), function () {
 
   describe('eval errors', function () {
 
-    it('throws Error', function () {
+    runErrorsTestSuite([
 
-      assert.throws(function () { parseExpression(15) }, Error, null, 'Number')
-      assert.throws(function () { parseExpression([]) }, Error, null, 'Array')
-      assert.throws(function () { parseExpression(null) }, Error, null, 'null')
+      [ () => parseExpression(15), Error, TypeError, /expression should be a String/ ],
+      [ () => parseExpression([]), Error, TypeError, /expression should be a String/ ],
+      [ () => parseExpression([15]), Error, TypeError, /expression should be a String/ ],
+      [ () => parseExpression(null), Error, TypeError, /expression should be a String/ ],
 
-      assert.throws(function () { evalExpression(15) }, Error, null, 'Number')
-      assert.throws(function () { evalExpression([]) }, Error, null, 'Array')
-      assert.throws(function () { evalExpression(null) }, Error, null, 'null')
-
-    })
-
-    it('throws TypeError', function () {
-
-      assert.throws(function () { parseExpression(15) }, TypeError, null, 'Number')
-      assert.throws(function () { parseExpression([]) }, TypeError, null, 'Array')
-      assert.throws(function () { parseExpression(null) }, TypeError, null, 'null')
-
-      assert.throws(function () { evalExpression(15) }, TypeError, null, 'Number')
-      assert.throws(function () { evalExpression([]) }, TypeError, null, 'Array')
-      assert.throws(function () { evalExpression(null) }, TypeError, null, 'null')
-
-    })
-
-    it('err.message', function () {
-
-      assert.throws(function () { parseExpression(15) }, /expression should be a String/, null, 'Number')
-      assert.throws(function () { parseExpression([]) }, /expression should be a String/, null, 'Array')
-      assert.throws(function () { parseExpression(null) }, /expression should be a String/, null, 'null')
-
-      assert.throws(function () { evalExpression(15) }, /expression should be a String/, null, 'Number')
-      assert.throws(function () { evalExpression([]) }, /expression should be a String/, null, 'Array')
-      assert.throws(function () { evalExpression(null) }, /expression should be a String/, null, 'null')
-
-    })
+    ])
 
   })
 
@@ -188,12 +161,12 @@ describe(__filename.substr(process.cwd().length), function () {
 
   describe('evalExpression', function () {
 
-    [
+    runErrorsTestSuite([
 
       [() => evalExpression(), Error, /expression should be a String/],
       [() => evalExpression(null), Error, /expression should be a String/],
 
-    ].forEach((test_case) => runErrorCase.apply(null, test_case))
+    ])
 
     it('curring', function () {
 

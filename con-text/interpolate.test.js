@@ -1,6 +1,6 @@
 
 import assert from 'assert'
-import { runErrorCase } from '../_common/test.helpers'
+import { runErrorsTestSuite } from '../_common/test.helpers'
 
 import { tokenizeExpressions, stringifyTokens, interpolateText } from './interpolate'
 
@@ -27,12 +27,12 @@ describe(__filename.substr(process.cwd().length), function () {
 
   describe('tokenizeExpressions', function () {
 
-    [
+    runErrorsTestSuite([
 
       [() => tokenizeExpressions(), Error, /expression should be a String/],
       [() => tokenizeExpressions(null), Error, /expression should be a String/],
 
-    ].forEach((test_case) => runErrorCase.apply(null, test_case))
+    ])
 
     function _runTestCase(input, tokens) {
       it(input, function () {
@@ -75,12 +75,12 @@ describe(__filename.substr(process.cwd().length), function () {
 
   describe('interpolateText', function () {
 
-    [
+    runErrorsTestSuite([
 
       [() => interpolateText(), Error, /expression should be a String/],
       [() => interpolateText(null), Error, /expression should be a String/],
 
-    ].forEach((test_case) => runErrorCase.apply(null, test_case))
+    ])
 
     function _runTestCase(input, tokens) {
       it(tokens.map(_toExpresion).join(''), function () {

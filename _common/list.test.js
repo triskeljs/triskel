@@ -2,7 +2,7 @@
 
 
 import assert from 'assert'
-import { runErrorCase } from './test.helpers'
+import { runErrorsTestSuite } from './test.helpers'
 
 import {
   firstIn,
@@ -38,13 +38,13 @@ describe(__filename.substr(process.cwd().length), function () {
 
   describe('pipeProcessor', function () {
 
-    [
+    runErrorsTestSuite([
       [() => pipeProcessor(), Error, TypeError, /list should be an Array/],
       [() => pipeProcessor([]), Error, TypeError, /pipeFn should be an Function/],
       [() => pipeProcessor([], null), Error, TypeError, /pipeFn should be an Function/],
       [() => pipeProcessor([1], () => null), Error, TypeError, /pipeFn in pipeProcessor\(list, pipeFn\) should return a Function/],
 
-    ].forEach((test_case) => runErrorCase.apply(null, test_case))
+    ])
 
     function _runTestCase(pipe_list, reducerFn, data_in, expected_result) {
       it(`${pipe_list} -> ${JSON.stringify(expected_result)}`, function () {
