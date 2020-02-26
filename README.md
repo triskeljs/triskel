@@ -1,4 +1,7 @@
+
 # @triskel
+
+[Documentation](https://kiltjs.github.io/triskel/)
 
 [![ᴋɪʟᴛ ᴊs](https://kiltjs.github.io/assets/images/badge-kiltjs.svg)](https://github.com/kiltjs)
 [![Build Status](https://travis-ci.org/kiltjs/triskel.svg?branch=master)](https://travis-ci.org/kiltjs/triskel)
