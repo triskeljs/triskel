@@ -3,7 +3,7 @@ name: Node.js CI
 on: [push]
 
 jobs:
-  build:
+  run:
 
     runs-on: ubuntu-latest
 
@@ -24,23 +24,28 @@ jobs:
     - name: Passing tests
       run: make test
 
-  coverage:
+    - name: Upload coverage to Codecov  
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
 
-    runs-on: ubuntu-latest
+  # coverage:
 
-    strategy:
-      matrix:
-        node-version: [12.x]
+  #   runs-on: ubuntu-latest
+
+  #   strategy:
+  #     matrix:
+  #       node-version: [12.x]
     
-    steps:
-    - name: Publishing to coveralls
-      run: make coveralls
-      # if: github.ref == 'master'
-      env:
-        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+  #   steps:
+  #   - name: Publishing to coveralls
+  #     run: make coveralls
+  #     # if: github.ref == 'master'
+  #     env:
+  #       COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
       
-    - name: Publishing to codecov
-      run: make codecov
-      if: github.ref == 'master'
-      env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+  #   - name: Publishing to codecov
+  #     run: make codecov
+  #     if: github.ref == 'master'
+  #     env:
+  #       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
