@@ -20,7 +20,7 @@ npm install -D @triskel/app
 
 #### packages included
 
-- @triskel/con-text
+`@triskel/con-text`
 
 Provides tools for eval and interpolate text and also pipe evaluated expressions across shared filters
 
