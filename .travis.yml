@@ -1,6 +1,8 @@
 language: node_js
 node_js:
   - "10"
+
+# not using karma
 # before_script:
 #   - export CHROME_BIN=chromium-browser
 #   - export DISPLAY=:99.0

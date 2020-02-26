@@ -4,7 +4,7 @@ name: node10
 
 steps:
 - name: test
-  image: nitrojs/node-karma:0.7.0
+  image: node:10
   commands:
   - npm install
   - make test
