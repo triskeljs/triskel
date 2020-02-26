@@ -47,7 +47,7 @@ jobs:
       run: make docs
 
     - if: github.ref == 'refs/heads/master' && matrix.node-version == '12.x'
-      name: Deploy
+      name: Deploy docs
       uses: peaceiris/actions-gh-pages@v3
       with:
         deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}

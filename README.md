@@ -4,7 +4,7 @@
 [Documentation](https://kiltjs.github.io/triskel/)
 
 [![ᴋɪʟᴛ ᴊs](https://kiltjs.github.io/assets/images/badge-kiltjs.svg)](https://github.com/kiltjs)
-[![Build Status](https://travis-ci.org/kiltjs/triskel.svg?branch=master)](https://travis-ci.org/kiltjs/triskel)
+![Node.js CI](https://github.com/kiltjs/triskel/workflows/Node.js%20CI/badge.svg?branch=master)
 [![Build Status](https://cloud.drone.io/api/badges/kiltjs/triskel/status.svg)](https://cloud.drone.io/kiltjs/triskel)
 [![codecov](https://codecov.io/gh/kiltjs/triskel/branch/master/graph/badge.svg)](https://codecov.io/gh/kiltjs/triskel)
 [![dependencies free](https://kiltjs.github.io/assets/images/badge-dependencies-free.svg)](https://www.npmjs.com/package/@kilt/triskel)
