@@ -20,7 +20,7 @@ npm install -D @triskel/app
 
 #### packages included
 
-> @triskel/con-text
+- @triskel/con-text
   Provides tools for eval and interpolate text and also pipe evaluated expressions across shared filters
 
 
@@ -29,7 +29,7 @@ npm install -D @triskel/app
 
 | HTML | @triskelAST |
 | -- | -- |
-| <code><h1>Title 1</h1></code> | <code>{<br>&nbsp;$: 'h1',<br>&nbsp;_: 'Title 1',<br>} </code> |
+| `<h1>Title 1</h1>` | <code>{<br>&nbsp;$: 'h1',<br>&nbsp;_: 'Title 1',<br>} </code> |
 
 
 > @triskel/loader
