@@ -26,7 +26,7 @@ npm install -D @triskel/app
 | `@triskel/parser` | - | Parses HTML into [@triskelAST] |
 | `@triskel/loader` | `@triskel/parser` | Parses and load HTML as stringified [@triskelAST] for webpack and rollup (`@triskel/loader/rollup`) |
 | `@triskel/render` | `@triskel/con-text` | Renders [@triskelAST] into the DOM |
-| `@triskel/stringify` | - | Serializes @triskelAST into a String |
+| `@triskel/stringify` | - | Serializes [@triskelAST] into a String |
 | `@triskel/tinyhtml` | `@triskel/parser`<br>`@triskel/stringify` | Parses into [@triskelAST] and serializes back minifying the resulting HTML |
 
 | package | dependencies | description |
