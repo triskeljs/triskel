@@ -41,6 +41,7 @@ describe('removeStrings', function () {
 var specs_expressions = [
 
   [` foo = 'bar' `, `foo`],
+  [` foo = "bar" `, `foo`],
   [` foo.bar = 'foobar' `, `foo`],
   [` foo ? foo : bar `, `foo, bar`],
   [` foo ? (foobar + 'bar') : bar `, `foo, foobar, bar`],
@@ -123,8 +124,6 @@ describe('eval errors', function () {
 
 })
 
-_getKeyFromData
-
 describe('_getKeyFromData', function () {
 
   function _runTestCase (data, key, result) {
@@ -144,16 +143,39 @@ describe('_getKeyFromData', function () {
     [ [{ foobar: 'bar' }, { barfoo: 'foo' }], 'foo', undefined ],
     [ [{ foobar: 'bar' }, { foo: 'foo' }], 'foo', 'foo' ],
 
+    // fallback to global
+    [ { foo: 'bar' }, 'Promise', Promise ],
+
   ].forEach( (test_case) => _runTestCase.apply(null, test_case) )
+
+  it(`(no data) => global getter`, function () {
+    assert.deepStrictEqual(
+      _getKeyFromData(null)('Promise'),
+      Promise,
+    )
+  })
 
 })
 
 describe('evalExpression', function () {
 
+  it ('curring', function () {
+
+    assert.strictEqual( typeof evalExpression('foobar'), 'function' )
+
+  })
+
   function _runTestCase (expression, data, result) {
     it(`${ expression } => ${ JSON.stringify(result, null, '') }`, function () {
       assert.deepStrictEqual(
         evalExpression(expression, data),
+        result,
+      )
+    })
+
+    it(`${ expression } (curring) => ${ JSON.stringify(result, null, '') }`, function () {
+      assert.deepStrictEqual(
+        evalExpression(expression)(data),
         result,
       )
     })

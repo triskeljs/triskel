@@ -1,7 +1,8 @@
 
 import { evalExpression } from './eval'
 import { interpolateText } from './interpolate'
-import { filterProcessor, defineFilter, expressionFilterProcessor } from './filters'
+import { filterProcessor, defineFilter, parseExpressionFilters } from './filters'
+import { pipeProcessor } from '../_common/list'
 
 export default new ConText()
 
@@ -16,38 +17,59 @@ export function ConText (target) {
   return createConText(this)
 }
 
-export function createConText (_TEXT = {}) {
+export function createConText (TEXT = {}) {
 
   var filter_definitions = {}
 
   var _processFilter = filterProcessor(filter_definitions)
 
-  var _parseExpression = expressionFilterProcessor(function (filter, input, data = {}) {
-    var _data = filter.expression && evalExpression(filter.expression)(data)
+  function _defineFilter (filter_name, processFilter) {
+    if (typeof filter_name === 'object') {
+      for (let key in filter_name ) _defineFilter(key, filter_name[key])
+    } else {
+      defineFilter(filter_definitions, filter_name, processFilter)
+    }
+    return TEXT
+  }
 
-    return filter.expression
-      ? _processFilter(filter.name, input, _data)
-      : _processFilter(filter.name, input)
-  })
+  function _parseExpression (expression) {
+    const parsed = parseExpressionFilters(expression)
 
-  function _evalExpression (expression, scope, filters_scope) {
+    return {
+      expression: parsed.expression,
+      filters: parsed.filters,
+      processFilters: !parsed.filters.length
+        ? (input) => input
+        : pipeProcessor(parsed.filters, (filter) => {
+          const _getFilterData = filter.expression
+            ? evalExpression(filter.expression)
+            : () => null
+
+          return (input, data) => _processFilter(filter.name, input, _getFilterData(data) )
+        }),
+    }
+  }
+
+  TEXT.defineFilter = _defineFilter
+  TEXT.parseExpression = _parseExpression
+
+  function _evalExpression (expression, scope ) {
     var _parsed = _parseExpression(expression),
         _getData = evalExpression( _parsed.expression )
 
     if( arguments.length < 2 ) {
-      if( !_parsed.has_filters ) return _getData
+      if( !_parsed.filters.length ) return _getData
 
-      return function _renderExpression (_scope, _filters_scope) {
-        console.log('renderExpression', expression, _scope, _filters_scope)
-        return _parsed.processFilters( _getData(_scope), _filters_scope || _scope )
+      return function _renderExpression (_scope) {
+        return _parsed.processFilters( _getData(_scope), _scope )
       }
     }
 
-    return _parsed.processFilters( _getData(scope), filters_scope || scope )
+    return _parsed.processFilters( _getData(scope), scope )
   }
   
-  _TEXT.eval = _evalExpression
-  _TEXT.interpolate = function _interpolate (text, _scope, _filters_scope) {
+  TEXT.eval = _evalExpression
+  TEXT.interpolate = function _interpolate (text, _scope, _filters_scope) {
     const renderExpressions = interpolateText(text, _evalExpression)
 
     return arguments > 1
@@ -57,13 +79,7 @@ export function createConText (_TEXT = {}) {
       }
   }
 
-  _TEXT.parseExpression = _parseExpression
+  TEXT.processFilter = _processFilter
 
-  _TEXT.defineFilter = function _defineFilter (filter_name, processFilter) {
-    defineFilter(filter_definitions, filter_name, processFilter)
-    return _TEXT
-  }
-  _TEXT.processFilter = _processFilter
-
-  return _TEXT
+  return TEXT
 }

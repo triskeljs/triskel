@@ -1,14 +1,52 @@
 
 
 import assert from 'assert'
+import { runErrorCase } from '../_common/test.helpers'
 
-import { filterProcessor, parseExpressionFilters, splitPipes, expressionFilterProcessor } from './filters'
+import {
+  defineFilter,
+  _processFilter,
+  filterProcessor,
+  parseExpressionFilters,
+  splitPipes,
+} from './filters'
 
 /** define-property */
 describe(__filename.substr(process.cwd().length), function () {
 // --------------------------------------
 
+describe('defineFilter', function () {
+
+  [
+    [() => defineFilter(), TypeError, /filter_definitions should be an Object/],
+    [() => defineFilter({}), TypeError, /filter_name should be a String/],
+    [() => defineFilter({}, null), TypeError, /filter_name should be a String/],
+    [() => defineFilter({}, 'foobar'), TypeError, /filterProcessor should be a Function/],
+
+  ].forEach( (test_case) => runErrorCase.apply(null, test_case) )
+
+  it ('should add filter', () => {
+    const filter_definitions = {}
+
+    function filterFn () {}
+    
+    defineFilter(filter_definitions, 'foo', filterFn)
+
+    assert.strictEqual( filter_definitions.foo, filterFn )
+
+  })
+
+})
+
+
 describe('filterProcessor', function () {
+
+  [
+
+    [() => _processFilter(), Error, /missing filter_name/],
+    [() => _processFilter.call({}, 'foobar'), Error, /filter 'foobar' is not defined/],
+
+  ].forEach( (test_case) => runErrorCase.apply(null, test_case) )
 
   it('throws', function () {
     assert.throws( () => filterProcessor(), Error )
@@ -22,14 +60,14 @@ describe('filterProcessor', function () {
   var filter_definitions = {
     uppercase: (text) => text.toUpperCase(),
     replaceFoo: (text, data) => text.replace(/foo/g, data),
-    dropEven: (list) => list.filter( (num) => num%2 )
+    dropEven: (list) => list.filter( (num) => num%2 ),
   }
 
   function _runTestCase (input, filter_name, data, result) {
     it(`'${ input }' | ${ filter_name }`, function () {
       assert.deepStrictEqual(
         filterProcessor(filter_definitions)(filter_name, input, data),
-        result
+        result,
       )
     })
   }
@@ -51,7 +89,7 @@ describe('splitPipes', function () {
     it(`'${ input }'`, function () {
       assert.deepStrictEqual(
         splitPipes(input),
-        result
+        result,
       )
     })
   }
@@ -72,7 +110,7 @@ describe('parseExpressionFilters', function () {
     it(`'${ input }'`, function () {
       assert.deepStrictEqual(
         parseExpressionFilters(input),
-        result
+        result,
       )
     })
   }
@@ -86,49 +124,13 @@ describe('parseExpressionFilters', function () {
 
     [` foobar | foo:{ user: name } | bar `, {
       expression: ' foobar ',
-      filters: [{ name: 'foo', expression: '{ user: name }' }, { name: 'bar' }]
+      filters: [{ name: 'foo', expression: '{ user: name }' }, { name: 'bar' }],
     }],
 
     [` foobar | foo:{ user: name } | bar: { last: name } `, {
       expression: ' foobar ',
       filters: [{ name: 'foo', expression: '{ user: name }' }, { name: 'bar', expression: '{ last: name }' }],
     } ],
-
-  ].forEach( (test_case) => _runTestCase.apply(null, test_case) )
-
-})
-
-describe('expressionFilterProcessor', function () {
-
-  it('throws', function () {
-    assert.throws( () => expressionFilterProcessor(), Error )
-    assert.throws( () => expressionFilterProcessor(), /processFilter should be a Function/ )
-    assert.throws( () => expressionFilterProcessor('foobar'), /processFilter should be a Function/ )
-  })
-
-  it('currying', function () {
-    assert.strictEqual( typeof expressionFilterProcessor(function () {}), 'function' )
-  })
-
-  function _runTestCase (input, processFilter, result) {
-    it(`'${ input }'`, function () {
-      var _parsed = expressionFilterProcessor(processFilter)(input)
-
-      assert.deepStrictEqual(
-        _parsed.processFilters(_parsed.expression),
-        result
-      )
-    })
-  }
-
-  function _filterToString (filter, result) {
-    return `${ result.trim() } [${ filter.name.trim() }]${ filter.expression ? ('{{ ' + filter.expression.trim() + ' }}') : '' }`
-  }
-  
-  [
-
-    [`foo | bar `, _filterToString, 'foo [bar]' ],
-    [`foo | bar:{ user: name } `, _filterToString, 'foo [bar]{{ { user: name } }}' ],
 
   ].forEach( (test_case) => _runTestCase.apply(null, test_case) )
 

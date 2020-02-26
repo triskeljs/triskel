@@ -8,21 +8,29 @@ SHELL := /bin/bash
 # include npm bin folder into $PATH
 export PATH := $(shell npm bin):$(PATH)
 
+# include dotenv (.env)
 ifeq ($(wildcard ./.env),./.env)
 include .env
 export $(shell sed 's/=.*//' .env)
 endif
 
+# default environment vars
 ifndef NPM_VERSION
   export NPM_VERSION=patch
 endif
 
+ifndef NYC_REPORTERS
+  export NYC_REPORTERS='--reporter=text'
+endif
+
+# common
 default: install test build
 
 node_modules:; npm install
 install:; npm install
 i: install
 
+# testing
 lint: node_modules
 	# eslint {app,con-text,loader}
 	eslint app --color
@@ -30,14 +38,18 @@ lint: node_modules
 mocha: node_modules
 	# npx mocha "{con-text,loader,parser,render,stringify,tinyhtml,app}/{,**/}*.test.js"
 	# mocha "app/{,**/}*.test.js" 
-	# mocha "con-text/{,**/}*.test.js" 
-	mocha "app/tests/{render,render-app}.test.js" \
+	# mocha "app/tests/{render,render-app}.test.js" 
+	mocha "{_common,con-text}/{,**/}*.test.js" \
 		--require @babel/register \
 		--require module-alias/register \
 		--color --full-trace
 
-test: lint mocha
+nyc-mocha: # make nyc-mocha NYC_REPORTERS="--reporter=lcov --reporter=text"
+	nyc ${NYC_REPORTERS} $(MAKE) mocha
 
+test: lint nyc-mocha
+
+# building
 build:
 	rm -rf dist
 	# npx babel src --out-dir dist --ignore src/**/*.test.js

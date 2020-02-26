@@ -27,12 +27,19 @@ var expression_tokens = [
 describe('tokenizeExpressions', function () {
 
     function _runTestCase (input, tokens) {
-        it(input, function () {
-            assert.deepStrictEqual(
-                tokenizeExpressions(input),
-                tokens,
-            )
-        })
+      it(input, function () {
+          assert.deepStrictEqual(
+              tokenizeExpressions(input),
+              tokens,
+          )
+      })
+
+      it(input + ' mapExpression()', function () {
+        assert.deepStrictEqual(
+            tokenizeExpressions(input, (expression) => ({ expression }) ),
+            tokens,
+        )
+      })
     }
     
     expression_tokens.forEach( (test_case) => _runTestCase.apply(null, test_case) )
@@ -46,12 +53,12 @@ function _toExpresion (token) {
 describe('stringifyTokens', function () {
 
   function _runTestCase (input, tokens) {
-      it( tokens.map(_toExpresion).join(''), function () {
-          assert.strictEqual(
-            stringifyTokens(tokens, (token) => `{{${ token.expression }}}` ),
-            input,
-          )
-      })
+    it( tokens.map(_toExpresion).join(''), function () {
+        assert.strictEqual(
+          stringifyTokens(tokens, (token) => `{{${ token.expression }}}` ),
+          input,
+        )
+    })
   }
   
   expression_tokens.forEach( (test_case) => _runTestCase.apply(null, test_case) )

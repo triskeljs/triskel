@@ -1,5 +1,9 @@
 
+
 export function defineFilter (filter_definitions, filter_name, filterProcessor) {
+  if (typeof filter_definitions !== 'object' && typeof filter_definitions !== 'function') {
+    throw new TypeError('filter_definitions should be an Object')
+  }
   if( typeof filter_name !== 'string' ) throw new TypeError('filter_name should be a String')
   if( !(filterProcessor instanceof Function) ) throw new TypeError('filterProcessor should be a Function')
 
@@ -7,7 +11,7 @@ export function defineFilter (filter_definitions, filter_name, filterProcessor) 
 }
 
 export function _processFilter (filter_name, input, data) {
-  if( !arguments.length ) throw new Error('missing filter_definitions')
+  if( !arguments.length ) throw new Error('missing filter_name')
   if( !this[filter_name] ) throw new Error('filter \'' + filter_name + '\' is not defined')
 
   return this[filter_name](input, data)
@@ -48,25 +52,5 @@ export function parseExpressionFilters (expression) {
   return {
     expression: _filters[0],
     filters: _filters.slice(1).map( parseFilter ),
-  }
-}
-
-export function expressionFilterProcessor (processFilter) {
-  if( !(processFilter instanceof Function) ) throw new TypeError('processFilter should be a Function')
-
-  return function _expressionFilterProcessor (expression) {
-    var _parsed = parseExpressionFilters(expression)
-
-    return {
-      expression: _parsed.expression,
-      has_filters: _parsed.filters.length > 0,
-      processFilters: _parsed.filters.length > 0
-        ? function (result, data) {
-          return _parsed.filters.reduce(function (_result, filter) {
-            return processFilter(filter, _result, data)
-          }, result)
-        }
-        : function (result) { return result }
-    }    
   }
 }
