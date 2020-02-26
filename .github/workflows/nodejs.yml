@@ -32,7 +32,7 @@ jobs:
 
     - name: Publishing to codecov
       run: make codecov
-      if: github.ref == 'refs/heads/master' && matrix.node == '12.x'
+      if: github.ref == 'refs/heads/master' && matrix.node-version == '12.x'
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
