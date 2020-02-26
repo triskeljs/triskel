@@ -29,6 +29,7 @@
     "@babel/register": "7.6.0",
     "chai": "4.2.0",
     "eslint": "6.8.0",
+    "jsdom": "^16.1.0",
     "json5": "2.1.1",
     "mocha": "7.0.1",
     "module-alias": "^2.2.2",
@@ -37,6 +38,6 @@
     "uglify-js": "3.6.8"
   },
   "_moduleAliases": {
-    "@triskel"      : "."
+    "@triskel": "."
   }
 }

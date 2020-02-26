@@ -1,11 +1,12 @@
-/* global describe, it */
 
-var assert = require('assert'),
-    createFilter = require('./rollup')
+const assert = require('assert')
+const { createFilter } = require('./rollup')
 
-console.log('createFilter', createFilter.createFilter)
+/** define-property */
+describe(__filename.substr(process.cwd().length), function () {
+// --------------------------------------
 
-describe('loader', function () {
+describe('createFilter', function () {
 
   function _runTestCase (include, exclude, file, result) {
 
@@ -30,3 +31,7 @@ describe('loader', function () {
   ].forEach( (test_case) => _runTestCase.apply(null, test_case) )
 
 })
+
+/** */
+})
+/** */

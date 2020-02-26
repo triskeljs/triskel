@@ -1,10 +1,9 @@
-/* global describe, it */
 
 var parseHTML = require('../parser'),
     assert = require('assert')
 
 /** define-property */
-describe(__filename.substr(process.cwd()), function () {
+describe(__filename.substr(process.cwd().length), function () {
 // --------------------------------------
 
 describe('parser', function () {

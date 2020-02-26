@@ -5,7 +5,7 @@ import assert from 'assert'
 import { filterProcessor, parseExpressionFilters, splitPipes, expressionFilterProcessor } from './filters'
 
 /** define-property */
-describe(__filename.substr(process.cwd()), function () {
+describe(__filename.substr(process.cwd().length), function () {
 // --------------------------------------
 
 describe('filterProcessor', function () {

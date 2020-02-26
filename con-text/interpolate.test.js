@@ -4,7 +4,7 @@ import assert from 'assert'
 import { tokenizeExpressions, stringifyTokens, interpolateText } from './interpolate'
 
 /** define-property */
-describe(__filename.substr(process.cwd()), function () {
+describe(__filename.substr(process.cwd().length), function () {
 // --------------------------------------
 
 var expression_tokens = [
@@ -30,7 +30,7 @@ describe('tokenizeExpressions', function () {
         it(input, function () {
             assert.deepStrictEqual(
                 tokenizeExpressions(input),
-                tokens
+                tokens,
             )
         })
     }
@@ -48,8 +48,8 @@ describe('stringifyTokens', function () {
   function _runTestCase (input, tokens) {
       it( tokens.map(_toExpresion).join(''), function () {
           assert.strictEqual(
-            stringifyTokens(tokens, (expression) => `{{${ expression }}}` ),
-            input
+            stringifyTokens(tokens, (token) => `{{${ token.expression }}}` ),
+            input,
           )
       })
   }
@@ -63,12 +63,8 @@ describe('interpolateText', function () {
   function _runTestCase (input, tokens) {
       it( tokens.map(_toExpresion).join(''), function () {
           assert.strictEqual(
-            interpolateText(input, (expression) => `{{${ expression }}}` ),
-            input, 'direct'
-          )
-          assert.strictEqual(
-            interpolateText(input)( (expression) => `{{${ expression }}}` ),
-            input, 'currying'
+            interpolateText(input, (expression) => ({ expression }))( (token) => `{{${ token.expression }}}` ),
+            input, 'direct',
           )
       })
   }

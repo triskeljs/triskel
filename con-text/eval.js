@@ -49,18 +49,19 @@ export function _getKeyFromData (data) {
   }
 
   return function _getKeyFromObject (key) {
-    return data[key]
+    return data && data[key]
   }
 }
 
 export function evalExpression (expression, data) {
-  var _parsed = parseExpression(expression, this ? { globals: this.globals } : {})
-  var _runExpression = Function.apply(null, _parsed.var_names.concat('return (' + _parsed.expression + ');') )
-  var _getVar = _getKeyFromData(data)
+  const _parsed = parseExpression(expression, this ? { globals: this.globals } : {})
+  const var_names = _parsed.var_names
+  const _runExpression = Function.apply(null, var_names.concat('return (' + _parsed.expression + ');') )
+  const _getVar = _getKeyFromData(data)
 
   return data
-    ? _runExpression.apply(null, _parsed.var_names.map(_getVar) )
+    ? _runExpression.apply(null, var_names.map(_getVar) )
     : function _evalExpression (_data) {
-      return _runExpression.apply(null, _parsed.var_names.map(_getVar) )
+      return _runExpression.apply(null, var_names.map(_getVar) )
     }
 }

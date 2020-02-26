@@ -13,9 +13,7 @@ function createFilter (include_pattern, exlude_pattern, minimatch_options = {}) 
   }
 }
 
-exports.createFilter = createFilter
-
-module.exports = function triskel(options = {}) {
+function triskel(options = {}) {
   if( !options.include ) options.include = '**/*.html'
 
   const matchesPatterns = createFilter(options.include, options.exclude)
@@ -33,3 +31,7 @@ module.exports = function triskel(options = {}) {
     }
   }
 }
+
+triskel.createFilter = createFilter
+
+module.exports = triskel

@@ -1,6 +1,6 @@
 
 import { evalExpression } from './eval'
-import { interpolateProcessor } from './interpolate'
+import { interpolateText } from './interpolate'
 import { filterProcessor, defineFilter, expressionFilterProcessor } from './filters'
 
 export default new ConText()
@@ -37,7 +37,8 @@ export function createConText (_TEXT = {}) {
     if( arguments.length < 2 ) {
       if( !_parsed.has_filters ) return _getData
 
-      return function (_scope, _filters_scope) {
+      return function _renderExpression (_scope, _filters_scope) {
+        console.log('renderExpression', expression, _scope, _filters_scope)
         return _parsed.processFilters( _getData(_scope), _filters_scope || _scope )
       }
     }
@@ -46,7 +47,15 @@ export function createConText (_TEXT = {}) {
   }
   
   _TEXT.eval = _evalExpression
-  _TEXT.interpolate = interpolateProcessor(_evalExpression)
+  _TEXT.interpolate = function _interpolate (text, _scope, _filters_scope) {
+    const renderExpressions = interpolateText(text, _evalExpression)
+
+    return arguments > 1
+      ? renderExpressions( (renderExpression) => renderExpression(_scope, _filters_scope) )
+      : function _renderText (scope, filters_scope) {
+        return renderExpressions( (renderExpression) => renderExpression(scope, filters_scope) )
+      }
+  }
 
   _TEXT.parseExpression = _parseExpression
 

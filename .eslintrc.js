@@ -1,52 +1,64 @@
 module.exports = {
-  "env": {
-    "browser": true,
-    "es6": true
+  'env': {
+    es6: true,
   },
-  "globals": {
-    "module": true,
-    "define": true,
-    "require": true,
-    "exports": true,
-    "global": true
+  'parserOptions': {
+    ecmaVersion: 9,
+    sourceType: 'module',
   },
-  "parserOptions": {
-    "ecmaVersion": 6,
-    "sourceType": "module",
-  },
-  "extends": "eslint:recommended",
-  "rules": {
-    "no-console": 1,
-    "linebreak-style": [
-      "error",
-      "unix"
+  'extends': [
+    'eslint:recommended',
+  ],
+  'rules': {
+    'no-console': ['warn'],
+    'no-unexpected-multiline': 'error',
+    'no-irregular-whitespace': 'off',
+    'comma-dangle': ['warn', 'always-multiline'],
+    'linebreak-style': [
+      'error',
+      'unix'
     ],
-    "quotes": [
-      "error",
-      "single",
-      { "allowTemplateLiterals": true }
-    ],
-    "semi": [
-      "error",
-      "never"
-    ],
-    "no-unused-vars": [
-      "error",
+    'quotes': [
+      'error',
+      'single',
       {
-        "args": "after-used",
-        "argsIgnorePattern": "^_\\w+"
+        avoidEscape: true,
+        allowTemplateLiterals: true,
+      },
+    ],
+    'semi': [
+      'error',
+      'never'
+    ],
+    'no-unused-vars': [
+      'error',
+      {
+          'args': 'after-used',
+          'argsIgnorePattern': '^_\\w+'
       }
-    ]
+    ],
   },
-  "overrides": [
+  'overrides': [
     {
-      "files": ["{,**/}*.test.js"],
-      "globals": {
-        describe: true,
-        it: true,
-        __filename: true,
-        process: true,
+      files: ['{app,con-text,loader,parser,render,stringify,tinyhtml}/{,**/}*.js'],
+      excludedFiles: ['{,**/}*.test.js'],
+      'env': {
+        es6: true,
+        browser: true,
       },
     },
-  ]
+    {
+      files: ['{,**/}*.test.js'],
+      globals: {
+        console: true,
+        process: true,
+        describe: true,
+        it: true,
+        beforeEach: true,
+        afterEacf: true,
+        __filename: true,
+        __dirname: true,
+      }
+    }
+  ],
 };

@@ -1,7 +1,10 @@
-/* global describe, it */
 
 var loadHTML = require('./loader'),
     assert = require('assert')
+
+/** define-property */
+describe(__filename.substr(process.cwd().length), function () {
+// --------------------------------------
 
 describe('loader', function () {
 
@@ -46,3 +49,7 @@ describe('loader', function () {
   })
 
 })
+
+/** */
+})
+/** */

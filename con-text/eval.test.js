@@ -11,7 +11,7 @@ import {
 } from './eval'
 
 /** define-property */
-describe(__filename.substr(process.cwd()), function () {
+describe(__filename.substr(process.cwd().length), function () {
 // --------------------------------------
 
 describe('removeStrings', function () {
@@ -20,7 +20,7 @@ describe('removeStrings', function () {
     it(input, function () {
       assert.strictEqual(
         removeStrings(input),
-        result
+        result,
       )
     })
   }
@@ -59,7 +59,7 @@ describe('matchVars', function () {
     it(`${ expression } => [${ var_names }]`, function () {
       assert.strictEqual(
         matchVars(expression).join(', '),
-        var_names
+        var_names,
       )
     })
   }
@@ -74,7 +74,7 @@ describe('parseExpression', function () {
       it(`${ expression } => [${ var_names }]`, function () {
         assert.deepStrictEqual(
           parseExpression(expression),
-          { expression, var_names: var_names.split(', ') }
+          { expression, var_names: var_names.split(', ') },
         )
       })
     }
@@ -131,7 +131,7 @@ describe('_getKeyFromData', function () {
     it(`${ data }[${ key }] => ${ JSON.stringify(result, null, '') }`, function () {
       assert.deepStrictEqual(
         _getKeyFromData(data)(key),
-        result
+        result,
       )
     })
   }
@@ -154,7 +154,7 @@ describe('evalExpression', function () {
     it(`${ expression } => ${ JSON.stringify(result, null, '') }`, function () {
       assert.deepStrictEqual(
         evalExpression(expression, data),
-        result
+        result,
       )
     })
   }

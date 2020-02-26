@@ -1,5 +1,17 @@
 
-.PHONY: test release
+#!make
+SHELL := /bin/bash 
+
+.DEFAULT_GOAL=default
+.PHONY: build dev deploy
+
+# include npm bin folder into $PATH
+export PATH := $(shell npm bin):$(PATH)
+
+ifeq ($(wildcard ./.env),./.env)
+include .env
+export $(shell sed 's/=.*//' .env)
+endif
 
 ifndef NPM_VERSION
   export NPM_VERSION=patch
@@ -12,23 +24,30 @@ install:; npm install
 i: install
 
 lint: node_modules
-	npx eslint con-text
+	# eslint {app,con-text,loader}
+	eslint app --color
 
-test: lint
-	npx mocha {con-text,loader}/*.test.js \
+mocha: node_modules
+	# npx mocha "{con-text,loader,parser,render,stringify,tinyhtml,app}/{,**/}*.test.js"
+	# mocha "app/{,**/}*.test.js" 
+	# mocha "con-text/{,**/}*.test.js" 
+	mocha "app/tests/{render,render-app}.test.js" \
 		--require @babel/register \
-		--require module-alias/register
+		--require module-alias/register \
+		--color --full-trace
+
+test: lint mocha
 
 build:
 	rm -rf dist
-	npx babel src --out-dir dist --ignore src/**/*.test.js
-	npx rollup src/con-text.js \
-		-c rollup.config.js \
-		--output.format umd \
-		--output.file dist/con-text.umd.js \
-		--output.exports named \
-		-n conText
-	npx uglifyjs dist/con-text.umd.js --compress --mangle -o dist/con-text.min.js
+	# npx babel src --out-dir dist --ignore src/**/*.test.js
+	# npx rollup src/con-text.js \
+	# 	-c rollup.config.js \
+	# 	--output.format umd \
+	# 	--output.file dist/con-text.umd.js \
+	# 	--output.exports named \
+	# 	-n conText
+	# npx uglifyjs dist/con-text.umd.js --compress --mangle -o dist/con-text.min.js
 
 npm.publish:
 	git pull --tags
