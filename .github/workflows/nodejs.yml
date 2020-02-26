@@ -15,6 +15,9 @@ jobs:
     - name: github.ref
       run: echo ${{github.ref}}
 
+    - name: matrix.node
+      run: echo ${{matrix.node}}
+
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
@@ -29,7 +32,7 @@ jobs:
 
     - name: Publishing to codecov
       run: make codecov
-      if: github.ref == 'refs/heads/master' && matrix.node-version = '12.x'
+      if: github.ref == 'refs/heads/master' && matrix.node = '12.x'
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
