@@ -25,7 +25,7 @@ npm install -D @triskel/app
 Provides tools for eval and interpolate text and also pipe evaluated expressions across shared filters
 
 
-> @triskel/parser
+`@triskel/parser`
   Parses HTML into @triskelAST
 
 | HTML | @triskelAST |
