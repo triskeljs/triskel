@@ -1,5 +1,5 @@
 
-function _appendChildren (parent_el, nodes, ns_scheme, options, _withNode, inits_list) {
+export function _appendChildren (parent_el, nodes, ns_scheme, options, _withNode, inits_list) {
   var inserted_nodes = []
 
   for( var i = 0, n = nodes.length, node ; i < n ; i++ ) {
@@ -43,7 +43,7 @@ var ns_tags = {
   xul: 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul',
 }
 
-function _create(node, ns_scheme, options, _withNode, inits_list, replace_text) {
+export function _create(node, ns_scheme, options, _withNode, inits_list, replace_text) {
   var node_el, attr_value
 
   if( 'text' in node ) return document.createTextNode( replace_text === undefined ? node.text : replace_text )
