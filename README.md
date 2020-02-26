@@ -20,15 +20,42 @@ npm install -D @triskel/app
 
 #### packages included
 
-- @triskel/con-text
-- @triskel/parser
-- @triskel/loader
-  - @triskel/parser
-- @triskel/render
-  - @triskel/con-text
-- @triskel/stringify
-- @triskel/template
-  - @triskel/con-text
-- @triskel/tinyhtml
-  - @triskel/parser
-  - @triskel/stringify
+> @triskel/con-text
+  Provides tools for eval and interpolate text and also pipe evaluated expressions across shared filters
+
+
+> @triskel/parser
+  Parses HTML into @triskelAST
+
+| HTML | @triskelAST |
+| -- | -- |
+| <code><h1>Title 1</h1></code> | <code>{<br>&nbsp;$: 'h1',<br>&nbsp;_: 'Title 1',<br>} </code> |
+
+
+> @triskel/loader
+  Parses and load HTML as stringified @triskelAST for webpack and rollup (`@triskel/loader/rollup`)
+
+`dependencies: @triskel/parser`
+
+
+> @triskel/render
+  Renders @triskelAST into the DOM
+
+`dependencies: @triskel/con-text`
+
+
+> @triskel/stringify
+  Serializes @triskelAST into a String
+
+
+> @triskel/tinyhtml
+  Parses into @triskelAST and serializes back minifying the resulting HTML
+
+`dependencies: @triskel/parser, @triskel/stringify`
+
+> @triskel/template
+  This is a regular template engine to interpolate and render Strings
+  
+`dependencies: @triskel/con-text`
+
+
