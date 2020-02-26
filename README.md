@@ -23,11 +23,11 @@ npm install -D @triskel/app
 | package | dependencies | description |
 | -- | -- | -- |
 | `@triskel/con-text` | - | Provides tools for eval and interpolate text and also pipe evaluated expressions across shared filters |
-| `@triskel/parser` | - | Parses HTML into [@triskelAST](#@triskelAST) |
-| `@triskel/loader` | `@triskel/parser` | Parses and load HTML as stringified @triskelAST for webpack and rollup (`@triskel/loader/rollup`) |
-| `@triskel/render` | `@triskel/con-text` | Renders @triskelAST into the DOM |
+| `@triskel/parser` | - | Parses HTML into [@triskelAST] |
+| `@triskel/loader` | `@triskel/parser` | Parses and load HTML as stringified [@triskelAST] for webpack and rollup (`@triskel/loader/rollup`) |
+| `@triskel/render` | `@triskel/con-text` | Renders [@triskelAST] into the DOM |
 | `@triskel/stringify` | - | Serializes @triskelAST into a String |
-| `@triskel/tinyhtml` | `@triskel/parser`<br>`@triskel/stringify` | Parses into @triskelAST and serializes back minifying the resulting HTML |
+| `@triskel/tinyhtml` | `@triskel/parser`<br>`@triskel/stringify` | Parses into [@triskelAST] and serializes back minifying the resulting HTML |
 
 | package | dependencies | description |
 | -- | -- | -- |
@@ -39,3 +39,7 @@ npm install -D @triskel/app
 | HTML | @triskelAST |
 | -- | -- |
 | `<h1>Title 1</h1>` | <code>{<br>&nbsp;$: 'h1',<br>&nbsp;_: 'Title 1',<br>} </code> |
+
+
+
+[@triskelAST]: #@triskelAST
