@@ -106,6 +106,13 @@ describe('splitPipes', function () {
 
 describe('parseExpressionFilters', function () {
 
+  [
+
+    [() => parseExpressionFilters(), Error, /expression should be a String/],
+    [() => parseExpressionFilters(null), Error, /expression should be a String/],
+
+  ].forEach( (test_case) => runErrorCase.apply(null, test_case) )
+
   function _runTestCase (input, result) {
     it(`'${ input }'`, function () {
       assert.deepStrictEqual(

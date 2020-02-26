@@ -132,4 +132,41 @@ describe(__filename.substr(process.cwd().length), function () {
 
   })
 
+  describe('TEXT.eval', function () {
+
+    [
+      [() => {
+        new ConText().eval(null)
+      }, Error, /expression should be a String/],
+
+    ].forEach((test_case) => runErrorCase.apply(null, test_case))
+
+
+    function _runTestCase(expression, data, expected_result, filter_definitions) {
+
+      it(`${expression}, ${JSON.stringify(expected_result)}`, () => {
+
+        const processData = new ConText()
+          .defineFilter(filter_definitions || {})
+          .eval(expression)
+
+        assert.deepStrictEqual(
+          processData(data),
+          expected_result,
+        )
+
+      })
+
+    }
+
+    [
+
+      ['foo', { foo: 'bar' }, 'bar'],
+      ['foo | bar', { foo: 'bar' }, 'bar:bar', { bar: (input) => input + ':bar' }],
+      ['foo | bar: { key: bar }', { foo: 'bar', bar: 123 }, 'bar:123', { bar: (input, data) => input + ':' + data.key }],
+
+    ].forEach((test_case) => _runTestCase.apply(null, test_case))
+
+  })
+
 })
