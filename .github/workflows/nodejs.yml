@@ -27,7 +27,11 @@ jobs:
     - name: Publishing to coveralls
       run: make coveralls
       if: github.ref == 'master'
+      env:
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
       
     - name: Publishing to codecov
       run: make codecov
       if: github.ref == 'master'
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
