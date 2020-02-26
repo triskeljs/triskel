@@ -1,6 +1,6 @@
 {
   "name": "@triskel/loader",
-  "version": "1.1.4",
+  "version": "1.5.0",
   "description": "@triskel loader for webpack and rollup",
   "main": "loader.js",
   "scripts": {
@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/kiltjs/triskeljs#readme",
   "dependencies": {
-    "json5": "2.1.1"
+    "json5": "2.1.1",
+    "@triskel/parser": "1.5.0"
   }
 }

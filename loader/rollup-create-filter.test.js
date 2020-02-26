@@ -14,7 +14,7 @@ describe('createFilter', function () {
 
       assert.strictEqual(
         createFilter(include, exclude)(file),
-        result
+        result,
       )
 
     })

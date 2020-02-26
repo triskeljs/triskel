@@ -1,12 +1,12 @@
 
-import { RenderApp } from './render-app'
+import { RenderApp } from './empty-app'
 import { ConText } from '@triskel/con-text'
 
-import addDirectiveIf from './directives/if.js'
-import addDirectiveRepeat from './directives/repeat.js'
-import addDirectiveOn from './directives/on.js'
-import addDirectiveBind from './directives/bind.js'
-import addDirectiveClass from './directives/class.js'
+import addDirectiveIf from './directives/if'
+import addDirectiveRepeat from './directives/repeat'
+import addDirectiveOn from './directives/on'
+import addDirectiveBind from './directives/bind'
+import addDirectiveClass from './directives/class'
 
 export function createApp(options) {
   options = options || {}

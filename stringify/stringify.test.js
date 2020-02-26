@@ -1,6 +1,6 @@
 
-const stringifyNodes = require('./stringify')
-const assert = require('assert')
+import stringifyNodes from './stringify'
+import assert from 'assert'
 
 /** define-property */
 describe(__filename.substr(process.cwd().length), function () {
@@ -120,24 +120,24 @@ describe('stringify', function () {
       {
         $: '!DOCTYPE',
         attrs: {
-          html: ''
+          html: '',
         },
         _: [
           {
             _: [
               {
-                $: 'head'
+                $: 'head',
               },
               {
-                $: 'body'
-              }
+                $: 'body',
+              },
             ],
-            $: 'html'
-          }
+            $: 'html',
+          },
         ],
         unclosed: true,
-        warn: true
-      }
+        warn: true,
+      },
     ]), '<!DOCTYPE html><html><head></head><body></body></html>' )
 
   })
@@ -161,12 +161,12 @@ describe('stringify', function () {
           {
             $: 'code',
             attrs: {
-              class: 'language-html'
+              class: 'language-html',
             },
             _: '\n<!DOCTYPE html>\n<html>\n  <head></head>\n  <body></body>\n</html>\n',
-          }
-        ]
-      }
+          },
+        ],
+      },
     ]), snippet.trim() )
 
   })

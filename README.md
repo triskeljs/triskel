@@ -1,4 +1,4 @@
-# @triskel Suite
+# @triskel
 
 [![ᴋɪʟᴛ ᴊs](https://kiltjs.github.io/assets/images/badge-kiltjs.svg)](https://github.com/kiltjs)
 [![Build Status](https://travis-ci.org/kiltjs/triskel.svg?branch=master)](https://travis-ci.org/kiltjs/triskel)
@@ -11,5 +11,24 @@
 ``` sh
 npm install -D @triskel/app
 
-npm install -D @triskel/template
+# includes:
+
+# @triskel/loader
+# @triskel/render
+#   - @triskel/con-text
 ```
+
+#### packages included
+
+- @triskel/con-text
+- @triskel/parser
+- @triskel/loader
+  - @triskel/parser
+- @triskel/render
+  - @triskel/con-text
+- @triskel/stringify
+- @triskel/template
+  - @triskel/con-text
+- @triskel/tinyhtml
+  - @triskel/parser
+  - @triskel/stringify

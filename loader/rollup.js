@@ -2,7 +2,7 @@
 const triskelLoader = require('./loader')
 const minimatch = require('minimatch')
 
-function createFilter (include_pattern, exlude_pattern, minimatch_options = {}) {
+export function createFilter (include_pattern, exlude_pattern, minimatch_options = {}) {
 
   return function _pathMatches (filepath) {
     var is_included = !include_pattern || minimatch(filepath, include_pattern, minimatch_options)
@@ -13,7 +13,7 @@ function createFilter (include_pattern, exlude_pattern, minimatch_options = {}) 
   }
 }
 
-function triskel(options = {}) {
+export default function triskel(options = {}) {
   if( !options.include ) options.include = '**/*.html'
 
   const matchesPatterns = createFilter(options.include, options.exclude)
@@ -31,7 +31,3 @@ function triskel(options = {}) {
     },
   }
 }
-
-triskel.createFilter = createFilter
-
-module.exports = triskel

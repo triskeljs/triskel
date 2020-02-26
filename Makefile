@@ -23,6 +23,8 @@ ifndef NYC_REPORTERS
   export NYC_REPORTERS='--reporter=text'
 endif
 
+dirs=_common,con-text,render,parser,loader,stringify,tinyhtml,template
+
 # common
 default: install test build
 
@@ -32,11 +34,10 @@ i: install
 
 # testing
 lint: node_modules
-	# eslint {app,con-text,loader}
-	eslint app --color
+	eslint {${dirs}}  --color
 
 mocha: node_modules
-	npx mocha "{_common,con-text,app,parser,loader,stringify,tinyhtml,template}/{,**/}*.test.js" \
+	npx mocha "{$(dirs)}/{,**/}*.test.js" \
 		--require @babel/register \
 		--require module-alias/register \
 		--color --full-trace

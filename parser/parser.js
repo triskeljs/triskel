@@ -1,3 +1,4 @@
+/* eslint-env node */
 
 function _parseTag (tag_str, options) {
   var tag = { attrs: {}, _: [], unclosed: true }
@@ -206,4 +207,4 @@ function parseHTML (html, options) {
   return _cleanNodes(nodes)
 }
 
-export default parseHTML
+module.exports = parseHTML

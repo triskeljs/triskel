@@ -1,6 +1,6 @@
 
-let parseHTML = require('../parser')
-const JSON5 = require('json5')
+import parseHTML from '../parser'
+import JSON5 from 'json5'
 
 // eslint-disable-next-line
 console.log( JSON5.stringify( parseHTML(`

@@ -1,5 +1,5 @@
 
-let stringifyHTML = require('../stringify');
+import stringifyHTML from '../stringify'
 
 // eslint-disable-next-line
 console.log( stringifyHTML([
@@ -173,4 +173,4 @@ console.log( stringifyHTML([
     unclosed: true,
     $: 'body',
   },
-]) );
+]) )

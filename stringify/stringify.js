@@ -74,7 +74,7 @@ function _stringifyNodes (nodes, options, indent_level) {
   }, '')
 }
 
-module.exports = function stringifyNodes (nodes, options) {
+export default function stringifyNodes (nodes, options) {
   options = options || {}
   options.processors = options.processors ||{}
 
