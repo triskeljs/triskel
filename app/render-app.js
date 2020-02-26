@@ -1,6 +1,6 @@
 
 import { firstIn } from '../_common/list'
-import _ from './utils'
+import { extend } from '../_common/object'
 import renderNodes from './render'
 
 function _noop () {}
@@ -37,7 +37,7 @@ RenderApp.prototype = {
   
     _options = _options || {}
     var APP = Object.create(this),
-        render_options = _.extend( Object.create( APP.options || {} ), _options ),
+        render_options = extend( Object.create( APP.options || {} ), _options ),
         with_node_pipe = APP.with_node_pipe,
         detach_queue = [],
         _processDetachQueue = function (detached_nodes) {
@@ -96,7 +96,7 @@ RenderApp.prototype = {
             // delete result_with_node.initNode; // will be overriden if init_pipe.length
           }
   
-          with_node = _.extend( with_node, result_with_node )
+          with_node = extend( with_node, result_with_node )
         }
       }
   
@@ -141,7 +141,7 @@ RenderApp.prototype = {
       var _with_node = options.withNode && options.withNode.apply(render_app, arguments) || {},
           _initNode = _with_node.initNode
   
-      return _.extend( _with_node, {
+      return extend( _with_node, {
         initNode: options.controller && options.template ? function (node_el, _node, render_options) {
           var _this = Object.create(this), _args = arguments
   
@@ -201,7 +201,7 @@ RenderApp.prototype = {
       this_app.attr_key = attr_key
       this_app.attr_value = _attrs[attr_key]
   
-      return _.extend( _withNode && _withNode.apply(this_app, arguments) || {}, {
+      return extend( _withNode && _withNode.apply(this_app, arguments) || {}, {
         initNode: function (node_el, _node, render_options, _with_node) {
           if( _with_node.replace_by_comment ) {
             _node = Object.create(_node)
