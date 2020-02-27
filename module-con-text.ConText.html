@@ -1,42 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
     <meta charset="utf-8">
-    <title>Class: ConText | Class: ConText</title>
-
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
+    <title>ConText - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
-    <link type="text/css" rel="stylesheet" href="styles/prettify-jsdoc.css">
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/tui-doc.css">
-
-    
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-<nav class="lnb" id="lnb">
-    <div class="logo" style="">
-        
-            <img src="img/toast-ui.png" width="100%" height="100%">
-        
-    </div>
-    <div class="title">
-        <h1><a href="index.html" class="link">Class: ConText</a></h1>
-        
-    </div>
-    <div class="search-container" id="search-container">
-        <input type="text" placeholder="Search">
-        <ul></ul>
-    </div>
-    
-    <div class="lnb-api hidden"><h3>Modules</h3><ul><li><a href="module-con-text.html">con-text</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:con-text_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-con-text.html#.dataScope">dataScope</a></li><li><a href="module-con-text.html#.evalExpression">evalExpression</a></li><li><a href="module-con-text.html#.propGetter">propGetter</a></li></ul></div></li></ul></div><div class="lnb-api hidden"><h3>Classes</h3><ul><li><a href="module-con-text.ConText.html">ConText</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:con-text.ConText_sub"></div></li></ul></div>
-</nav>
-<div id="resizer"></div>
 
-<div class="main" id="main">
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module-con-text.ConText.html">ConText</a></li></ul><h3>Modules</h3><ul><li><a href="module-con-text.html">con-text</a><ul class='methods'><li data-type='method'><a href="module-con-text.html#.dataScope">dataScope</a></li><li data-type='method'><a href="module-con-text.html#.evalExpression">evalExpression</a></li><li data-type='method'><a href="module-con-text.html#.propGetter">propGetter</a></li></ul></li><li></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">ConText</h1>
+    
+
     
 
 
@@ -46,8 +44,11 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="module-con-text.html">con-text</a>.</span>ConText<span class="signature">(target<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h2>
+        <h2>
+            <span class="ancestors"><a href="module-con-text.html">con-text</a>.</span>
+        
+        ConText
+        </h2>
         
     
 </header>
@@ -58,29 +59,22 @@
         
             
 
-<dt>
     
-        <h4 class="name" id="ConText">
-            
-                new <span class="type-signature"></span>ConText<span class="signature">(target<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span>
-                
-            
-            <div class="container-source members">
-                <code><a href="con-text.js.html">con-text.js</a></code>,
-                <code><a href="con-text.js.html#line29">line 29</a></code>
-            </div>
-            
-        </h4>
 
-        
-    
-</dt>
-<dd>
+    <h4 class="name" id="ConText"><span class="type-signature"></span>new ConText<span class="signature">(target<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
-    <div class="description">
-        <p>Creates an isolated filters context for evaluating strings</p>
-    </div>
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="con-text.js.html">con-text.js</a>, <a href="con-text.js.html#line29">line 29</a>
+    </li></ul></dd>
     
 
     
@@ -90,9 +84,63 @@
     
 
     
-    <div class="container-params">
-        <h5>Parameters:</h5>
-        
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Creates an isolated filters context for evaluating strings</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>import { ConText } from '@triskel/con-text'
+
+const TEXT = new ConText()
+
+TEXT.defineFilter('foo', (input) => input + ':foo' )
+
+TEXT.eval(' name | foo', { name: 'John' })
+// return 'John:foo'</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
 <table class="params">
     <thead>
     <tr>
@@ -150,73 +198,23 @@
     </tbody>
 </table>
 
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
 
 
-    
-        <h5>Example</h5>
-        
-    <pre class="prettyprint"><code>import { ConText } from '@triskel/con-text'
 
-const TEXT = new ConText()
 
-TEXT.defineFilter('foo', (input) => input + ':foo' )
 
-TEXT.eval(' name | foo', { name: 'John' })
-// return 'John:foo'</code></pre>
 
-    
 
-</dd>
+
+
+
+
+
+
+
+
 
         
         </div>
@@ -227,10 +225,10 @@ TEXT.eval(' name | foo', { name: 'John' })
     
 
     
-
+    
     
 
-    
+     
 
     
 
@@ -248,26 +246,21 @@ TEXT.eval(' name | foo', { name: 'John' })
 
 
 
+    
+    
 </div>
 
+<br class="clear">
+
 <footer>
-    <img class="logo" src="img/toast-ui.png" style="">
-    <div class="footer-text">NHN Entertainment. Frontend Development Lab</div>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Feb 27 2020 00:54:08 GMT+0000 (Coordinated Universal Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
+
 <script>prettyPrint();</script>
-<script src="scripts/jquery.min.js"></script>
-<script src="scripts/tui-doc.js"></script>
+<script src="scripts/polyfill.js"></script>
 <script src="scripts/linenumber.js"></script>
 
-    <script>
-        var id = 'module:con-text.ConText_sub'.replace(/"/g, '_');
-        var selectedApi = document.getElementById(id); // do not use jquery selector
-        var $selectedApi = $(selectedApi);
 
-        $selectedApi.removeClass('hidden');
-        $selectedApi.parent().find('.glyphicon').removeClass('glyphicon-plus').addClass('glyphicon-minus');
-        showLnbApi();
-    </script>
 
 </body>
 </html>
