@@ -24,7 +24,7 @@ ifndef NYC_REPORTERS
   export NYC_REPORTERS='--reporter=text'
 endif
 
-dirs=_common,con-text,render,parser,loader,stringify,tinyhtml,template
+dirs=_common,con-text,app,parser,loader,stringify,tinyhtml,template
 
 # common
 default: install test build
