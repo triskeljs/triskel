@@ -24,18 +24,18 @@ npm install -D @triskel/app
 
 #### packages included
 
-| package | dependencies | size | description |
-| -- | -- | -- | -- |  
-| `@triskel/con-text` | - | [![minzip-con-text]](https://bundlephobia.com/result?p=@triskel/con-text) | Provides tools for eval and interpolate text and also pipe evaluated expressions across shared filters |
-| `@triskel/parser` | - | [![minzip-parser]](https://bundlephobia.com/result?p=@triskel/parser) | Parses HTML into [@triskelAST] |
-| `@triskel/loader` | `@triskel/parser` | [![minzip-loader]](https://bundlephobia.com/result?p=@triskel/loader) | Parses and load HTML as stringified [@triskelAST] for webpack and rollup (`@triskel/loader/rollup`) |
-| `@triskel/render` | `@triskel/con-text` | [![minzip-render]](https://bundlephobia.com/result?p=@triskel/app) | Renders [@triskelAST] into the DOM |
-| `@triskel/stringify` | - | [![minzip-stringify]](https://bundlephobia.com/result?p=@triskel/stringify) | Serializes [@triskelAST] into a String |
-| `@triskel/tinyhtml` | `@triskel/parser`<br>`@triskel/stringify` | [![minzip-tinyhtml]](https://bundlephobia.com/result?p=@triskel/tinyhtml) | Parses into [@triskelAST] and serializes back minifying the resulting HTML |
+| package | size / dependencies | description |
+| -- | -- | -- |  
+| `@triskel/con-text` | [![minzip-con-text]](https://bundlephobia.com/result?p=@triskel/con-text) | Provides tools for eval and interpolate text and also pipe evaluated expressions across shared filters |
+| `@triskel/parser` | [![minzip-parser]](https://bundlephobia.com/result?p=@triskel/parser) | Parses HTML into [@triskelAST] |
+| `@triskel/loader` | [![minzip-loader]](https://bundlephobia.com/result?p=@triskel/loader)<br>`@triskel/parser` | Parses and load HTML as stringified [@triskelAST] for webpack and rollup (`@triskel/loader/rollup`) |
+| `@triskel/render` | [![minzip-render]](https://bundlephobia.com/result?p=@triskel/app)<br>`@triskel/con-text` | Renders [@triskelAST] into the DOM |
+| `@triskel/stringify` | [![minzip-stringify]](https://bundlephobia.com/result?p=@triskel/stringify) | Serializes [@triskelAST] into a String |
+| `@triskel/tinyhtml` | [![minzip-tinyhtml]](https://bundlephobia.com/result?p=@triskel/tinyhtml)<br>`@triskel/parser`<br>`@triskel/stringify` | Parses into [@triskelAST] and serializes back minifying the resulting HTML |
 
-| package | dependencies | size | description |
-| -- | -- | -- | -- |
-| @triskel/template | `@triskel/con-text` | [![minzip-template]](https://bundlephobia.com/result?p=@triskel/template) | This is a regular template engine to interpolate and render Strings |
+| package | size / dependencies | description |
+| -- | -- | -- |
+| @triskel/template | [![minzip-template]](https://bundlephobia.com/result?p=@triskel/template)<br>`@triskel/con-text` | This is a regular template engine to interpolate and render Strings |
 
 
 #### @triskelAST
