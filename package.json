@@ -28,6 +28,7 @@
     "@babel/preset-env": "7.6.0",
     "@babel/register": "7.6.0",
     "chai": "4.2.0",
+    "clean-jsdoc-theme": "^2.2.11",
     "codecov": "^3.6.5",
     "coveralls": "^3.0.9",
     "docdash": "^1.2.0",
