@@ -169,103 +169,72 @@ describe(__filename.substr(process.cwd().length), function () {
 
   })
 
-  describe('TEXT.eval', function () {
+  const eval_test_suites = {
 
-    runErrorsTestSuite([
-
-      [() => {
-        new ConText().eval(null)
-      }, Error, /expression should be a String/],
-
-    ])
-
-
-    function _runTestCase(expression, data, expected_result, filter_definitions) {
-
-      it(`${expression}, ${JSON.stringify(expected_result)}`, () => {
-
-        const TEXT = new ConText()
-          .defineFilter(filter_definitions || {})
-
-        assert.deepStrictEqual(
-          TEXT.eval(expression, data),
-          expected_result,
-        )
-
-      })
-
-      it(`${expression} (curring), ${JSON.stringify(expected_result)}`, () => {
-
-        const TEXT = new ConText()
-          .defineFilter(filter_definitions || {})
-
-        assert.deepStrictEqual(
-          TEXT.eval(expression)(data),
-          expected_result,
-        )
-
-      })
-
-    }
-
-    [
+    eval: [
 
       ['foo', { foo: 'bar' }, 'bar'],
       ['foo | bar', { foo: 'bar' }, 'bar:bar', { bar: (input) => input + ':bar' }],
       ['foo | bar: { key: bar }', { foo: 'bar', bar: 123 }, 'bar:123', { bar: (input, data) => input + ':' + data.key }],
 
-    ].forEach((test_case) => _runTestCase.apply(null, test_case))
+    ],
 
-  })
-
-  describe('TEXT.interpolate', function () {
-
-    runErrorsTestSuite([
-      [() => {
-        new ConText().interpolate(null)
-      }, Error, /expression should be a String/],
-
-    ])
-
-
-    function _runTestCase(expression, data, expected_result, filter_definitions) {
-
-      it(`${expression}, ${JSON.stringify(expected_result)}`, () => {
-
-        const TEXT = new ConText()
-          .defineFilter(filter_definitions || {})
-
-        assert.deepStrictEqual(
-          TEXT.interpolate(expression, data),
-          expected_result,
-        )
-
-      })
-
-      it(`${expression} (curring), ${JSON.stringify(expected_result)}`, () => {
-
-        const TEXT = new ConText()
-          .defineFilter(filter_definitions || {})
-
-        assert.deepStrictEqual(
-          TEXT.interpolate(expression)(data),
-          expected_result,
-        )
-
-      })
-
-    }
-
-    [
+    interpolate: [
 
       ['{{ foo }}', { foo: 'bar' }, 'bar'],
       ['[{{ foo | bar }}]', { foo: 'bar' }, '[bar:bar]', { bar: (input) => input + ':bar' }],
       ['::[{{ foo | bar: { key: bar } }}]', { foo: 'bar', bar: 123 }, '::[bar:123]', { bar: (input, data) => input + ':' + data.key }],
 
-    ].forEach((test_case) => _runTestCase.apply(null, test_case))
+    ],
 
-  })
+  }
 
-  
+  Object
+    .keys(eval_test_suites)
+    .forEach(function (method) {
+
+      describe('TEXT.' + method, function () {
+
+        runErrorsTestSuite([
+
+          [() => {
+            new ConText()[method](null)
+          }, Error, /expression should be a String/],
+    
+        ])
+
+        function _runTestCase(expression, data, expected_result, filter_definitions) {
+
+          it(`${expression}, ${JSON.stringify(expected_result)}`, () => {
+    
+            const TEXT = new ConText()
+              .defineFilter(filter_definitions || {})
+    
+            assert.deepStrictEqual(
+              TEXT[method](expression, data),
+              expected_result,
+            )
+    
+          })
+    
+          it(`${expression} (curring), ${JSON.stringify(expected_result)}`, () => {
+    
+            const TEXT = new ConText()
+              .defineFilter(filter_definitions || {})
+    
+            assert.deepStrictEqual(
+              TEXT[method](expression)(data),
+              expected_result,
+            )
+    
+          })
+    
+        }
+
+        eval_test_suites[method].forEach((test_case) => _runTestCase.apply(null, test_case))
+
+      })
+
+    })
 
 })
