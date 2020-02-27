@@ -29,6 +29,8 @@ jobs:
       
     - name: Passing tests
       run: make test
+      env:
+        NYC_REPORTERS: "--reporter=text --reporter=lcov"
 
     - if: github.ref == 'refs/heads/master' && matrix.node-version == '12.x'
       name: Build

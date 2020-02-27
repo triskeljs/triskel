@@ -48,19 +48,19 @@ nyc-mocha: # make nyc-mocha NYC_REPORTERS="--reporter=lcov --reporter=text"
 
 test: lint nyc-mocha
 
-coverage:
+lcov:
 	nyc report --reporter=lcov
 
-coveralls: coverage
+coveralls:
 	coveralls
 
-codecov: coverage
+codecov:
 	codecov
 
-codeclimate: coverage
+codeclimate:
 	curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-        chmod +x ./cc-test-reporter
-        ./cc-test-reporter upload-coverage
+		chmod +x ./cc-test-reporter
+		./cc-test-reporter upload-coverage
 
 # docs
 docs:
