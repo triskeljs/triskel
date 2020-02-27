@@ -33,7 +33,7 @@ jobs:
         NYC_REPORTERS: "--reporter=text --reporter=lcov"
 
     - if: github.ref == 'refs/heads/master' && matrix.node-version == '12.x'
-      name: Build
+      name: Build docs
       run: make docs
 
     - if: github.ref == 'refs/heads/master' && matrix.node-version == '12.x'
