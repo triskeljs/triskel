@@ -55,7 +55,7 @@ jobs:
       env:
         COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
 
-    - if:
+    - if: github.ref == 'refs/heads/master' && matrix.node-version == '12.x'
       name: Publishing to codeclimate
       run: make codeclimate
       env:
