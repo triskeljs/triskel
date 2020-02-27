@@ -26,7 +26,7 @@ npm install -D @triskel/app
 
 | package | dependencies | size | description |
 | -- | -- | -- | -- |  
-| `@triskel/con-text` | - | [![minzip-con-text]](https://bundlephobia.com/result?p=@triskel/con-text) | Provides tools for eval and interpolate text and also pipe evaluated expressions across shared filters |
+| `@triskel/con-text` | - | [![minzip-con-text]] | Provides tools for eval and interpolate text and also pipe evaluated expressions across shared filters |
 | `@triskel/parser` | - | Parses HTML into [@triskelAST] |
 | `@triskel/loader` | `@triskel/parser` | Parses and load HTML as stringified [@triskelAST] for webpack and rollup (`@triskel/loader/rollup`) |
 | `@triskel/render` | `@triskel/con-text` | [![minzip](https://badgen.net/bundlephobia/minzip/@triskel/app)](https://bundlephobia.com/result?p=@triskel/app) | Renders [@triskelAST] into the DOM |
@@ -49,3 +49,11 @@ npm install -D @triskel/app
 [@triskelAST]: #@triskelAST
 
 [minzip-con-text]: https://badgen.net/bundlephobia/minzip/@triskel/con-text
+[![minzip-con-text]]: https://bundlephobia.com/result?p=@triskel/con-text
+
+[minzip-parser]: https://badgen.net/bundlephobia/minzip/@triskel/parser
+[minzip-loader]: https://badgen.net/bundlephobia/minzip/@triskel/loader
+[minzip-render]: https://badgen.net/bundlephobia/minzip/@triskel/app
+[minzip-stringify]: https://badgen.net/bundlephobia/minzip/@triskel/stringify
+[minzip-tinyhtml]: https://badgen.net/bundlephobia/minzip/@triskel/tinyhtml
+[minzip-template]: https://badgen.net/bundlephobia/minzip/@triskel/template
