@@ -1,3 +1,6 @@
+/**
+ * @module con-text
+ */
 
 import { evalExpression } from './eval'
 import { interpolateText } from './interpolate'
@@ -6,6 +9,23 @@ import { pipeProcessor } from '../_common/list'
 
 export default new ConText()
 
+/**
+ * Creates an isolated filters context for evaluating strings
+ * 
+ * @class
+ * @param {*} [target] - only pass a target when not creating a new ConText instance, otherwise it will drop an exception
+ * 
+ * @example
+ * 
+ * import { ConText } from '@triskel/con-text'
+ * 
+ * const TEXT = new ConText()
+ * 
+ * TEXT.defineFilter('foo', (input) => input + ':foo' )
+ * 
+ * TEXT.eval(' name | foo', { name: 'John' })
+ * // return 'John:foo'
+ */
 export function ConText(target) {
   if (arguments.length) {
     if (this instanceof ConText) throw new TypeError('can not use target with constructor')
