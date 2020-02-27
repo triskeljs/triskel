@@ -43,7 +43,7 @@ mocha: node_modules
 		--require module-alias/register \
 		--color --full-trace
 
-nyc-mocha: # make nyc-mocha NYC_REPORTERS="--reporter=lcov --reporter=text"
+nyc-mocha: # p.e: make nyc-mocha NYC_REPORTERS="--reporter=lcov --reporter=text"
 	nyc ${NYC_REPORTERS} $(MAKE) mocha
 
 test: lint nyc-mocha
