@@ -52,7 +52,7 @@ lcov:
 	nyc report --reporter=lcov
 
 coveralls:
-	coveralls
+	nyc report --reporter=text-lcov | coveralls
 
 codecov:
 	codecov
