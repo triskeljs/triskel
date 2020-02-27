@@ -31,6 +31,17 @@ jobs:
       run: make test
 
     - if: github.ref == 'refs/heads/master' && matrix.node-version == '12.x'
+      name: Build
+      run: make docs
+
+    - if: github.ref == 'refs/heads/master' && matrix.node-version == '12.x'
+      name: Deploy docs
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        publish_dir: ./docs
+
+    - if: github.ref == 'refs/heads/master' && matrix.node-version == '12.x'
       name: Publishing to codecov
       run: make codecov
       env:
@@ -42,13 +53,8 @@ jobs:
       env:
         COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
 
-    - if: github.ref == 'refs/heads/master' && matrix.node-version == '12.x'
-      name: Build
-      run: make docs
-
-    - if: github.ref == 'refs/heads/master' && matrix.node-version == '12.x'
-      name: Deploy docs
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-        publish_dir: ./docs
+    - if:
+      name: Publishing to codeclimate
+      run: make codeclimate
+      env:
+        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}

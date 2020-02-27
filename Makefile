@@ -7,6 +7,7 @@ SHELL := /bin/bash
 
 # include npm bin folder into $PATH
 export PATH := $(shell npm bin):$(PATH)
+export GIT_BRANCH="${GITHUB_REF/refs\/heads\//}"
 
 # include dotenv (.env)
 ifeq ($(wildcard ./.env),./.env)
@@ -47,11 +48,19 @@ nyc-mocha: # make nyc-mocha NYC_REPORTERS="--reporter=lcov --reporter=text"
 
 test: lint nyc-mocha
 
-coveralls:
-	nyc report --reporter=text-lcov | coveralls
+coverage:
+	nyc report --reporter=lcov
 
-codecov:
-	nyc report --reporter=lcov && codecov
+coveralls: coverage
+	coveralls
+
+codecov: coverage
+	codecov
+
+codeclimate: coverage
+	curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        chmod +x ./cc-test-reporter
+        ./cc-test-reporter upload-coverage
 
 # docs
 docs:
