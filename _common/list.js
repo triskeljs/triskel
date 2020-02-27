@@ -6,6 +6,12 @@ export function firstIn (list, iteratee, this_arg) {
   return null
 }
 
+/**
+ * Returns a function that will process secuentially the functions genereted for the items in the list
+ * 
+ * @param {Array} list 
+ * @param {Function} pipeFn 
+ */
 export function pipeProcessor (list, pipeFn) {
   if (!Array.isArray(list)) throw new TypeError('list should be an Array')
   if (typeof pipeFn !== 'function') throw new TypeError('pipeFn should be an Function')
