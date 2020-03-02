@@ -20,6 +20,10 @@ ifndef NPM_VERSION
   export NPM_VERSION=patch
 endif
 
+ifndef FORCE_COLOR
+  export FORCE_COLOR=true
+endif
+
 ifndef NYC_REPORTERS
   export NYC_REPORTERS='--reporter=text'
 endif
@@ -35,16 +39,16 @@ i: install
 
 # testing
 lint: node_modules
-	eslint {${dirs}}  --color
+	eslint {${dirs}} --color
 
 mocha: node_modules
 	npx mocha "{$(dirs)}/{,**/}*.test.js" \
 		--require @babel/register \
 		--require module-alias/register \
-		--color --full-trace
+		--full-trace
 
 nyc-mocha: # p.e: make nyc-mocha NYC_REPORTERS="--reporter=lcov --reporter=text"
-	FORCE_COLOR=true nyc ${NYC_REPORTERS} $(MAKE) mocha
+	nyc ${NYC_REPORTERS} $(MAKE) mocha
 
 test: lint nyc-mocha
 
