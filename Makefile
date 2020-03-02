@@ -44,7 +44,7 @@ mocha: node_modules
 		--color --full-trace
 
 nyc-mocha: # p.e: make nyc-mocha NYC_REPORTERS="--reporter=lcov --reporter=text"
-	nyc ${NYC_REPORTERS} $(MAKE) mocha
+	FORCE_COLOR=true nyc ${NYC_REPORTERS} $(MAKE) mocha
 
 test: lint nyc-mocha
 
