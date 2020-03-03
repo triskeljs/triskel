@@ -32,26 +32,26 @@ HTML.render(document.body, layout_html, {
 | package | size / dependencies | description |
 | -- | -- | -- |  
 | `@triskel/con-text` | [![minzip-con-text]](https://bundlephobia.com/result?p=@triskel/con-text) | Provides tools for eval and interpolate text and also pipe evaluated expressions across shared filters |
-| `@triskel/parser` | [![minzip-parser]](https://bundlephobia.com/result?p=@triskel/parser) | Parses HTML into [@TriskelAST] |
-| `@triskel/loader` | [![minzip-loader]](https://bundlephobia.com/result?p=@triskel/loader)<br>`@triskel/parser` | Parses and load HTML as stringified [@TriskelAST] for webpack and rollup (`@triskel/loader/rollup`) |
-| `@triskel/app` | [![minzip-app]](https://bundlephobia.com/result?p=@triskel/app)<br>`@triskel/con-text` | Renders [@TriskelAST] into the DOM |
-| `@triskel/stringify` | [![minzip-stringify]](https://bundlephobia.com/result?p=@triskel/stringify) | Serializes [@TriskelAST] into a String |
-| `@triskel/tinyhtml` | [![minzip-tinyhtml]](https://bundlephobia.com/result?p=@triskel/tinyhtml)<br>`@triskel/parser`<br>`@triskel/stringify` | Parses into [@TriskelAST] and serializes back minifying the resulting HTML |
+| `@triskel/parser` | [![minzip-parser]](https://bundlephobia.com/result?p=@triskel/parser) | Parses HTML into [@triskelAST] |
+| `@triskel/loader` | [![minzip-loader]](https://bundlephobia.com/result?p=@triskel/loader)<br>`@triskel/parser` | Parses and load HTML as stringified [@triskelAST] for webpack and rollup (`@triskel/loader/rollup`) |
+| `@triskel/app` | [![minzip-app]](https://bundlephobia.com/result?p=@triskel/app)<br>`@triskel/con-text` | Renders [@triskelAST] into the DOM |
+| `@triskel/stringify` | [![minzip-stringify]](https://bundlephobia.com/result?p=@triskel/stringify) | Serializes [@triskelAST] into a String |
+| `@triskel/tinyhtml` | [![minzip-tinyhtml]](https://bundlephobia.com/result?p=@triskel/tinyhtml)<br>`@triskel/parser`<br>`@triskel/stringify` | Parses into [@triskelAST] and serializes back minifying the resulting HTML |
 
 | package | size / dependencies | description |
 | -- | -- | -- |
 | @triskel/template | [![minzip-template]](https://bundlephobia.com/result?p=@triskel/template)<br>`@triskel/con-text` | This is a regular template engine to interpolate and render Strings |
 
 
-#### @TriskelAST
+#### @triskelAST
 
-| HTML | @TriskelAST |
+| HTML | @triskelAST |
 | -- | -- |
 | `<h1>Title 1</h1>` | <code>{<br>&nbsp;$: 'h1',<br>&nbsp;_: 'Title 1',<br>} </code> |
 
 
 
-[@TriskelAST]: #@TriskelAST
+[@triskelAST]: #@triskelAST
 
 [minzip-con-text]: https://badgen.net/bundlephobia/minzip/@triskel/con-text
 [minzip-parser]: https://badgen.net/bundlephobia/minzip/@triskel/parser
