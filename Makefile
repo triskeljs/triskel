@@ -25,7 +25,7 @@ ifndef FORCE_COLOR
 endif
 
 ifndef NYC_REPORTERS
-  export NYC_REPORTERS='--reporter=text'
+  export NYC_REPORTERS=--reporter=text
 endif
 
 dirs=_common,con-text,app,parser,loader,stringify,tinyhtml,template
@@ -44,6 +44,7 @@ lint: node_modules
 mocha: node_modules
 	npx mocha "{$(dirs)}/{,**/}*.test.js" \
 		--require @babel/register \
+		--require source-map-support/register \
 		--require module-alias/register \
 		--full-trace
 

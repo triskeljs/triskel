@@ -1,6 +1,6 @@
 
-const assert = require('assert')
-const { createFilter } = require('./rollup')
+import assert from 'assert'
+import { createFilter } from './rollup'
 
 /** define-property */
 describe(__filename.substr(process.cwd().length), function () {

@@ -32,13 +32,13 @@ function _processNode (_node, processor, options, i, indent_level) {
 
   if( processor instanceof Function ) {
     for( var key in _node ) {
-      if( key !== '$' && key !== '_' ) node[key] = _node[key]
+      if( key !== 'tag' && key !== 'content' ) node[key] = _node[key]
     }
 
     _node.__parent__ = _node
 
     result = processor(node, function _renderChildren () {
-      return this._ ? _stringifyNodes(this._, options, indent_level + 1) : ''
+      return this.content ? _stringifyNodes(this.content, options, indent_level + 1) : ''
     }, _renderAttrs.bind(node) )
 
     if( typeof result === 'string' ) return result
@@ -46,21 +46,21 @@ function _processNode (_node, processor, options, i, indent_level) {
 
   result = ''
 
-  if( node.$ ) {
+  if( node.tag ) {
     if( options.prettify_markup ) result += _indentationSpaces(indent_level, i)
-    result += '<' + node.$ + _stringifyAttrs(node.attrs) + ( node.self_closed ? '/' : '' ) + '>' + (options.prettify_markup && node.warn ? '\n' : '')
-    if( '_' in node ) result += _stringifyNodes(node._, options, indent_level + (node.warn ? 0 : 1) )
+    result += '<' + node.tag + _stringifyAttrs(node.attrs) + ( node.self_closed ? '/' : '' ) + '>' + (options.prettify_markup && node.warn ? '\n' : '')
+    if( 'content' in node ) result += _stringifyNodes(node.content, options, indent_level + (node.warn ? 0 : 1) )
     if( !node.self_closed && !node.unclosed ) {
-      if( options.prettify_markup && node._ instanceof Array ) result += '\n'
-      result += '</' + node.$ + '>'
+      if( options.prettify_markup && node.content instanceof Array ) result += '\n'
+      result += '</' + node.tag + '>'
     }
   } else if( 'comments' in node ) {
     if( options.remove_comments === false ) {
       if( options.prettify_markup ) result += _indentationSpaces(indent_level, i)
       result += '<!--' + node.comments + '-->'
     }
-  } else {
-    result += node.text || ''
+  // } else {
+  //   result += node.text || ''
   }
 
   return result
@@ -70,7 +70,7 @@ function _stringifyNodes (nodes, options, indent_level) {
   if( typeof nodes === 'string' ) return nodes
 
   return nodes.reduce(function (html, node, i) {
-    return html + _processNode(node, options.processors[node.$], options, i, indent_level)
+    return html + _processNode(node, options.processors[node.tag], options, i, indent_level)
   }, '')
 }
 

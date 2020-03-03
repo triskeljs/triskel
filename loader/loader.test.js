@@ -1,6 +1,6 @@
 
-var loadHTML = require('./loader'),
-    assert = require('assert')
+import loadHTML from './loader'
+import assert from 'assert'
 
 /** define-property */
 describe(__filename.substr(process.cwd().length), function () {
@@ -12,7 +12,7 @@ describe('loader', function () {
 
     assert.strictEqual( loadHTML(`
 <div id="foobar">foo</div>
-    `), `export default [{attrs:{id:'foobar'},_:'foo',$:'div'}];` )
+    `), `export default [{attrs:{id:'foobar'},content:['foo'],tag:'div'}];` )
 
   })
 
@@ -20,7 +20,7 @@ describe('loader', function () {
 
     assert.strictEqual( loadHTML(`<style>
   @import '/assets/styles.css';
-</style>`), `export default [{_:"\\n  @import '/assets/styles.css';\\n",$:'style'}];` )
+</style>`), `export default [{content:["\\n  @import '/assets/styles.css';\\n"],tag:'style'}];` )
 
   })
 
@@ -28,7 +28,7 @@ describe('loader', function () {
 
     assert.strictEqual( loadHTML(`<style>
   @import '/assets/styles.css';
-</style><!-- foobar -->`, { remove_comments: false }), `export default [{_:"\\n  @import '/assets/styles.css';\\n",$:'style'},{comments:' foobar '}];` )
+</style><!-- foobar -->`, { remove_comments: false }), `export default [{content:["\\n  @import '/assets/styles.css';\\n"],tag:'style'},{comments:' foobar '}];` )
 
   })
 
@@ -36,7 +36,7 @@ describe('loader', function () {
 
     assert.strictEqual( loadHTML(`<style>
   @import '/assets/styles.css';
-</style><!-- foobar -->`), `export default [{_:"\\n  @import '/assets/styles.css';\\n",$:'style'}];` )
+</style><!-- foobar -->`), `export default [{content:["\\n  @import '/assets/styles.css';\\n"],tag:'style'}];` )
 
   })
 
@@ -44,7 +44,7 @@ describe('loader', function () {
 
     assert.strictEqual( loadHTML(`<style>
   @import '/assets/styles.css';
-</style><!-- foobar -->`, { remove_comments: true }), `export default [{_:"\\n  @import '/assets/styles.css';\\n",$:'style'}];` )
+</style><!-- foobar -->`, { remove_comments: true }), `export default [{content:["\\n  @import '/assets/styles.css';\\n"],tag:'style'}];` )
 
   })
 

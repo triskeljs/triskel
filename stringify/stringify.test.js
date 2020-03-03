@@ -10,7 +10,7 @@ describe('stringify', function () {
 
   it('div', function () {
 
-    assert.deepEqual( stringifyNodes([{ $:'div', attrs: { id: 'foobar' }, _:[{ text: 'foo' }] }]), `
+    assert.deepEqual( stringifyNodes([{ tag:'div', attrs: { id: 'foobar' }, content:['foo'] }]), `
 <div id="foobar">foo</div>
     `.trim() )
 
@@ -18,7 +18,7 @@ describe('stringify', function () {
 
   it('self_closed', function () {
 
-    assert.deepEqual( stringifyNodes([{ $:'div', attrs: { id: 'foobar' }, _:[{ text: 'foo' }] }, { $: 'br', self_closed: true }]), `
+    assert.deepEqual( stringifyNodes([{ tag:'div', attrs: { id: 'foobar' }, content:['foo'] }, { tag: 'br', self_closed: true }]), `
 <div id="foobar">foo</div><br/>
     `.trim() )
 
@@ -26,7 +26,7 @@ describe('stringify', function () {
 
   it('prettify_markup', function () {
 
-    assert.deepEqual( stringifyNodes([{ $:'div', attrs: { id: 'foobar' }, _:[{ $: 'foo', _: 'bar' }] }, { $: 'br', self_closed: true }], {
+    assert.deepEqual( stringifyNodes([{ tag:'div', attrs: { id: 'foobar' }, content:[{ tag: 'foo', content: 'bar' }] }, { tag: 'br', self_closed: true }], {
       prettify_markup: true,
     }), `
 <div id="foobar">
@@ -40,11 +40,11 @@ describe('stringify', function () {
   it('prettify_markup with comments', function () {
 
     assert.deepEqual( stringifyNodes([
-      { $:'div', attrs: { id: 'foobar' }, _:[
+      { tag:'div', attrs: { id: 'foobar' }, content:[
         { comments: ' foobar ' },
-        { $: 'foo', _: 'bar' },
+        { tag: 'foo', content: 'bar' },
       ] },
-      { $: 'br', self_closed: true },
+      { tag: 'br', self_closed: true },
     ], {
       prettify_markup: true,
       remove_comments: false,
@@ -61,11 +61,11 @@ describe('stringify', function () {
   it('prettify_markup removing comments', function () {
 
     assert.deepEqual( stringifyNodes([
-      { $:'div', attrs: { id: 'foobar' }, _:[
+      { tag:'div', attrs: { id: 'foobar' }, content:[
         { comments: ' foobar ' },
-        { $: 'foo', _: 'bar' },
+        { tag: 'foo', content: 'bar' },
       ] },
-      { $: 'br', self_closed: true },
+      { tag: 'br', self_closed: true },
     ], {
       prettify_markup: true,
       remove_comments: true,
@@ -81,32 +81,17 @@ describe('stringify', function () {
   it('text nodes', function () {
 
     assert.strictEqual( stringifyNodes([
-      {
-        text: 'foo ',
-      },
-      {
-        text: ' bar',
-      },
-    ]), 'foo  bar' )
-
-  })
-
-  it('mixed nodes', function () {
-
-    assert.strictEqual( stringifyNodes([
       'foo ',
-      {
-        text: ' bar',
-      },
+      ' bar',
     ]), 'foo  bar' )
 
   })
 
   it('script', function () {
 
-    assert.strictEqual( stringifyNodes([{ $:'script', attrs: { 'template:type': 'text/javascript' }, _:`
+    assert.strictEqual( stringifyNodes([{ tag:'script', attrs: { 'template:type': 'text/javascript' }, content:[`
   var foo = 'bar';
-` }]), `
+`] }]), `
 <script template:type="text/javascript">
   var foo = 'bar';
 </script>
@@ -118,21 +103,21 @@ describe('stringify', function () {
 
     assert.strictEqual( stringifyNodes([
       {
-        $: '!DOCTYPE',
+        tag: '!DOCTYPE',
         attrs: {
           html: '',
         },
-        _: [
+        content: [
           {
-            _: [
+            content: [
               {
-                $: 'head',
+                tag: 'head',
               },
               {
-                $: 'body',
+                tag: 'body',
               },
             ],
-            $: 'html',
+            tag: 'html',
           },
         ],
         unclosed: true,
@@ -156,14 +141,14 @@ describe('stringify', function () {
 
     assert.strictEqual( stringifyNodes([
       {
-        $: 'pre',
-        _: [
+        tag: 'pre',
+        content: [
           {
-            $: 'code',
+            tag: 'code',
             attrs: {
               class: 'language-html',
             },
-            _: '\n<!DOCTYPE html>\n<html>\n  <head></head>\n  <body></body>\n</html>\n',
+            content: ['\n<!DOCTYPE html>\n<html>\n  <head></head>\n  <body></body>\n</html>\n'],
           },
         ],
       },
@@ -176,15 +161,11 @@ describe('stringify', function () {
     var snippet = 'foo <!-- commented text --> bar'
 
     assert.strictEqual( stringifyNodes([
-      {
-        text: 'foo ',
-      },
+      'foo ',
       {
         comments: ' commented text ',
       },
-      {
-        text: ' bar',
-      },
+      ' bar',
     ], { remove_comments: false }), snippet.trim() )
 
   })
@@ -192,15 +173,11 @@ describe('stringify', function () {
   it('remove comments implicitly', function () {
 
     assert.strictEqual( stringifyNodes([
-      {
-        text: 'foo ',
-      },
+      'foo ',
       {
         comments: ' commented text ',
       },
-      {
-        text: ' bar',
-      },
+      ' bar',
     ]), 'foo  bar' )
 
   })
@@ -208,15 +185,11 @@ describe('stringify', function () {
   it('remove comments explicitly', function () {
 
     assert.strictEqual( stringifyNodes([
-      {
-        text: 'foo ',
-      },
+      'foo ',
       {
         comments: ' commented text ',
       },
-      {
-        text: ' bar',
-      },
+      ' bar',
     ], { remove_comments: true }), 'foo  bar' )
 
   })

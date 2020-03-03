@@ -29,7 +29,7 @@ describe('parsing tags', function () {
     assert.strictEqual( tinyHTML(snippet_script, {
       processors: {
         script: function (tag) {
-          tag._ = ''
+          tag.content = ['']
         },
       },
     }), 'foo<script src="http://example.com/script.js"></script>bar', 'compress')
@@ -41,7 +41,7 @@ describe('parsing tags', function () {
     assert.strictEqual( tinyHTML(snippet_script, {
       processors: {
         script: function (tag, getContent, getAttrs) {
-          tag._ = getAttrs()
+          tag.content = [getAttrs()]
         },
       },
     }), 'foo<script src="http://example.com/script.js"> src="http://example.com/script.js"</script>bar', 'compress')
@@ -52,8 +52,8 @@ describe('parsing tags', function () {
 
     assert.strictEqual( tinyHTML(snippet_script, {
       processors: {
-        script: function (tag) {
-          tag._ = 'var href = \'' + tag.attrs.src + '\';'
+        script: function (node) {
+          node.content = ['var href = \'' + node.attrs.src + '\';']
         },
       },
     }), `foo<script src="http://example.com/script.js">var href = 'http://example.com/script.js';</script>bar`, 'accesing attributes')

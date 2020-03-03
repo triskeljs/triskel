@@ -1,6 +1,6 @@
 
-const triskelLoader = require('./loader')
-const minimatch = require('minimatch')
+import triskelLoader  from './loader'
+import minimatch  from 'minimatch'
 
 export function createFilter (include_pattern, exlude_pattern, minimatch_options = {}) {
 

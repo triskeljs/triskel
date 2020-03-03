@@ -1,40 +1,41 @@
 /* eslint-env node */
 
 function _parseTag (tag_str, options) {
-  var tag = { attrs: {}, _: [], unclosed: true }
+  var node = { attrs: {}, content: [], unclosed: true }
 
   tag_str
     .replace(/^<|>$/g, '')
     .replace(/ *\/$/, function () {
-      delete tag.unclosed
-      tag.self_closed = true
+      delete node.unclosed
+      node.self_closed = true
       return ''
     })
     .replace(/^\//, function () {
-      if( tag.self_closed ) throw new Error('tag closer self_closed: ' + tag_str )
-      tag.closer = true
+      if( node.self_closed ) throw new Error('tag closer self_closed: ' + tag_str )
+      node.closer = true
       return ''
     })
     .replace(/^[^ ]+/, function (node_name) {
-      tag.$ = node_name.trim()
-      if( /^!/.test(node_name) ) tag.warn = true
+      node.tag = node_name.trim()
+      if( /^!/.test(node_name) ) node.warn = true
       return ''
     })
     .replace(/\b([^= ]+) *= *"([^"]*?)"|\b([^= ]+) *= *'([^']*?)'/g, function (_matched, attribute, value) {
+      if (!attribute) return ''
       attribute = attribute.trim()
       if( attribute === 'style' ) value = value.replace(/([:;])\s+/g, '$1')
-      if( options.compress_attibutes !== false ) value = value.replace(/ *\n */g, '').trim()
-      tag.attrs[attribute] = value
+      if( options.compress_attributes !== false ) value = value.replace(/ *\n */g, '').trim()
+      node.attrs[attribute] = value
       return ''
     })
     .split(/ +/)
     .forEach(function (empty_attr) {
       empty_attr = empty_attr.trim()
       if( !empty_attr ) return
-      tag.attrs[empty_attr] = ''
+      node.attrs[empty_attr] = ''
     })
 
-  return tag
+  return node
 }
 
 function _trimText (text) {
@@ -92,26 +93,28 @@ function _tokenize (html) {
 function _parseHTML (html, nodes, node_opened, options) {
   options = options || {}
 
-  _tokenize(html).forEach(function (tag, i) {
+  const tokens = _tokenize(html)
+
+  tokens.forEach(function (token, i) {
 
     if( !(i%2) ) {
-      if( /\S/.test(tag) ) node_opened._.push( _trimText(tag) )
+      if( /\S/.test(token) ) node_opened.content.push( _trimText(token) )
       return
     }
 
-    tag = _parseTag(tag, options)
+    const node = _parseTag(token, options)
 
-    if( tag.closer ) {
-      if( tag.$ !== node_opened.$ ) throw new Error('tag closer \'' + tag.$ + '\' for \'' + node_opened.$ + '\'' )
+    if( node.closer ) {
+      if( node.tag !== node_opened.tag && !options.ignore_bad_closed ) throw new Error('tag closer \'' + node.tag + '\' for \'' + node_opened.tag + '\'' )
       delete node_opened.unclosed
       node_opened = node_opened._parent
-    } else if( tag.self_closed ) {
-      node_opened._.push(tag)
+    } else if( node.self_closed ) {
+      node_opened.content.push(node)
     } else {
-      tag._parent = node_opened
+      node._parent = node_opened
       // tag._ = [];
-      node_opened._.push(tag)
-      node_opened = tag
+      node_opened.content.push(node)
+      node_opened = node
     }
 
   })
@@ -133,32 +136,32 @@ var RE_full_content = new RegExp( '(' + '<!--|-->|' + full_content_tags.map(func
 }).join('|') + ')', 'g')
 
 function _cleanNodes (nodes) {
-  nodes.forEach(function (tag) {
+  nodes.forEach(function (node) {
     // avoiding circular structure
-    delete tag._parent
+    delete node._parent
 
     // removing temporary tester
-    delete tag.match_closer
+    delete node.match_closer
 
     // cleaning empty attributes
-    if( tag.attrs && Object.keys(tag.attrs).length === 0 ) delete tag.attrs
+    if( node.attrs && Object.keys(node.attrs).length === 0 ) delete node.attrs
 
     // cleaning empty children
-    if( tag._ instanceof Array ) {
-      if( !tag._.length ) delete tag._
-      else if( tag._.length === 1 && typeof tag._[0] === 'string' ) tag._ = tag._[0]
-      else _cleanNodes(tag._)
+    if( node.content instanceof Array ) {
+      if( !node.content.length ) delete node.content
+      // else if( node.content.length === 1 && typeof node.content[0] === 'string' ) node.content = node.content[0]
+      else _cleanNodes(node.content)
     }
 
   })
   return nodes
 }
 
-function parseHTML (html, options) {
+export default function parseHTML (html, options) {
 
   var tag_opened = null,
       nodes = [],
-      last_parse = { node_opened: { _: nodes } }
+      last_parse = { node_opened: { content: nodes } }
 
   options = options || {}
 
@@ -167,9 +170,9 @@ function parseHTML (html, options) {
     if( !(i%2) ) {
       if( tag_opened ) {
         if( 'comments' in tag_opened ) tag_opened.comments += token
-        else if( typeof tag_opened._ === 'string' ) tag_opened._ += token
-        else tag_opened._ = token
-      } else last_parse = _parseHTML(token, nodes, last_parse.node_opened || { $: '__root__', _: nodes }, options)
+        // else if( typeof tag_opened.content === 'string' ) tag_opened.content += token
+        else tag_opened.content = [token]
+      } else last_parse = _parseHTML(token, nodes, last_parse.node_opened || { tag: '__root__', content: nodes }, options)
       return
     }
 
@@ -180,31 +183,29 @@ function parseHTML (html, options) {
         tag_opened = null
       } else {
         if( 'comments' in tag_opened ) tag_opened.comments += token
-        else if( typeof tag_opened._ === 'string' ) tag_opened._ += token
-        else tag_opened._ = token
+        // else if( typeof tag_opened.content === 'string' ) tag_opened.content += token
+        else tag_opened.content = [token]
       }
     } else {
       if( token === '<!--' ) tag_opened = { comments: '', match_closer: /^-->$/, unclosed: true }
       else {
         tag_opened = _parseTag(token, options)
-        tag_opened.match_closer = new RegExp('^<\\/ *' + tag_opened.$ + ' *>$')
+        tag_opened.match_closer = new RegExp('^<\\/ *' + tag_opened.tag + ' *>$')
       }
 
-      if( token === '-->' ) throw new Error('unexpected comments closer \'-->\'')
-      if( tag_opened.closer ) throw new Error('unexpected tag closer \'' + token + '\'')
+      if( token === '-->' && !options.ignore_bad_closed ) throw new Error('unexpected comments closer \'-->\'')
+      if( tag_opened.closer && !options.ignore_bad_closed ) throw new Error('unexpected tag closer \'' + token + '\'')
 
       if( !('comments' in tag_opened) || !options.remove_comments ){
-        last_parse.node_opened._.push(tag_opened)
+        last_parse.node_opened.content.push(tag_opened)
       }
     }
 
   })
 
   if( !options.ignore_unclosed && last_parse.node_opened && last_parse.node_opened.unclosed && !last_parse.node_opened.warn ) {
-    throw new Error('tab unclosed \'' + last_parse.node_opened.$ + '\'')
+    throw new Error('tag unclosed \'' + last_parse.node_opened.tag + '\'')
   }
 
   return _cleanNodes(nodes)
 }
-
-module.exports = parseHTML
