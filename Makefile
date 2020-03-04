@@ -1,13 +1,12 @@
-
 #!make
-SHELL := /bin/bash 
+SHELL := env PATH=$(shell npm bin):$(PATH) /bin/bash
+
+# following does not work well in some environments (like macos) or with some commands (jsdoc)
+# SHELL := /bin/bash 
+# export PATH := $(shell npm bin):$(PATH)
 
 .DEFAULT_GOAL=default
 .PHONY: build dev deploy
-
-# include npm bin folder into $PATH
-export PATH := $(shell npm bin):$(PATH)
-export GIT_BRANCH="${GITHUB_REF/refs\/heads\//}"
 
 # include dotenv (.env)
 ifeq ($(wildcard ./.env),./.env)
@@ -27,6 +26,8 @@ endif
 ifndef NYC_REPORTERS
   export NYC_REPORTERS=--reporter=text
 endif
+
+branch_name = $(shell git symbolic-ref --short HEAD)
 
 dirs=_common,con-text,app,parser,loader,stringify,tinyhtml,template
 
