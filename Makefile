@@ -43,7 +43,7 @@ lint: node_modules
 	eslint {${dirs}} --color
 
 mocha: node_modules
-	npx mocha "{$(dirs)}/{,**/}*.test.js" \
+	mocha "{$(dirs)}/{,**/}*.test.js" \
 		--require @babel/register \
 		--require source-map-support/register \
 		--require module-alias/register \
@@ -71,19 +71,19 @@ codeclimate:
 
 # docs
 docs:
-	npx jsdoc --configure .jsdoc.json --verbose {${dirs}} -d docs
+	jsdoc --configure .jsdoc.json --verbose {${dirs}} -d docs
 
 # building
 build:
 	rm -rf dist
-	# npx babel src --out-dir dist --ignore src/**/*.test.js
-	# npx rollup src/con-text.js \
+	# babel src --out-dir dist --ignore src/**/*.test.js
+	# rollup src/con-text.js \
 	# 	-c rollup.config.js \
 	# 	--output.format umd \
 	# 	--output.file dist/con-text.umd.js \
 	# 	--output.exports named \
 	# 	-n conText
-	# npx uglifyjs dist/con-text.umd.js --compress --mangle -o dist/con-text.min.js
+	# uglifyjs dist/con-text.umd.js --compress --mangle -o dist/con-text.min.js
 
 npm.publish:
 	git pull --tags
