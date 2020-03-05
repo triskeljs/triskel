@@ -1,6 +1,6 @@
 
 import assert from 'assert'
-import { runErrorsTestSuite } from '../_common/test.helpers'
+import { runErrorsTestSuite } from '../_utils/test.helpers'
 
 import { tokenizeExpressions, stringifyTokens, interpolateText } from './interpolate'
 

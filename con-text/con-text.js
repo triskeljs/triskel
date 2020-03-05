@@ -5,7 +5,7 @@
 import { evalExpression } from './eval'
 import { interpolateText } from './interpolate'
 import { filterProcessor, defineFilter, parseExpressionFilters } from './filters'
-import { pipeProcessor } from '../_common/list'
+import { pipeProcessor } from '../_utils/list'
 
 export default new ConText()
 

@@ -58,29 +58,11 @@ describe(__filename.substr(process.cwd().length), function () {
     [
 
       [[1, 2, 3, 4, 5, 6], (num) => (sum) => num + sum, 0, 21],
+      [['foo', 'bar', '123'], (foo) => (bar) => bar + ':' + foo, 'input', 'input:foo:bar:123'],
 
     ].forEach((test_case) => _runTestCase.apply(null, test_case))
 
   })
-
-  // describe('pipeProcessor(spy)', function () {
-
-  //   function _runTestCase (pipe_list, reducerFn, data_in, expected_result) {
-  //     it(`${ pipe_list } -> ${ JSON.stringify(expected_result) }`, function () {
-  //       assert.deepStrictEqual(
-  //         pipeProcessor(pipe_list, reducerFn)(data_in),
-  //         expected_result,
-  //       )
-  //     })
-  //   }
-
-  //   [
-
-  //     [  ],
-
-  //   ].forEach( (test_case) => _runTestCase.apply(null, test_case) )
-
-  // })
 
   /** */
 })

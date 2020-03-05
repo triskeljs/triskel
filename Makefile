@@ -29,7 +29,7 @@ endif
 
 branch_name = $(shell git symbolic-ref --short HEAD)
 
-dirs=_common,con-text,app,parser,loader,stringify,tinyhtml,template
+dirs=_utils,con-text,app,parser,loader,stringify,tinyhtml,template
 
 # common
 default: install test build
@@ -43,11 +43,11 @@ lint: node_modules
 	eslint {${dirs}} --color
 
 mocha: node_modules
-	npx mocha "{$(dirs)}/{,**/}*.test.js" \
+	mocha "{$(dirs)}/{,**/}*.test.js" \
 		--require @babel/register \
 		--require source-map-support/register \
 		--require module-alias/register \
-		--full-trace
+		--inline-diffs --full-trace
 
 nyc-mocha: # p.e: make nyc-mocha NYC_REPORTERS="--reporter=lcov --reporter=text"
 	nyc ${NYC_REPORTERS} $(MAKE) mocha
@@ -71,19 +71,19 @@ codeclimate:
 
 # docs
 docs:
-	npx jsdoc --configure .jsdoc.json --verbose {${dirs}} -d docs
+	jsdoc --configure .jsdoc.json --verbose {${dirs}} -d docs
 
 # building
 build:
 	rm -rf dist
-	# npx babel src --out-dir dist --ignore src/**/*.test.js
-	# npx rollup src/con-text.js \
+	# babel src --out-dir dist --ignore src/**/*.test.js
+	# rollup src/con-text.js \
 	# 	-c rollup.config.js \
 	# 	--output.format umd \
 	# 	--output.file dist/con-text.umd.js \
 	# 	--output.exports named \
 	# 	-n conText
-	# npx uglifyjs dist/con-text.umd.js --compress --mangle -o dist/con-text.min.js
+	# uglifyjs dist/con-text.umd.js --compress --mangle -o dist/con-text.min.js
 
 npm.publish:
 	git pull --tags

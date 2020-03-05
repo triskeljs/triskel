@@ -117,6 +117,29 @@ describe('parser', function () {
 
   })
 
+  it('several lines attributes (single quotes)', function () {
+
+    assert.deepEqual( parseHTML(`
+<foo-bar
+  foo='bar'
+  bar='foo'></foo-bar>
+    `), [{ tag:'foo-bar', attrs: { foo: 'bar', bar: 'foo' } }] )
+
+  })
+
+//   it('several lines attribute values (mixed single and double quotes)', function () {
+
+//     assert.deepEqual( parseHTML(`
+// <foo-bar
+//   foo="bar"
+//   bar='{
+//     foo: "bar",
+//     bar: "foobar",
+//   }'></foo-bar>
+//     `, { compress_attributes: false }), [{ tag:'foo-bar', attrs: { foo: 'bar', bar: `{\n    foo: "bar",\n    bar: "foobar",\n  }` } }] )
+
+//   })
+
   it('several lines attribute values', function () {
 
     assert.deepEqual( parseHTML(`

@@ -5,7 +5,7 @@
 
 // https://stackoverflow.com/questions/1661197/what-characters-are-valid-for-javascript-variable-names/9337047#9337047
 
-import { global } from '../_common/global-this'
+import { global } from '../_utils/global-this'
 
 var ecma_keywords = {}
 

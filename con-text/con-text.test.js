@@ -1,7 +1,7 @@
 
 import assert from 'assert'
 import sinon from 'sinon'
-import { runErrorsTestSuite } from '../_common/test.helpers'
+import { runErrorsTestSuite } from '../_utils/test.helpers'
 
 import {
   createConText,

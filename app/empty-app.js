@@ -1,6 +1,6 @@
 
-import { firstIn } from '../_common/list'
-import { extend } from '../_common/object'
+import { firstIn } from '../_utils/list'
+import { extend } from '../_utils/object'
 import renderNodes from './render'
 
 function _noop () {}
