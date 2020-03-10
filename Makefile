@@ -1,5 +1,5 @@
 #!make
-SHELL := env PATH=$(shell npm bin):$(PATH) /bin/bash
+SHELL := env PATH=$(shell npm bin):$(PATH) /bin/bash -O extglob
 
 # following does not work well in some environments (like macos) or with some commands (jsdoc)
 # SHELL := /bin/bash 
