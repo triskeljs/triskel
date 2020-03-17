@@ -38,7 +38,9 @@ function _processNode (_node, processor, options, i, indent_level) {
     _node.__parent__ = _node
 
     result = processor(node, function _renderChildren () {
-      return this.content ? _stringifyNodes(this.content, options, indent_level + 1) : ''
+      return this.content
+        ? _stringifyNodes(this.content, options, indent_level + 1)
+        : ''
     }, _renderAttrs.bind(node) )
 
     if( typeof result === 'string' ) return result

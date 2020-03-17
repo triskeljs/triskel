@@ -3,6 +3,14 @@
 function _parseTag (tag_str, options) {
   var node = { attrs: {}, content: [], unclosed: true }
 
+  function _replaceQuote (_matched, attribute, value) {
+    if (!attribute) return ''
+    attribute = attribute.trim()
+    if (options.compress_attributes !== false) value = value.replace(/ *\n */g, '').trim()
+    node.attrs[attribute] = value
+    return ''
+  }
+
   tag_str
     .replace(/^<|>$/g, '')
     .replace(/ *\/$/, function () {
@@ -20,14 +28,8 @@ function _parseTag (tag_str, options) {
       if( /^!/.test(node_name) ) node.warn = true
       return ''
     })
-    .replace(/\b([^= ]+) *= *"([^"]*?)"|\b([^= ]+) *= *'([^']*?)'/g, function (_matched, attribute, value) {
-      if (!attribute) return ''
-      attribute = attribute.trim()
-      if( attribute === 'style' ) value = value.replace(/([:;])\s+/g, '$1')
-      if( options.compress_attributes !== false ) value = value.replace(/ *\n */g, '').trim()
-      node.attrs[attribute] = value
-      return ''
-    })
+    .replace(/\b([^= ]+)\s*=\s*"([^"]*?)"/g, _replaceQuote)
+    .replace(/\b([^= ]+)\s*=\s*'([^']*?)'/g, _replaceQuote)
     .split(/ +/)
     .forEach(function (empty_attr) {
       empty_attr = empty_attr.trim()

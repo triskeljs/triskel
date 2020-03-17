@@ -2,14 +2,14 @@
 var EACH = / *([^,]+)(\s*,\s*([\S]+))? in (\S+)/
 
 export default {
-  if: function (expression, scope, renderContent, renderOtherwise) {
+  if (expression, scope, renderContent, renderOtherwise) {
     if (this.eval(expression)(scope)) return renderContent(scope)
     return renderOtherwise(scope)
   },
-  each: function (expression, scope, renderContent) {
+  each (expression, scope, renderContent) {
     var expressions = expression.match(EACH), key, i, n, s
 
-    if (!expressions) throw new Error('each expression is not correct: ' + expression)
+    if (!expressions) throw new Error('each expression is not correct "' + expression + '"')
 
     var result = '',
       item_key = expressions[1],

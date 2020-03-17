@@ -44,13 +44,15 @@ function createTemplateContext() {
   }
   template.cmd = template.statement
 
-  template.filter = function (filter_name, filterFn) {
+  template.defineFilter = function (filter_name, filterFn) {
     if (typeof filter_name !== 'string') _throwType('filter name should be a String', filter_name)
     if (typeof filterFn !== 'function') _throwType('filter function should be a Function', filterFn)
 
     con_Text.defineFilter(filter_name, filterFn)
     return template
   }
+
+  template.filter = template.defineFilter
 
   template.compile = function (template_src) {
     return _compileTemplate(con_Text, statements, self_closed_statements, template_src)

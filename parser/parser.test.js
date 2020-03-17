@@ -91,6 +91,14 @@ describe('parser', function () {
 
   })
 
+  it('several lt attributes (single quotes)', function () {
+
+    assert.deepEqual( parseHTML(`
+<foo-bar foo=' bar < foo && bar < foo '></foo-bar>
+    `), [{ tag:'foo-bar', attrs: { foo: 'bar < foo && bar < foo' } }] )
+
+  })
+
   it('several gt attributes', function () {
 
     assert.deepEqual( parseHTML(`
@@ -98,6 +106,14 @@ describe('parser', function () {
     `), [{ tag:'foo-bar', attrs: { foo: 'bar > foo && bar > foo' } }] )
 
   })
+
+//   it('several gt attributes (single quotes)', function () {
+
+//     assert.deepEqual( parseHTML(`
+// <foo-bar foo=' bar > foo && bar > foo '></foo-bar>
+//     `), [{ tag:'foo-bar', attrs: { foo: 'bar > foo && bar > foo' } }] )
+
+//   })
 
   it('several lt && gt attributes', function () {
 
@@ -127,6 +143,19 @@ describe('parser', function () {
     bar: 'foobar',
   }"></foo-bar>
     `, { compress_attributes: false }), [{ tag:'foo-bar', attrs: { foo: 'bar', bar: `{\n    foo: 'bar',\n    bar: 'foobar',\n  }` } }] )
+
+  })
+
+  it('several lines attribute values (single quotes)', function () {
+
+    assert.deepEqual( parseHTML(`
+<foo-bar
+  foo="bar"
+  bar='{
+    foo: "bar",
+    bar: "foobar",
+  }'></foo-bar>
+    `, { compress_attributes: false }), [{ tag:'foo-bar', attrs: { foo: 'bar', bar: `{\n    foo: "bar",\n    bar: "foobar",\n  }` } }] )
 
   })
 
@@ -224,6 +253,32 @@ foo <!--<script template:type="text/javascript">
     }] }] )
 
   })
+
+//   it('code <script>', function () {
+
+//     assert.deepEqual( parseHTML(`
+// <pre><code class="language-html">
+// <!DOCTYPE html>
+// <html>
+//   <head></head>
+//   <body>
+//     <script></script>
+//   </body>
+// <html>
+// </code></pre>
+//     `), [{ tag:'pre', content: [{
+//       tag: 'code', attrs: { class: 'language-html' }, content: [`
+// <!DOCTYPE html>
+// <html>
+//   <head></head>
+//   <body>
+//     <script></script>
+//   </body>
+// <html>
+// `],
+//     }] }] )
+
+//   })
 
   it('img', function () {
 

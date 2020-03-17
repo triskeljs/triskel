@@ -41,11 +41,11 @@ function _raiseTokens(tokens, self_closed_statements, _i) {
 
     current_expression = tokens[i]
 
+    /* istanbul ignore else */
     if (EXPRESSION.test(current_expression)) {
       matched_expression = current_expression.match(EXPRESSION)
 
-      if (!matched_expression)
-        throw new Error(current_expression + ' is not a valid expression')
+      // if (!matched_expression) throw new Error('"' + current_expression + '" is not a valid expression')
 
       if (self_closed_statements[matched_expression[1]] || !matched_expression[1]) {
         chunks.push(_selfClosedChunk(matched_expression[1], matched_expression[2]))
@@ -86,7 +86,6 @@ function _raiseTokens(tokens, self_closed_statements, _i) {
 
       raised.index = i
       return raised
-
     } else throw new Error('Unknow expression type: ' + current_expression)
   }
 

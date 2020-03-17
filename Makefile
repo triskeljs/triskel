@@ -47,7 +47,7 @@ mocha: node_modules
 		--require @babel/register \
 		--require source-map-support/register \
 		--require module-alias/register \
-		--full-trace
+		--full-trace --inline-diffs
 
 nyc-mocha: # p.e: make nyc-mocha NYC_REPORTERS="--reporter=lcov --reporter=text"
 	nyc ${NYC_REPORTERS} $(MAKE) mocha
