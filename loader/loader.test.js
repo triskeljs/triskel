@@ -16,6 +16,14 @@ describe('loader', function () {
 
   })
 
+  it('div (cjs)', function () {
+
+    assert.strictEqual( loadHTML(`
+<div id="foobar">foo</div>
+    `, { cjs: true }), `module.exports = [{attrs:{id:'foobar'},content:['foo'],tag:'div'}];` )
+
+  })
+
   it('style', function () {
 
     assert.strictEqual( loadHTML(`<style>
