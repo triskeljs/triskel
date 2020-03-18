@@ -20,11 +20,14 @@ export function _appendChildren (parent_el, nodes, ns_scheme, options, _withNode
 
     parent_el.appendChild( node_el )
 
-    if( with_node.initNode ) inits_list.push({
-      fn: with_node.initNode,
-      _this: node_el,
-      _args: [node_el, node, options, with_node],
-    })
+    if( with_node.initNode ) {
+      if( typeof with_node.initNode !== 'function' ) throw new TypeError('initNode should be a Function')
+      inits_list.push({
+        fn: with_node.initNode,
+        _this: node_el,
+        _args: [node_el, node, options, with_node],
+      })
+    }
 
     inserted_nodes.push({
       el: node_el,
@@ -49,11 +52,11 @@ export function _create(node, ns_scheme, options, _withNode, inits_list, replace
   if( 'text' in node ) return document.createTextNode( replace_text === undefined ? node.text : replace_text )
   if( 'comments' in node ) return document.createComment(node.comments)
 
-  if( !node.$ ) throw new TypeError('unknown node format')
+  if( !node.tag ) throw new TypeError('unknown node format')
 
-  ns_scheme = ns_scheme || ns_tags[node.$]
-  if( ns_scheme ) node_el = document.createElementNS(ns_scheme, node.$)
-  else node_el = document.createElement(node.$)
+  ns_scheme = ns_scheme || ns_tags[node.tag]
+  if( ns_scheme ) node_el = document.createElementNS(ns_scheme, node.tag)
+  else node_el = document.createElement(node.tag)
 
   if( node.attrs ) {
     for( var key in node.attrs ) {
@@ -67,7 +70,18 @@ export function _create(node, ns_scheme, options, _withNode, inits_list, replace
     }
   }
 
-  if( '_' in node ) _appendChildren(node_el, node._ instanceof Array ? node._ : [node._], ns_scheme, options, _withNode, inits_list)
+  if( 'content' in node ) {
+    _appendChildren(
+      node_el,
+      node.content instanceof Array
+        ? node.content
+        : [node.content],
+      ns_scheme,
+      options,
+      _withNode,
+      inits_list,
+    )
+  }
 
   return node_el
 }

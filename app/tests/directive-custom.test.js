@@ -29,7 +29,7 @@ describe('directive (custom)', function () {
     })
 
     _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'foo-bar': ' foo ',
       },
@@ -48,7 +48,7 @@ describe('directive (custom)', function () {
     })
 
     _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'foo-bar': ' foo ',
       },
@@ -69,7 +69,7 @@ describe('directive (custom)', function () {
     })
 
     _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'foo-bar': ' foo ',
       },

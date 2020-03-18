@@ -24,7 +24,7 @@ describe('directive [data-if]', function () {
 
     assert.throws(function () {
       _APP.render(document.body, [{
-        $: 'div',
+        tag: 'div',
         attrs: {
           'data-class': `[123]`,
         },
@@ -36,7 +36,7 @@ describe('directive [data-if]', function () {
   it('class null', function () {
 
     _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'data-class': 'null',
       },
@@ -49,7 +49,7 @@ describe('directive [data-if]', function () {
   it('class [null]', function () {
 
     _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'data-class': '[null]',
       },
@@ -62,7 +62,7 @@ describe('directive [data-if]', function () {
   it('class _foo-bar', function () {
 
     _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'data-class': "{ _foo: '-bar' }",
       },
@@ -75,7 +75,7 @@ describe('directive [data-if]', function () {
   it('class _foo-bar _bar-foo', function () {
 
     _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'data-class': '{ _foo: "-bar", _bar: "-foo" }',
       },
@@ -88,7 +88,7 @@ describe('directive [data-if]', function () {
   it('class _foo _bar', function () {
 
     _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'data-class': `['_foo', '_bar']`,
       },
@@ -101,7 +101,7 @@ describe('directive [data-if]', function () {
   it('class _foo [_bar]', function () {
 
     _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'data-class': `['_foo', ['_bar']]`,
       },
@@ -114,7 +114,7 @@ describe('directive [data-if]', function () {
   it('class _foo _foo-bar _bar', function () {
 
     _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'data-class': `[{ _foo: '-bar' }, '_bar']`,
       },

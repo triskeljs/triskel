@@ -40,7 +40,7 @@ describe('APP.component', function () {
 
     assert.throws(function () {
       _APP.render(null, [{
-        $: 'my-div',
+        tag: 'my-div',
       }])
     }, TypeError)
 
@@ -55,7 +55,7 @@ describe('APP.component', function () {
     })
 
     _APP.render(document.body, [{
-      $: 'my-div',
+      tag: 'my-div',
     }], {
       data: {
         first_name: 'John',
@@ -65,7 +65,7 @@ describe('APP.component', function () {
     assert.strictEqual(document.body.innerHTML, '<my-div></my-div>')
 
     _APP.render(document.body, [{
-      $: 'my-div', _: 'Hi {{ first_name }}!',
+      tag: 'my-div', content: 'Hi {{ first_name }}!',
     }], {
       data: {
         first_name: 'John',
@@ -92,7 +92,7 @@ describe('APP.component', function () {
     })
 
     _APP.render(document.body, [{
-      $: 'my-div',
+      tag: 'my-div',
     }])
 
     assert.strictEqual(document.body.innerHTML, '<!-- comented my-div -->')
@@ -117,7 +117,7 @@ describe('APP.component', function () {
     })
 
     _APP.render(document.body, [{
-      $: 'my-div',
+      tag: 'my-div',
     }])
 
     assert.strictEqual(document.body.innerHTML, '<my-div><!-- comented text --></my-div>')
@@ -139,7 +139,7 @@ describe('APP.component', function () {
     })
 
     _APP.render(document.body, [{
-      $: 'my-div',
+      tag: 'my-div',
     }])
 
     assert.strictEqual(with_node_called, true)
@@ -167,7 +167,7 @@ describe('APP.component', function () {
     })
 
     _APP.render(document.body, [{
-      $: 'my-div',
+      tag: 'my-div',
     }])
 
     assert.strictEqual(with_node_called, true)
@@ -197,7 +197,7 @@ describe('APP.component', function () {
     })
 
     _APP.render(document.body, [{
-      $: 'my-div',
+      tag: 'my-div',
     }])
 
     assert.strictEqual(with_node_called, true)
@@ -219,10 +219,13 @@ describe('APP.component', function () {
     })
 
     _APP.render(document.body, [{
-      $: 'my-div',
+      tag: 'my-div',
     }, {
-      $: 'div',
+      tag: 'div',
+      content: [{ tag: 'div' }],
     }])
+
+    _APP.render(document.body.querySelector('div'), [])
 
     _APP.render(document.body, [])
 
@@ -237,7 +240,7 @@ describe('APP.component', function () {
     })
 
     _APP.render(document.body, [{
-      $: 'my-div',
+      tag: 'my-div',
     }], {
       data: {
         first_name: 'John',
@@ -260,7 +263,7 @@ describe('APP.component', function () {
     })
 
     _APP.render(document.body, [{
-      $: 'my-div',
+      tag: 'my-div',
     }])
 
     assert.strictEqual(document.body.innerHTML, '<my-div><!-- text: Hi {{ first_name }}! -->Hi John!</my-div>')
@@ -280,7 +283,7 @@ describe('APP.component', function () {
     })
 
     _APP.render(document.body, [{
-      $: 'my-div',
+      tag: 'my-div',
     }])
 
     assert.strictEqual(document.body.innerHTML, '<my-div><!-- text: Hi {{ first_name }}! -->Hi John!</my-div>')
@@ -296,7 +299,7 @@ describe('APP.component', function () {
     })
 
     _APP.render(document.body, [{
-      $: 'my-div', _: 'Hi {{ first_name }}!',
+      tag: 'my-div', content: 'Hi {{ first_name }}!',
     }], {
       data: {
         first_name: 'John',
@@ -320,7 +323,7 @@ describe('APP.component', function () {
     })
 
     _APP.render(document.body, [{
-      $: 'my-div',
+      tag: 'my-div',
     }], {
       data: {
         first_name: 'John',
@@ -343,7 +346,7 @@ describe('APP.component', function () {
     })
 
     _APP.render(document.body, [{
-      $: 'my-div', _: 'Hi {{ first_name }}!',
+      tag: 'my-div', content: 'Hi {{ first_name }}!',
     }], {
       data: {
         first_name: 'John',

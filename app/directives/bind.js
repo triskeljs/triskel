@@ -11,7 +11,7 @@ export default function dataBind (APP, TEXT, directive_ns) {
 
       if( typeof result !== 'string' && !(result instanceof Array) ) throw new TypeError('data-bind should return a String or an Array')
 
-      APP.render(node_el, typeof result === 'string' ? [{ text: result }] : result, { data: _data })
+      APP.render(node_el, typeof result === 'string' ? [result] : result, { data: _data })
     })
 
   })

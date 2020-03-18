@@ -24,7 +24,7 @@ describe('directive [data-if]', function () {
     var el
 
     _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'data-on:click': '_runClick(this)',
       },
@@ -51,7 +51,7 @@ describe('directive [data-if]', function () {
     var el, clicked
 
     _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'data-on:click': '_runClick(this)',
       },

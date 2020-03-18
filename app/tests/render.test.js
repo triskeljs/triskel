@@ -4,6 +4,8 @@ import assert from 'assert'
 import renderNodes from '../render'
 import { JSDOM } from 'jsdom'
 
+import { runErrorsTestSuite } from '../../_common/test.helpers'
+
 /** define-property */
 describe(__filename.substr(process.cwd().length), function () {
 // --------------------------------------
@@ -36,9 +38,9 @@ describe('rendering HTML', function () {
 
   it('render Function attr', function () {
 
-    var html_nodes = [{ $:'div', attrs: { 'class': 'foo-bar', foo: function () {
+    var html_nodes = [{ tag:'div', attrs: { 'class': 'foo-bar', foo: function () {
       return 'bar'
-    } }, _: 'foobar' }]
+    } }, content: 'foobar' }]
 
     renderNodes(document.body, html_nodes)
 
@@ -48,9 +50,9 @@ describe('rendering HTML', function () {
 
   it('render Function attr: null', function () {
 
-    var html_nodes = [{ $:'div', attrs: { 'class': 'foo-bar', foo: function () {
+    var html_nodes = [{ tag:'div', attrs: { 'class': 'foo-bar', foo: function () {
       return null
-    } }, _: 'foobar' }]
+    } }, content: 'foobar' }]
 
     renderNodes(document.body, html_nodes)
 
@@ -60,7 +62,7 @@ describe('rendering HTML', function () {
 
   it('render div', function () {
 
-    var html_nodes = [{ $:'div', attrs: { 'class': 'foo-bar' }, _: 'foobar' }]
+    var html_nodes = [{ tag:'div', attrs: { 'class': 'foo-bar' }, content: 'foobar' }]
 
     renderNodes(document.body, html_nodes)
 
@@ -75,9 +77,9 @@ describe('rendering HTML', function () {
   it('render several p', function () {
 
     var html_nodes = [
-      { $: 'p', _: 'Lorem ipsum...' },
-      { $: 'p', _: 'dolor sit...' },
-      { $: 'p', _: 'amet...' },
+      { tag: 'p', content: 'Lorem ipsum...' },
+      { tag: 'p', content: 'dolor sit...' },
+      { tag: 'p', content: 'amet...' },
     ]
 
     renderNodes(document.body, html_nodes)
@@ -88,9 +90,9 @@ describe('rendering HTML', function () {
 
   it('render svg', function () {
 
-    var html_nodes = [{ $:'div', attrs: { 'class': 'foo-bar' }, _: [
-      { $:'svg', attrs: { height: '100', width: '100' }, _: [
-        { $: 'circle', attrs: { cx: '50', cy: '50', r: '40', stroke: 'black', 'stroke-width': '3', fill: 'red' } },
+    var html_nodes = [{ tag:'div', attrs: { 'class': 'foo-bar' }, content: [
+      { tag:'svg', attrs: { height: '100', width: '100' }, content: [
+        { tag: 'circle', attrs: { cx: '50', cy: '50', r: '40', stroke: 'black', 'stroke-width': '3', fill: 'red' } },
       ] },
     ] }]
 
@@ -102,11 +104,11 @@ describe('rendering HTML', function () {
 
   it('render function attributes', function () {
 
-    renderNodes(document.body, [{ $:'div', attrs: { 'class': function () { return 'foo-bar' } }, _: 'foobar' }])
+    renderNodes(document.body, [{ tag:'div', attrs: { 'class': function () { return 'foo-bar' } }, content: 'foobar' }])
 
     assert.strictEqual( document.body.innerHTML, '<div class="foo-bar">foobar</div>' )
 
-    renderNodes(document.body, [{ $:'div', attrs: { 'class': () => 'foo-bar' }, _: 'foobar' }])
+    renderNodes(document.body, [{ tag:'div', attrs: { 'class': () => 'foo-bar' }, content: 'foobar' }])
 
     assert.strictEqual( document.body.innerHTML, '<div class="foo-bar">foobar</div>' )
 
@@ -114,7 +116,7 @@ describe('rendering HTML', function () {
 
   it('rendering text nodes', function () {
 
-    renderNodes(document.body, [{ $:'div', attrs: { 'class': function () { return 'foo-bar' } }, _: [{ text: 'foobar' }] }])
+    renderNodes(document.body, [{ tag:'div', attrs: { 'class': function () { return 'foo-bar' } }, content: [{ text: 'foobar' }] }])
 
     assert.strictEqual( document.body.innerHTML, '<div class="foo-bar">foobar</div>' )
 
@@ -122,7 +124,7 @@ describe('rendering HTML', function () {
 
   it('rendering mixed text nodes', function () {
 
-    renderNodes(document.body, ['foobar', { $:'div', attrs: { 'class': function () { return 'foo-bar' } }, _: [{ text: 'foobar' }] }])
+    renderNodes(document.body, ['foobar', { tag:'div', attrs: { 'class': function () { return 'foo-bar' } }, content: [{ text: 'foobar' }] }])
 
     assert.strictEqual( document.body.innerHTML, 'foobar<div class="foo-bar">foobar</div>' )
 
@@ -144,9 +146,14 @@ describe('rendering HTML', function () {
 
   })
 
+  runErrorsTestSuite([
+    [() => renderNodes(document.body, [{}]), Error, TypeError, /unknown node format/],
+    [() => renderNodes(document.body, [{tag: 'div'}], { withNode() { return { initNode: 123 } } }), Error, TypeError, /initNode should be a Function/],
+  ])
+
   it('withNode', function () {
 
-    var html_nodes = [{ $:'div', attrs: { 'class': 'foo-bar' }, _: 'foobar' }, { $:'div', attrs: { 'data-if': ' foo === bar ' }, _: 'foobar' }]
+    var html_nodes = [{ tag:'div', attrs: { 'class': 'foo-bar' }, content: 'foobar' }, { tag:'div', attrs: { 'data-if': ' foo === bar ' }, content: 'foobar' }]
 
     renderNodes(document.body, html_nodes, {
       withNode: function (node) {
@@ -162,7 +169,7 @@ describe('rendering HTML', function () {
 
   it('withNode (text)', function () {
 
-    var html_nodes = [{ $:'div', attrs: { 'class': 'foo-bar' }, _: 'foobar' }, { $:'div', attrs: { 'data-if': ' foo === bar ' }, _: 'foobar' }]
+    var html_nodes = [{ tag:'div', attrs: { 'class': 'foo-bar' }, content: 'foobar' }, { tag:'div', attrs: { 'data-if': ' foo === bar ' }, content: 'foobar' }]
 
     renderNodes(document.body, html_nodes, {
       withNode: function (node) {
@@ -178,7 +185,7 @@ describe('rendering HTML', function () {
 
   it('withNode (text -clear-)', function () {
 
-    var html_nodes = [{ $:'div', attrs: { 'class': 'foo-bar' }, _: 'foobar' }, { $:'div', attrs: { 'data-if': ' foo === bar ' }, _: 'foobar' }]
+    var html_nodes = [{ tag:'div', attrs: { 'class': 'foo-bar' }, content: 'foobar' }, { tag:'div', attrs: { 'data-if': ' foo === bar ' }, content: 'foobar' }]
 
     renderNodes(document.body, html_nodes, {
       withNode: function (node) {
@@ -194,7 +201,7 @@ describe('rendering HTML', function () {
 
   it('withNode (text -clear-)', function () {
 
-    var html_nodes = [{ $:'div', attrs: { 'class': 'foo-bar' }, _: 'foobar' }, 'foobar', { $:'div', attrs: { 'data-if': ' foo === bar ' }, _: 'foobar' }]
+    var html_nodes = [{ tag:'div', attrs: { 'class': 'foo-bar' }, content: 'foobar' }, 'foobar', { tag:'div', attrs: { 'data-if': ' foo === bar ' }, content: 'foobar' }]
 
     renderNodes(document.body, html_nodes, {
       withNode: function (node) {
@@ -210,13 +217,13 @@ describe('rendering HTML', function () {
 
   it('initNode', function () {
 
-    var html_nodes = [{ $:'div', attrs: { 'class': 'foo-bar' }, _: 'foobar' }, { $:'div', attrs: { 'data-if': ' foo === bar ' }, _: 'foobar' }],
+    var html_nodes = [{ tag:'div', attrs: { 'class': 'foo-bar' }, content: 'foobar' }, { tag:'div', attrs: { 'data-if': ' foo === bar ' }, content: 'foobar' }],
         matched_node
 
     renderNodes(document.body, html_nodes, {
       withNode: function (node) {
         if( node.attrs && 'data-if' in node.attrs ) return {
-          initNode: function (node_el) {
+          initNode (node_el) {
             matched_node = node_el
           },
         }
@@ -231,7 +238,7 @@ describe('rendering HTML', function () {
 
   it('onCreate', function () {
 
-    var html_nodes = [{ $:'div', attrs: { 'class': 'foo-bar' }, _: 'foobar' }],
+    var html_nodes = [{ tag:'div', attrs: { 'class': 'foo-bar' }, content: 'foobar' }],
         is_created = false,
         is_rendered = false
 
@@ -256,8 +263,8 @@ describe('rendering HTML', function () {
 
   it('insert_before', function () {
 
-    var html_nodes = [{ $:'div', attrs: { 'class': 'foo-bar' }, _: 'foobar' }, { $:'div', attrs: { 'insert-before': ' me ' }, _: 'foobar' }],
-        append_nodes = [{ $:'foo-bar' }, { $:'bar-foo', attrs: { 'foo': 'bar' }, _: ' text content ' }],
+    var html_nodes = [{ tag:'div', attrs: { 'class': 'foo-bar' }, content: 'foobar' }, { tag:'div', attrs: { 'insert-before': ' me ' }, content: 'foobar' }],
+        append_nodes = [{ tag:'foo-bar' }, { tag:'bar-foo', attrs: { 'foo': 'bar' }, content: ' text content ' }],
         insert_before
 
     renderNodes(document.body, html_nodes, {

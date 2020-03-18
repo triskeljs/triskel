@@ -41,34 +41,43 @@ export function createApp(options) {
   // preset directives
 
   var special_chars = {
-    nbsp: '\u00a0', hellip: '…', quot: '"',
+    nbsp: '\u00a0', hellip: '…', quot: '"', amp: '&',
+  }
+
+  function _replaceSpecialChars (matched, special_char) {
+    return special_char in special_chars
+      ? special_chars[special_char]
+      : matched
   }
 
   APP.withNode(function (node) {
-    var text_node = typeof node === 'string' ? node : node.text
+    var text_node = node && typeof node.text === 'string' ? node.text : null
 
     if( text_node ) return {
       replace_text: '',
       initNode: function (el) {
         var renderText = TEXT.interpolate(text_node),
-            parent_el = el.parentElement || el.parentNode
+            parent_el = el.parentElement || /* istanbul ignore next: IE */ el.parentNode
 
         if( parent_el && /{{.*}}/.test(text_node) ) parent_el.insertBefore( document.createComment(' text: ' + text_node + ' '), el )
 
         this.watchData(function (data) {
-          var text = renderText(data).replace(/&([a-z]+);/g, function (matched, special_char) {
-            return special_chars[special_char] || matched
-          })
+          var text = renderText(data).replace(/&([a-z]+);/g, _replaceSpecialChars)
           if( text !== el.textContent ) el.textContent = text
         })
       },
     }
   })
 
+  /* istanbul ignore else  */
   if( add_directives.if ) addDirectiveIf(APP, TEXT, directive_ns)
+  /* istanbul ignore else  */
   if( add_directives.repeat ) addDirectiveRepeat(APP, TEXT, directive_ns)
+  /* istanbul ignore else  */
   if( add_directives.bind ) addDirectiveBind(APP, TEXT, directive_ns)
+  /* istanbul ignore else  */
   if( add_directives.on ) addDirectiveOn(APP, TEXT, directive_ns)
+  /* istanbul ignore else  */
   if( add_directives['class'] ) addDirectiveClass(APP, TEXT, directive_ns)
 
   function _renderApp (_parent, _nodes, render_options) {
@@ -95,11 +104,11 @@ export function createApp(options) {
     APP_.updateData = updateData
     APP_.render = _renderApp.bind(APP_)
 
-    Object.defineProperty(APP_, 'data', {
-      get: function () {
-        return data
-      },
-    })
+    // Object.defineProperty(APP_, 'data', {
+    //   get: function () {
+    //     return data
+    //   },
+    // })
 
     var inserted_nodes = app.render.apply(APP_, arguments)
 

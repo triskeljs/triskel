@@ -77,7 +77,6 @@ export default function dataRepeat (APP, TEXT, directive_ns) {
     this.watchData(function (data) {
       var list = getList(data),
           index = 0
-          // current_repeat = []
 
       if( list.length === previous_repeat.length && list.every(__matchesPreviousRepeat) ) {
         previous_repeat.forEach(function (item, i) {
@@ -85,21 +84,6 @@ export default function dataRepeat (APP, TEXT, directive_ns) {
         })
         return
       }
-
-      // if( !list || typeof list !== 'object' ) throw new TypeError('expression \'' + matched_expressions[3] + '\' should return an Array or an Object')
-
-      // _forEach(list, function (data_item, i) {
-      //   current_repeat.push( previous_repeat[i] ?
-      //     _updateRenderedData(previous_repeat[i], data, data_item, index++) :
-      //     _addListItem(data, data_item, index++)
-      //   )
-      // })
-
-      // while( previous_repeat[index] ) {
-      //   parent_el.removeChild( previous_repeat[index++].el )
-      // }
-
-      // previous_repeat = current_repeat
 
       if( !(list instanceof Array) ) throw new TypeError('expression \'' + matched_expressions[3] + '\' should return an Array')
 

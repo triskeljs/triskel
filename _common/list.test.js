@@ -6,6 +6,7 @@ import { runErrorsTestSuite } from './test.helpers'
 
 import {
   firstIn,
+  isInList,
   pipeProcessor,
 } from './list'
 
@@ -31,6 +32,24 @@ describe(__filename.substr(process.cwd().length), function () {
       [[1, 2, 3, 4, 5, 6], (num) => num > 2, 3],
       [[1, 2, 3, 4, 5, 6], (num) => num > 6, null],
       [[1, 2, 3, 4, 5, 6], (num) => num % 2, 1],
+
+    ].forEach((test_case) => _runTestCase.apply(null, test_case))
+
+  })
+
+  describe('isInList', function () {
+
+    function _runTestCase(list, item, expected_result) {
+      it(`${list} -> ${item}`, function () {
+        assert.strictEqual( isInList(list, item), expected_result )
+      })
+    }
+
+    [
+
+      [[1, 2, 3, 4, 5, 6], 3, true],
+      [[1, 2, 3, 4, 5, 6], 7, false],
+      [[1, 2, 3, 4, 5, 6], 0, false],
 
     ].forEach((test_case) => _runTestCase.apply(null, test_case))
 

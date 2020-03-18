@@ -6,6 +6,13 @@ export function firstIn (list, iteratee, this_arg) {
   return null
 }
 
+export function isInList(list, item) {
+  for( var i = list.length - 1; i >= 0 ; i-- ) {
+    if( item === list[i] ) return true
+  }
+  return false
+}
+
 /**
  * Returns a function that will process secuentially the functions genereted for the items in the list
  * 

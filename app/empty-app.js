@@ -1,16 +1,9 @@
 
-import { firstIn } from '../_common/list'
+import { firstIn, isInList } from '../_common/list'
 import { extend } from '../_common/object'
 import renderNodes from './render'
 
 function _noop () {}
-
-function _isInList(list, item) {
-  for( var i = list.length - 1; i >= 0 ; i-- ) {
-    if( item === list[i] ) return true
-  }
-  return false
-}
 
 function _autoWithNode (withNode) {
   if( withNode instanceof Function ) return withNode
@@ -37,25 +30,27 @@ RenderApp.prototype = {
   
     _options = _options || {}
     var APP = Object.create(this),
-        render_options = extend( Object.create( APP.options || {} ), _options ),
+        render_options = extend( Object.create( APP.options ), _options ),
         with_node_pipe = APP.with_node_pipe,
         detach_queue = [],
         _processDetachQueue = function (detached_nodes) {
           for( var i = detach_queue.length - 1 ; i >= 0 ; i-- ) {
-            if( _isInList(detached_nodes, detach_queue[i].el) ) {
+            if( isInList(detached_nodes, detach_queue[i].el) ) {
               detach_queue[i].listener.call(detach_queue[i].el)
               detach_queue.splice(i, 1)
             }
           }
           if( detach_queue.length === 0 ) mutation_observer.disconnect()
         },
-        mutation_observer = typeof MutationObserver && MutationObserver ? new MutationObserver(function(mutations) {
-  
-          mutations.forEach(function(mutation) {
-            _processDetachQueue(mutation.removedNodes)
+        mutation_observer = typeof MutationObserver === 'function'
+          ? new MutationObserver(function(mutations) {
+    
+            mutations.forEach(function(mutation) {
+              _processDetachQueue(mutation.removedNodes)
+            })
+    
           })
-  
-        }) : { observe: _noop, disconnect: _noop }
+          : { observe: _noop, disconnect: _noop }
   
     function _onDetach (listener) {
       if( !detach_queue.length ) mutation_observer.observe(parent_el, { childList: true, subtree: true })
@@ -136,7 +131,7 @@ RenderApp.prototype = {
     
     render_app.withNode(function (node) {
   
-      if( node.$ !== tag_name ) return
+      if( node.tag !== tag_name ) return
   
       var _with_node = options.withNode && options.withNode.apply(render_app, arguments) || {},
           _initNode = _with_node.initNode

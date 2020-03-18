@@ -41,7 +41,7 @@ describe('directive [data-bind]', function () {
     assert.throws( function () {
 
       _APP.render(document.body, [{
-        $: 'div',
+        tag: 'div',
         attrs: {
           'data-repeat': ' foo bar ',
         },
@@ -56,7 +56,7 @@ describe('directive [data-bind]', function () {
     assert.throws( function () {
 
       _APP.render(document.body, [{
-        $: 'div',
+        tag: 'div',
         attrs: {
           'data-repeat': ' item in list ',
         },
@@ -78,11 +78,11 @@ describe('directive [data-bind]', function () {
     it(`[data-repeat=${ repeat_expression }]/{text: ${ text_expression } } (${ data_set.join(',') }) => ${ expected_items.join(',') }`, function () {
 
       var _view = _APP.render(document.body, [{
-        $: 'div',
+        tag: 'div',
         attrs: {
           'data-repeat': repeat_expression,
         },
-        _: '{{' + text_expression + '}}',
+        content: ['{{' + text_expression + '}}'],
       }], {
         data: {
           list: data_set,
@@ -123,11 +123,11 @@ describe('directive [data-bind]', function () {
     it(`[data-repeat=${ repeat_expression }]/{text: ${ text_expression } } (${ data_set.join(',') }) => ${ expected_items.join(',') }; (${ new_data_set.join(',') }) => ${ new_expected_items.join(',') }`, function () {
 
       var _view = _APP.render(document.body, [{
-        $: 'div',
+        tag: 'div',
         attrs: {
           'data-repeat': repeat_expression,
         },
-        _: '{{' + text_expression + '}}',
+        content: ['{{' + text_expression + '}}'],
       }], {
         data: {
           list: data_set,

@@ -26,7 +26,7 @@ describe('directive [data-if]', function () {
   it('undefined var', function () {
 
     _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'data-if': ' foo ',
       },
@@ -39,7 +39,7 @@ describe('directive [data-if]', function () {
   it('foo = true', function () {
 
     _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'data-if': ' foo ',
       },
@@ -56,7 +56,7 @@ describe('directive [data-if]', function () {
   it('foo = false', function () {
 
     _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'data-if': ' foo ',
       },
@@ -73,7 +73,7 @@ describe('directive [data-if]', function () {
   it('foo = false then foo = true', function () {
 
     var _view = _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'data-if': ' foo ',
       },
@@ -96,7 +96,7 @@ describe('directive [data-if]', function () {
   it('foo = false then foo = false', function () {
 
     var _view = _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'data-if': ' foo ',
       },
@@ -119,7 +119,7 @@ describe('directive [data-if]', function () {
   it('foo = true then foo = false', function () {
 
     var _view = _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'data-if': ' foo ',
       },
@@ -142,7 +142,7 @@ describe('directive [data-if]', function () {
   it('foo = true then foo = true', function () {
 
     var _view = _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'data-if': ' foo ',
       },
@@ -165,7 +165,7 @@ describe('directive [data-if]', function () {
   it('foo = true then foo = false then foo = true', function () {
 
     var _view = _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'data-if': ' foo ',
       },
@@ -194,7 +194,7 @@ describe('directive [data-if]', function () {
   it('foo.bar = undefined', function () {
 
     _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'data-if': ' foo.bar ',
       },
@@ -212,7 +212,7 @@ describe('directive [data-if]', function () {
   it('foo.bar = false', function () {
 
     _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'data-if': ' foo.bar ',
       },
@@ -231,7 +231,7 @@ describe('directive [data-if]', function () {
   it('foo.bar = true', function () {
 
     _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'data-if': ' foo.bar ',
       },

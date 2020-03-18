@@ -29,7 +29,7 @@ describe('directive [data-bind]', function () {
     assert.throws( function () {
 
       _APP.render(document.body, [{
-        $: 'div',
+        tag: 'div',
         attrs: {
           'data-bind': ' foo ',
         },
@@ -42,7 +42,7 @@ describe('directive [data-bind]', function () {
   it('[data-bind] foo ', function () {
 
     _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'data-bind': ' foo ',
       },
@@ -59,7 +59,7 @@ describe('directive [data-bind]', function () {
   it('[data-bind] foo | bar', function () {
 
     _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'data-bind': ' foo | bar ',
       },
@@ -76,15 +76,15 @@ describe('directive [data-bind]', function () {
   it('[data-bind] foo | bar', function () {
 
     _APP.render(document.body, [{
-      $: 'div',
+      tag: 'div',
       attrs: {
         'data-bind': ' foo ',
       },
     }], {
       data: {
         foo: [{
-          $: 'foo',
-          _: '{{ bar }}',
+          tag: 'foo',
+          content: '{{ bar }}',
         }],
         bar: 'foobar',
       },
