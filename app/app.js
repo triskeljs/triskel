@@ -51,16 +51,20 @@ export function TriskelApp (options = {}) {
 
     if( text_node ) return {
       replace_text: '',
-      initNode: function (el) {
+      initNode (el) {
         var renderText = APP.interpolate(text_node),
             parent_el = el.parentElement || /* istanbul ignore next: IE */ el.parentNode
 
-        if( parent_el && /{{.*}}/.test(text_node) ) parent_el.insertBefore( document.createComment(' text: ' + text_node + ' '), el )
+        if( parent_el && /{{.*}}/.test(text_node) ) {
+          parent_el.insertBefore( document.createComment(' text: ' + text_node + ' '), el )
+        }
 
-        this.watchData(function (data) {
+        function _onData (data) {
           var text = renderText(data).replace(/&([a-z]+);/g, _replaceSpecialChars)
           if( text !== el.textContent ) el.textContent = text
-        })
+        }
+
+        this.watchData(_onData)
       },
     }
   })
@@ -70,14 +74,14 @@ export function TriskelApp (options = {}) {
 TriskelApp.prototype = Object.create(RenderApp.prototype)
 TriskelApp.prototype.constructor = TriskelApp
 
-TriskelApp.prototype.render = function _renderApp (_parent, _nodes, render_options) {
+function _renderApp (_parent, _nodes, render_options) {
 
   render_options = Object.create(render_options || {})
 
-  var APP_ = Object.create(APP),
-      // parent_app = render_options.parent_app || {},
-      data = render_options.data || {},
-      data_listeners = [],
+  var APP_ = Object.create(this),
+      data = render_options.data || {}
+
+  var data_listeners = [],
       watchData = function (onData) {
         data_listeners.push(onData)
         onData(data)
@@ -103,11 +107,13 @@ TriskelApp.prototype.render = function _renderApp (_parent, _nodes, render_optio
     set data (_data) {
       updateData(_data)
     },
-    updateData: updateData,
-    inserted_nodes: inserted_nodes,
+    updateData,
+    inserted_nodes,
   }
 
 }
+
+TriskelApp.prototype.render = _renderApp
 
 const APP = new TriskelApp()
 

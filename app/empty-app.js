@@ -29,17 +29,19 @@ RenderApp.prototype = {
     var APP = Object.create(this),
         render_options = extend( Object.create( APP.options ), _options ),
         with_node_pipe = APP.with_node_pipe,
-        detach_queue = [],
-        _processDetachQueue = function (detached_nodes) {
-          for( var i = detach_queue.length - 1 ; i >= 0 ; i-- ) {
-            if( isInList(detached_nodes, detach_queue[i].el) ) {
-              detach_queue[i].listener.call(detach_queue[i].el)
-              detach_queue.splice(i, 1)
-            }
-          }
-          if( detach_queue.length === 0 ) mutation_observer.disconnect()
-        },
-        mutation_observer = typeof MutationObserver === 'function'
+        detach_queue = []
+
+    function _processDetachQueue (detached_nodes) {
+      for( var i = detach_queue.length - 1 ; i >= 0 ; i-- ) {
+        if( isInList(detached_nodes, detach_queue[i].el) ) {
+          detach_queue[i].listener.call(detach_queue[i].el)
+          detach_queue.splice(i, 1)
+        }
+      }
+      if( detach_queue.length === 0 ) mutation_observer.disconnect()
+    }
+
+    const mutation_observer = typeof MutationObserver === 'function'
           ? new MutationObserver(function(mutations) {
     
             mutations.forEach(function(mutation) {
@@ -71,9 +73,9 @@ RenderApp.prototype = {
       }
   
       for( i = 0, n = _with_node_pipe.length ; i < n ; i++ ) {
-        result_with_node = _with_node_pipe[i] instanceof Function ?
-          _with_node_pipe[i].call(APP, node, safe_render_options, with_node) :
-          _with_node_pipe[i]
+        result_with_node = _with_node_pipe[i] instanceof Function
+          ? _with_node_pipe[i].call(APP, node, safe_render_options, with_node)
+          : _with_node_pipe[i]
   
         if( result_with_node ) {
           if( result_with_node.replace_by_comment ) return result_with_node
