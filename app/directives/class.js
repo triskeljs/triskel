@@ -24,10 +24,10 @@ function _getClassesFromArray (classes_array) {
   }).join(' ')
 }
 
-export default function dataClass (APP, TEXT, directive_ns) {
+export default function dataClass (APP, directive_ns) {
 
   APP.directive(directive_ns + '-class', function (node_el, node, _render_options, _with_node) {
-    var getClassesObject = TEXT.eval(node.attrs[directive_ns + '-class']),
+    var getClassesObject = APP.eval(node.attrs[directive_ns + '-class']),
         original_classes = node_el.className || '',
         previus_classes = ''
 

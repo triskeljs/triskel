@@ -1,5 +1,5 @@
 
-export default function dataRepeat (APP, TEXT, directive_ns) {
+export default function dataRepeat (APP, directive_ns) {
 
   function _findDataItem(list, data_item, seek_and_destroy) {
     for( var i = 0, n = list.length; i < n ; i++ ) {
@@ -34,7 +34,7 @@ export default function dataRepeat (APP, TEXT, directive_ns) {
           index_key = _key
           return ''
         }).trim(),
-        getList = TEXT.eval(matched_expressions[3]),
+        getList = APP.eval(matched_expressions[3]),
         previous_repeat = []
 
     function __matchesPreviousRepeat (data_item, i) {

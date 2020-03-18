@@ -1,7 +1,7 @@
 /* global global, document */
 
 import assert from 'assert'
-import { createApp } from '../app'
+import { TriskelApp } from '../app'
 import { JSDOM } from 'jsdom'
 
 /** define-property */
@@ -20,7 +20,7 @@ describe('APP.component', function () {
 
   it('render error', function () {
 
-    var _APP = createApp()
+    var _APP = new TriskelApp()
 
     assert.throws(function () {
       _APP.component('my-div')
@@ -48,7 +48,7 @@ describe('APP.component', function () {
 
   it('basic render', function () {
 
-    var _APP = createApp()
+    var _APP = new TriskelApp()
 
     _APP.component('my-div', function (el) {
       assert.strictEqual(el.nodeName, 'MY-DIV')
@@ -78,7 +78,7 @@ describe('APP.component', function () {
 
   it('replace_by_comment', function () {
 
-    var _APP = createApp()
+    var _APP = new TriskelApp()
 
     _APP.component('my-div', {
       controller: function (el) {
@@ -101,7 +101,7 @@ describe('APP.component', function () {
 
   it('template replace_by_comment', function () {
 
-    var _APP = createApp()
+    var _APP = new TriskelApp()
 
     _APP.component('my-div', {
       template: ['foobar'],
@@ -126,7 +126,7 @@ describe('APP.component', function () {
 
   it('withNode called', function () {
 
-    var _APP = createApp(),
+    var _APP = new TriskelApp(),
         with_node_called = false
 
     _APP.component('my-div', {
@@ -148,7 +148,7 @@ describe('APP.component', function () {
 
   it('initNode called', function () {
 
-    var _APP = createApp(),
+    var _APP = new TriskelApp(),
         with_node_called = false,
         init_node_called = false
 
@@ -177,7 +177,7 @@ describe('APP.component', function () {
 
   it('initNode called (with template)', function () {
 
-    var _APP = createApp(),
+    var _APP = new TriskelApp(),
         with_node_called = false,
         init_node_called = false
 
@@ -207,7 +207,7 @@ describe('APP.component', function () {
 
   it('render and detach', function (done) {
 
-    var _APP = createApp()
+    var _APP = new TriskelApp()
 
     _APP.component('my-div', function (el) {
       assert.strictEqual(el.nodeName, 'MY-DIV')
@@ -233,7 +233,7 @@ describe('APP.component', function () {
 
   it('rendering template', function () {
 
-    var _APP = createApp()
+    var _APP = new TriskelApp()
 
     _APP.component('my-div', {
       template: ['Hi {{ first_name }}!'],
@@ -253,7 +253,7 @@ describe('APP.component', function () {
 
   it('rendering template component.data', function () {
 
-    var _APP = createApp()
+    var _APP = new TriskelApp()
 
     _APP.component('my-div', {
       template: ['Hi {{ first_name }}!'],
@@ -272,7 +272,7 @@ describe('APP.component', function () {
 
   it('rendering template component template_options.data', function () {
 
-    var _APP = createApp()
+    var _APP = new TriskelApp()
 
     _APP.component('my-div', {
       template: ['Hi {{ first_name }}!'],
@@ -292,7 +292,7 @@ describe('APP.component', function () {
 
   it('rendering template overrides', function () {
 
-    var _APP = createApp()
+    var _APP = new TriskelApp()
 
     _APP.component('my-div', {
       template: ['Hi {{ last_name }}!'],
@@ -313,7 +313,7 @@ describe('APP.component', function () {
 
   it('rendering template with controller', function () {
 
-    var _APP = createApp()
+    var _APP = new TriskelApp()
 
     _APP.component('my-div', {
       template: ['Hi {{ first_name }}!'],
@@ -336,7 +336,7 @@ describe('APP.component', function () {
 
   it('rendering template overrides with controller', function () {
 
-    var _APP = createApp()
+    var _APP = new TriskelApp()
 
     _APP.component('my-div', {
       template: ['Hi {{ last_name }}!'],

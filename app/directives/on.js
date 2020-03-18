@@ -1,5 +1,5 @@
 
-export default function dataOn (APP, TEXT, directive_ns) {
+export default function dataOn (APP, directive_ns) {
   APP.directive(directive_ns + '-on:\\w+', function (node_el, node, render_options, _with_node) {
     var _render_app = this.render_app,
         event_name = this.attr_key.substr(directive_ns.length + 4),

@@ -1,5 +1,5 @@
 
-export default function dataIf (APP, TEXT, directive_ns) {
+export default function dataIf (APP, directive_ns) {
   APP.directive(directive_ns + '-if', function (close_comment, node, render_options, _with_node) {
 
     // @TODO stuff
@@ -9,7 +9,7 @@ export default function dataIf (APP, TEXT, directive_ns) {
         attr_value = APP_.attr_value,
         start_comment = document.createComment(' : ' + this.attr_key + ' : ' + attr_value + ' ' ),
         if_options = Object.create(render_options),
-        assertExpression = TEXT.eval(attr_value),
+        assertExpression = APP.eval(attr_value),
         rendered_handler = null, inserted_node = null
 
     parent_el.insertBefore(start_comment, close_comment)

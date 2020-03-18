@@ -88,6 +88,23 @@ export function _create(node, ns_scheme, options, _withNode, inits_list, replace
 
 function _runInits (init_node) { init_node.fn.apply(init_node._this, init_node._args) }
 
+/**
+ * Render TriskelAST as DOM tree into an HTMLElement
+ * 
+ * @param {HTMLElement} parent_el 
+ * @param {TriskelAST} nodes 
+ * @param {*} [options]
+ * 
+ * @example
+ * 
+ * import renderNodes from '@triskel/app/render'
+ * 
+ * renderNodes(document.body, [
+ *  { tag: 'div', attrs: { class: 'foo' }, content: ['bar] },
+ * ])
+ * // document.body.innerHTML results:
+ * // <div class="foo">bar</div>
+ */
 export default function renderNodes (parent_el, nodes, options) {
   options = Object.create(options || {})
   var _withNode = options.withNode || function __withNode () {}

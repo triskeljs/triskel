@@ -12,12 +12,9 @@ function _autoWithNode (withNode) {
   }
 }
 
-export function RenderApp (_options) {
-  // var options = Object.create(_options || {})
-
+export function RenderApp (options = {}) {
   this.with_node_pipe = []
-
-  this.options = _options || {}
+  this.options = options
 }
 
 RenderApp.prototype = {

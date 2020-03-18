@@ -2,7 +2,7 @@
 /* global global, document */
 
 import assert from 'assert'
-import { createApp } from '../app'
+import { TriskelApp } from '../app'
 import { JSDOM } from 'jsdom'
 
 /** define-property */
@@ -19,7 +19,7 @@ describe('directive [data-bind]', function () {
     global.MutationObserver = window.MutationObserver
   })
 
-  var _APP = createApp()
+  var _APP = new TriskelApp()
   _APP.defineFilter('bar', function (text) {
     return text + 'bar'
   })
