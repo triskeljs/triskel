@@ -1,5 +1,5 @@
 
-import { RenderApp } from './empty-app'
+import { RenderApp } from './render-app'
 import { ConText } from '@triskel/con-text'
 
 import addDirectiveIf from './directives/if'

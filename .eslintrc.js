@@ -48,14 +48,14 @@ module.exports = {
     },
     {
       files: ['{app,con-text,parser,render,stringify,tinyhtml}/{,**/}*.js'],
-      excludedFiles: ['{,**/}*.test.js'],
+      excludedFiles: ['{,**/}*.test{,_}.js'],
       'env': {
         es6: true,
         browser: true,
       },
     },
     {
-      files: ['{,**/}*.test.js'],
+      files: ['{,**/}*.test{,_}.js'],
       'globals': {
         console: true,
         process: true,

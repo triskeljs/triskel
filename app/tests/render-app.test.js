@@ -1,7 +1,7 @@
 /* global global, document */
 
 import assert from 'assert'
-import RENDER_APP from '../app'
+import RENDER_APP from '../render-app'
 import { JSDOM } from 'jsdom'
 
 import { runErrorsTestSuite } from '../../_common/test.helpers'

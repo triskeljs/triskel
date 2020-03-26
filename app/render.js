@@ -15,7 +15,7 @@ export function _appendChildren (parent_el, nodes, ns_scheme, options, _withNode
     else node_el = _create(node, ns_scheme, options, _withNode, inits_list, with_node.replace_text)
 
     if( with_node.onCreate instanceof Function ) {
-      with_node.onCreate.call(node_el, node_el, node, options, with_node)
+      with_node.onCreate.call(node_el, node_el, node, options)
     }
 
     parent_el.appendChild( node_el )
@@ -25,7 +25,7 @@ export function _appendChildren (parent_el, nodes, ns_scheme, options, _withNode
       inits_list.push({
         fn: with_node.initNode,
         _this: node_el,
-        _args: [node_el, node, options, with_node],
+        _args: [node_el, node, options],
       })
     }
 
