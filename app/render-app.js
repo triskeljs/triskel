@@ -84,6 +84,8 @@ function nodeMethods (methods_list) {
 export function RenderApp (options = {}) {
   this.with_node_queue = []
   this.options = options
+  
+  if (options.withNode) this.with_node_queue.push(options.withNode)
 }
 
 RenderApp.prototype = {
@@ -92,10 +94,7 @@ RenderApp.prototype = {
   render (parent_el, nodes, render_options = {}) {
     if (nodes instanceof Array === false) throw new TypeError('render nodes should be an Array')
   
-    const app_options = this.options
     const with_node_queue = this.with_node_queue.slice(0)
-
-    if (app_options.withNode) with_node_queue.unshift(_autoWithNode(app_options.withNode))
     if (render_options.withNode) with_node_queue.unshift(_autoWithNode(render_options.withNode))
     
     const detach_queue = detachQueue(parent_el)
