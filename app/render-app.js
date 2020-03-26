@@ -1,80 +1,9 @@
 
-import { firstIn, isInList } from '../_common/list'
+import { firstIn } from '../_common/list'
 import { extend } from '../_common/object'
 import renderNodes from './render'
 
-function _noop () {}
-
-function _autoWithNode (withNode) {
-  if( withNode instanceof Function ) return withNode
-  if( withNode && typeof withNode === 'object' ) return function () {
-    return withNode
-  }
-  throw new TypeError('withNode should be a Function or an Object')
-}
-
-function detachQueue (parent_el) {
-  var detach_queue = [],
-      mutation_observer = typeof MutationObserver === 'function'
-        ? new MutationObserver(function(mutations) {
-  
-          mutations.forEach(function(mutation) {
-            _processDetachQueue(mutation.removedNodes)
-          })
-  
-        })
-        : { observe: _noop, disconnect: _noop }
-
-  function _processDetachQueue (detached_nodes) {
-    for( var i = detach_queue.length - 1 ; i >= 0 ; i-- ) {
-      if( isInList(detached_nodes, detach_queue[i].el) ) {
-        detach_queue[i].listener.call(detach_queue[i].el)
-        detach_queue.splice(i, 1)
-      }
-    }
-    if( detach_queue.length === 0 ) mutation_observer.disconnect()
-  }
-
-  function onDetach (listener) {
-    if( !detach_queue.length ) mutation_observer.observe(parent_el, { childList: true, subtree: true })
-    detach_queue.push({ el: this, listener: listener })
-  }
-
-  return {
-    onDetach,
-  }
-}
-
-function nodeMethods (methods_list) {
-  const queues = methods_list.reduce(function (queues, method_name) {
-    queues[method_name] = []
-    return queues
-  }, {})
-
-  return {
-    addWithNode (_result) {
-      methods_list.forEach( (method_name) => {
-        if (!_result[method_name]) return
-        
-        if (typeof _result[method_name] !== 'function') {
-          throw new TypeError(method_name + ' should be a Function')
-        }
-        queues[method_name].push(_result[method_name])
-      })
-    },
-    generateInitNode (_nodeThis) {
-      return methods_list.reduce( (with_node, method_name) => {
-        if (queues[method_name].length) {
-          with_node[method_name] = function () {
-            queues[method_name].forEach( (_nodeFn) => _nodeFn.apply(_nodeThis.apply(this, arguments), arguments) )
-          }
-        }
-
-        return with_node
-      }, {})
-    },
-  }
-}
+import { alwaysFunction, detachQueue, nodeMethods } from './render-utils'
 
 /**
  * @class
@@ -95,7 +24,7 @@ RenderApp.prototype = {
     if (nodes instanceof Array === false) throw new TypeError('render nodes should be an Array')
   
     const with_node_queue = this.with_node_queue.slice(0)
-    if (render_options.withNode) with_node_queue.unshift(_autoWithNode(render_options.withNode))
+    if (render_options.withNode) with_node_queue.unshift(alwaysFunction(render_options.withNode))
     
     const detach_queue = detachQueue(parent_el)
     const data_listeners = []
@@ -234,7 +163,7 @@ RenderApp.prototype = {
         matchAttr = function (attr) {
           return matchRE.test(attr)
         },
-        _withNode = _autoWithNode(withNode)
+        _withNode = alwaysFunction(withNode)
   
     this.withNode(function (node, _render_options) {
       var _attrs = node.attrs || {},
