@@ -32,7 +32,7 @@ describe('rendering HTML', function () {
 
     assert.throws(function () {
       RENDER_APP.render(document.body, [{ tag: 'foo' }], {
-        withNode: function () {
+        withNode () {
           return {
             initNode: 123,
           }
@@ -64,7 +64,7 @@ describe('rendering HTML', function () {
     RENDER_APP.render(document.body, [{
       tag: 'div', content: 'Hi {{ first_name }}!',
     }], {
-      withNode: function () {
+      withNode () {
         with_node_called = true
       },
     })

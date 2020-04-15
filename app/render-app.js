@@ -95,7 +95,7 @@ RenderApp.prototype = {
   },
 
   withNode (withNode) {
-    this.with_node_pipe.push(withNode)
+    this.with_node_queue.push(withNode)
     return this
   },
 

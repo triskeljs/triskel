@@ -1,10 +1,10 @@
 /* global global, document */
 
 import assert from 'assert'
-import renderNodes from '../render'
+import renderNodes from './render'
 import { JSDOM } from 'jsdom'
 
-import { runErrorsTestSuite } from '../../_common/test.helpers'
+import { runErrorsTestSuite } from '../_common/test.helpers'
 
 /** define-property */
 describe(__filename.substr(process.cwd().length), function () {
