@@ -50,7 +50,6 @@ HTML.render(document.body, layout_html, {
 | `<h1>Title 1</h1>` | <code>{<br>&nbsp;$: 'h1',<br>&nbsp;_: 'Title 1',<br>} </code> |
 
 
-
 [@triskelAST]: #@triskelAST
 
 [minzip-con-text]: https://badgen.net/bundlephobia/minzip/@triskel/con-text
