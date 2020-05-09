@@ -1,7 +1,7 @@
 
 # @triskel
 
-[Documentation](https://kiltjs.github.io/triskel/)
+[Documentation](https://triskeljs.github.io/triskel/)
 
 [![ᴋɪʟᴛ ᴊs](https://kiltjs.github.io/assets/images/badge-kiltjs.svg)](https://github.com/kiltjs)
 ![Node.js CI](https://github.com/kiltjs/triskel/workflows/Node.js%20CI/badge.svg?branch=master)
@@ -48,6 +48,7 @@ HTML.render(document.body, layout_html, {
 | HTML | @triskelAST |
 | -- | -- |
 | `<h1>Title 1</h1>` | <code>{<br>&nbsp;$: 'h1',<br>&nbsp;_: 'Title 1',<br>} </code> |
+
 
 
 [@triskelAST]: #@triskelAST
