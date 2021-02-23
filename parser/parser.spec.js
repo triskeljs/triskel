@@ -299,5 +299,5 @@ foo <!--<script template:type="text/javascript">
   //   ],
 
 ])('%s', (_title, html, ast, options = {}) => {
-  expect(parseHTML(html, options)).toEqual(ast)
+  expect(parseHTML(html, options)).toStrictEqual(ast)
 })

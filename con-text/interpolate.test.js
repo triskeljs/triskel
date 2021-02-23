@@ -16,17 +16,16 @@ describe(__filename.substr(process.cwd().length), function () {
     ['foo {{ foobar }} bar {{ barfoo }} tail', [
       'foo ', { expression: ' foobar ' }, ' bar ', { expression: ' barfoo ' }, ' tail',
     ]],
-    [`foo {{ foobar: { inner: 'curly_brackets' } }} bar`, [
+    ['foo {{ foobar: { inner: \'curly_brackets\' } }} bar', [
       'foo ', { expression: ' foobar: { inner: \'curly_brackets\' } ' }, ' bar',
     ]],
-    [`foo {{ foobar: { inner: ['brackets'] } }} bar`, [
+    ['foo {{ foobar: { inner: [\'brackets\'] } }} bar', [
       'foo ', { expression: ' foobar: { inner: [\'brackets\'] } ' }, ' bar',
     ]],
 
   ]
 
   describe('tokenizeExpressions', function () {
-
     runErrorsTestSuite([
 
       [() => tokenizeExpressions(), Error, /expression should be a String/],
@@ -34,7 +33,7 @@ describe(__filename.substr(process.cwd().length), function () {
 
     ])
 
-    function _runTestCase(input, tokens) {
+    function _runTestCase (input, tokens) {
       it(input, function () {
         assert.deepStrictEqual(
           tokenizeExpressions(input),
@@ -51,16 +50,14 @@ describe(__filename.substr(process.cwd().length), function () {
     }
 
     expression_tokens.forEach((test_case) => _runTestCase.apply(null, test_case))
-
   })
 
-  function _toExpresion(token) {
+  function _toExpresion (token) {
     return typeof token === 'string' ? token : `{{${token.expression}}}`
   }
 
   describe('stringifyTokens', function () {
-
-    function _runTestCase(input, tokens) {
+    function _runTestCase (input, tokens) {
       it(tokens.map(_toExpresion).join(''), function () {
         assert.strictEqual(
           stringifyTokens(tokens, (token) => `{{${token.expression}}}`),
@@ -70,11 +67,9 @@ describe(__filename.substr(process.cwd().length), function () {
     }
 
     expression_tokens.forEach((test_case) => _runTestCase.apply(null, test_case))
-
   })
 
   describe('interpolateText', function () {
-
     runErrorsTestSuite([
 
       [() => interpolateText(), Error, /expression should be a String/],
@@ -82,7 +77,7 @@ describe(__filename.substr(process.cwd().length), function () {
 
     ])
 
-    function _runTestCase(input, tokens) {
+    function _runTestCase (input, tokens) {
       it(tokens.map(_toExpresion).join(''), function () {
         assert.strictEqual(
           interpolateText(input, (expression) => ({ expression }))((token) => `{{${token.expression}}}`),
@@ -92,7 +87,6 @@ describe(__filename.substr(process.cwd().length), function () {
     }
 
     expression_tokens.forEach((test_case) => _runTestCase.apply(null, test_case))
-
   })
 
   /** */

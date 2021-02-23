@@ -1,5 +1,4 @@
 
-
 import assert from 'assert'
 import { runErrorsTestSuite } from '../_common/test.helpers'
 
@@ -15,133 +14,123 @@ import {
 describe(__filename.substr(process.cwd().length), function () {
 // --------------------------------------
 
-describe('defineFilter', function () {
+  describe('defineFilter', function () {
+    runErrorsTestSuite([
+      [() => defineFilter(), TypeError, /filter_definitions should be an Object/],
+      [() => defineFilter({}), TypeError, /filter_name should be a String/],
+      [() => defineFilter({}, null), TypeError, /filter_name should be a String/],
+      [() => defineFilter({}, 'foobar'), TypeError, /filterProcessor should be a Function/],
 
-  runErrorsTestSuite([
-    [() => defineFilter(), TypeError, /filter_definitions should be an Object/],
-    [() => defineFilter({}), TypeError, /filter_name should be a String/],
-    [() => defineFilter({}, null), TypeError, /filter_name should be a String/],
-    [() => defineFilter({}, 'foobar'), TypeError, /filterProcessor should be a Function/],
+    ])
 
-  ])
+    it('should add filter', () => {
+      const filter_definitions = {}
 
-  it ('should add filter', () => {
-    const filter_definitions = {}
-
-    function filterFn () {}
+      function filterFn () {}
     
-    defineFilter(filter_definitions, 'foo', filterFn)
+      defineFilter(filter_definitions, 'foo', filterFn)
 
-    assert.strictEqual( filter_definitions.foo, filterFn )
-
+      assert.strictEqual(filter_definitions.foo, filterFn)
+    })
   })
 
-})
+  describe('filterProcessor', function () {
+    runErrorsTestSuite([
 
+      [() => _processFilter(), Error, /missing filter_name/],
+      [() => _processFilter.call({}, 'foobar'), Error, /filter 'foobar' is not defined/],
 
-describe('filterProcessor', function () {
+    ])
 
-  runErrorsTestSuite([
+    it('throws', function () {
+      assert.throws(() => filterProcessor(), Error)
+      assert.throws(() => filterProcessor(), /missing filter_definitions/)
+    })
 
-    [() => _processFilter(), Error, /missing filter_name/],
-    [() => _processFilter.call({}, 'foobar'), Error, /filter 'foobar' is not defined/],
+    it('currying', function () {
+      assert.strictEqual(typeof filterProcessor({}), 'function')
+    })
 
-  ])
+    var filter_definitions = {
+      uppercase: (text) => text.toUpperCase(),
+      replaceFoo: (text, data) => text.replace(/foo/g, data),
+      dropEven: (list) => list.filter((num) => num % 2),
+    }
 
-  it('throws', function () {
-    assert.throws( () => filterProcessor(), Error )
-    assert.throws( () => filterProcessor(), /missing filter_definitions/ )
+    function _runTestCase (input, filter_name, data, result) {
+      it(`'${input}' | ${filter_name}`, function () {
+        assert.deepStrictEqual(
+          filterProcessor(filter_definitions)(filter_name, input, data),
+          result,
+        )
+      })
+    }
+  
+    [
+
+      [' foo ', 'uppercase', null, ' FOO '],
+      [' foo ', 'replaceFoo', 'bar', ' bar '],
+
+      [[1, 2, 3, 4, 5, 6], 'dropEven', null, [1, 3, 5]],
+
+    ].forEach((test_case) => _runTestCase.apply(null, test_case))
   })
 
-  it('currying', function () {
-    assert.strictEqual( typeof filterProcessor({}), 'function' )
+  describe('splitPipes', function () {
+    function _runTestCase (input, result) {
+      it(`'${input}'`, function () {
+        assert.deepStrictEqual(
+          splitPipes(input),
+          result,
+        )
+      })
+    }
+  
+    [
+
+      [' foo | bar ', [' foo ', ' bar ']],
+      [' foo || bar ', [' foo || bar ']],
+      [' foo || bar | foobar ', [' foo || bar ', ' foobar ']],
+
+    ].forEach((test_case) => _runTestCase.apply(null, test_case))
   })
 
-  var filter_definitions = {
-    uppercase: (text) => text.toUpperCase(),
-    replaceFoo: (text, data) => text.replace(/foo/g, data),
-    dropEven: (list) => list.filter( (num) => num%2 ),
-  }
+  describe('parseExpressionFilters', function () {
+    runErrorsTestSuite([
 
-  function _runTestCase (input, filter_name, data, result) {
-    it(`'${ input }' | ${ filter_name }`, function () {
-      assert.deepStrictEqual(
-        filterProcessor(filter_definitions)(filter_name, input, data),
-        result,
-      )
-    })
-  }
+      [() => parseExpressionFilters(), Error, /expression should be a String/],
+      [() => parseExpressionFilters(null), Error, /expression should be a String/],
+
+    ])
+
+    function _runTestCase (input, result) {
+      it(`'${input}'`, function () {
+        assert.deepStrictEqual(
+          parseExpressionFilters(input),
+          result,
+        )
+      })
+    }
   
-  [
+    [
 
-    [` foo `, 'uppercase', null, ` FOO `],
-    [` foo `, 'replaceFoo', `bar`, ' bar '],
+      [' foo | bar ', {
+        expression: ' foo ',
+        filters: [{ name: 'bar' }],
+      }],
 
-    [ [1,2,3,4,5,6], 'dropEven', null, [1,3,5] ],
+      [' foobar | foo:{ user: name } | bar ', {
+        expression: ' foobar ',
+        filters: [{ name: 'foo', expression: '{ user: name }' }, { name: 'bar' }],
+      }],
 
-  ].forEach( (test_case) => _runTestCase.apply(null, test_case) )
+      [' foobar | foo:{ user: name } | bar: { last: name } ', {
+        expression: ' foobar ',
+        filters: [{ name: 'foo', expression: '{ user: name }' }, { name: 'bar', expression: '{ last: name }' }],
+      }],
 
-})
-
-describe('splitPipes', function () {
-
-  function _runTestCase (input, result) {
-    it(`'${ input }'`, function () {
-      assert.deepStrictEqual(
-        splitPipes(input),
-        result,
-      )
-    })
-  }
-  
-  [
-
-    [` foo | bar `, [' foo ', ' bar '] ],
-    [` foo || bar `, [' foo || bar '] ],
-    [` foo || bar | foobar `, [' foo || bar ', ' foobar '] ],
-
-  ].forEach( (test_case) => _runTestCase.apply(null, test_case) )
-
-})
-
-describe('parseExpressionFilters', function () {
-
-  runErrorsTestSuite([
-
-    [() => parseExpressionFilters(), Error, /expression should be a String/],
-    [() => parseExpressionFilters(null), Error, /expression should be a String/],
-
-  ])
-
-  function _runTestCase (input, result) {
-    it(`'${ input }'`, function () {
-      assert.deepStrictEqual(
-        parseExpressionFilters(input),
-        result,
-      )
-    })
-  }
-  
-  [
-
-    [` foo | bar `, {
-      expression: ' foo ',
-      filters: [{ name: 'bar' }],
-    } ],
-
-    [` foobar | foo:{ user: name } | bar `, {
-      expression: ' foobar ',
-      filters: [{ name: 'foo', expression: '{ user: name }' }, { name: 'bar' }],
-    }],
-
-    [` foobar | foo:{ user: name } | bar: { last: name } `, {
-      expression: ' foobar ',
-      filters: [{ name: 'foo', expression: '{ user: name }' }, { name: 'bar', expression: '{ last: name }' }],
-    } ],
-
-  ].forEach( (test_case) => _runTestCase.apply(null, test_case) )
-
-})
+    ].forEach((test_case) => _runTestCase.apply(null, test_case))
+  })
 
 /** */
 })

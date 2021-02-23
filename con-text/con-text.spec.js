@@ -123,41 +123,97 @@ describe('TEXT.parseExpression::processFilters()', () => {
     )
 })
 
+describe('TEXT.parseExpression::processFilters(spy)', () => {
+  test
+    .each([
+      ['bar | foobar: { foo }', { foo: 'bar' }],
+      ['bar | foobar: { foo }', { foo: 'bar' }, { foobar: { foo: 'bar' } }],
+      ['bar | foobar: { foo } | 123: { num }', { foo: 'bar', num: 123 }, { foobar: { foo: 'bar' }, 123: { num: 123 } }],
+    ])(
+      '%s, %j',
+      (expression, data, filter_data = {}) => {
+        const TEXT = new ConText()
+        const parsed = TEXT.parseExpression(expression)
+        const filter_definitions = parsed.filters
+          .reduce(function (definitions, filter) {
+            definitions[filter.name] = jest.fn(input => input)
+            return definitions
+          }, {})
+
+        TEXT.defineFilter(filter_definitions)
+
+        parsed.processFilters(data, data)
+
+        for (const key in filter_definitions) {
+          // expect(filter_definitions[key].mock.calls.length).toBe(1)
+          expect(filter_definitions[key]).toHaveBeenCalledTimes(1)
+          expect(filter_definitions[key].mock.calls[0][0]).toStrictEqual(data)
+          expect(filter_definitions[key].mock.calls[0][1]).toStrictEqual(filter_data[key] || data)
+        }
+      }
+    )
+})
+
+const eval_test_suites = {
+
+  eval: [
+
+    ['foo', { foo: 'bar' }, 'bar'],
+    ['foo | bar', { foo: 'bar' }, 'bar:bar', { bar: input => input + ':bar' }],
+    ['foo | bar: { key: bar }', { foo: 'bar', bar: 123 }, 'bar:123', { bar: (input, data) => input + ':' + data.key }],
+
+  ],
+
+  interpolate: [
+
+    ['{{ foo }}', { foo: 'bar' }, 'bar'],
+    ['[{{ foo | bar }}]', { foo: 'bar' }, '[bar:bar]', { bar: input => input + ':bar' }],
+    ['::[{{ foo | bar: { key: bar } }}]', { foo: 'bar', bar: 123 }, '::[bar:123]', { bar: (input, data) => input + ':' + data.key }],
+
+  ],
+
+}
+
+Object
+  .keys(eval_test_suites)
+  .forEach(method => {
+    describe('TEXT.' + method, () => {
+      test
+        .each([
+          Error,
+          /expression should be a String/,
+        ])(
+          '%s',
+          error => {
+            expect(() => new ConText()[method](null)).toThrow(error)
+          }
+        )
+
+      test
+        .each(eval_test_suites[method])(
+          '%s',
+          (expression, data, expected_result, filter_definitions = {}) => {
+            const TEXT = new ConText().defineFilter(filter_definitions)
+
+            expect(TEXT[method](expression, data)).toBe(expected_result)
+          },
+        )
+
+      test
+        .each(eval_test_suites[method])(
+          '%s  (curring)',
+          (expression, data, expected_result, filter_definitions = {}) => {
+            const TEXT = new ConText().defineFilter(filter_definitions)
+
+            expect(TEXT[method](expression)(data)).toBe(expected_result)
+          },
+        )
+    })
+  })
+
 // /** define-property */
 // describe(__filename.substr(process.cwd().length), function () {
 //   // --------------------------------------
-
-//   describe('TEXT.parseExpression::processFilters(spy)', function () {
-//     function _runTestCase (expression, data, filter_data = {}) {
-//       it(`${expression}, ${JSON.stringify(data)}`, () => {
-//         const TEXT = new ConText()
-//         const parsed = TEXT.parseExpression(expression)
-//         const filter_definitions = parsed.filters
-//           .reduce(function (definitions, filter) {
-//             definitions[filter.name] = sinon.fake((input) => input)
-//             return definitions
-//           }, {})
-
-//         TEXT.defineFilter(filter_definitions)
-
-//         parsed.processFilters(data, data)
-
-//         for (const key in filter_definitions) {
-//           assert.strictEqual(filter_definitions[key].callCount, 1, 'callCount')
-//           assert.deepStrictEqual(filter_definitions[key].getCall(0).args[0], data, 'data')
-//           assert.deepStrictEqual(filter_definitions[key].getCall(0).args[1], filter_data[key] || data, 'filter_data')
-//         }
-//       })
-//     }
-
-//     [
-
-//       ['bar | foobar: { foo }', { foo: 'bar' }],
-//       ['bar | foobar: { foo }', { foo: 'bar' }, { foobar: { foo: 'bar' } }],
-//       ['bar | foobar: { foo } | 123: { num }', { foo: 'bar', num: 123 }, { foobar: { foo: 'bar' }, 123: { num: 123 } }],
-
-//     ].forEach((test_case) => _runTestCase.apply(null, test_case))
-//   })
 
 //   const eval_test_suites = {
 
