@@ -21,4 +21,4 @@ console.log( JSON5.stringify( parseHTML(`
         <div id="mw-content-text" lang="es" dir="ltr" class="mw-content-ltr"><table style="margin:4px 0 0 0; width:100%; background:none">
 <tr>
 <td class="MainPageBG" style="width:100%; border:1px solid #C7D0F8; background:#F2F5FD; vertical-align:top; color:#000; -moz-border-radius:4px; -webkit-border-radius: 4px; border-radius: 4px;">
-`, { ignore_unclosed: true }), null, '  ' ) )
+`, { ignore_unclosed: true }), null, '  '))

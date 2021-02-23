@@ -52,6 +52,12 @@ mocha: node_modules
 nyc-mocha: # p.e: make nyc-mocha NYC_REPORTERS="--reporter=lcov --reporter=text"
 	nyc ${NYC_REPORTERS} $(MAKE) mocha
 
+jest:
+	jest --testPathPattern '.+\.spec\.js' --verbose
+
+nyc-jest:
+	nyc ${NYC_REPORTERS} $(MAKE) jest
+
 test: lint nyc-mocha
 
 lcov:

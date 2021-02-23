@@ -13,27 +13,27 @@ function _parseTag (tag_str, options) {
 
   tag_str
     .replace(/^<|>$/g, '')
-    .replace(/ *\/$/, function () {
+    .replace(/ *\/$/, () => {
       delete node.unclosed
       node.self_closed = true
       return ''
     })
-    .replace(/^\//, function () {
-      if( node.self_closed ) throw new Error('tag closer self_closed: ' + tag_str )
+    .replace(/^\//, () => {
+      if (node.self_closed) throw new Error('tag closer self_closed: ' + tag_str)
       node.closer = true
       return ''
     })
-    .replace(/^[^ ]+/, function (node_name) {
+    .replace(/^[^ ]+/, node_name => {
       node.tag = node_name.trim()
-      if( /^!/.test(node_name) ) node.warn = true
+      if (/^!/.test(node_name)) node.warn = true
       return ''
     })
     .replace(/\b([^= ]+)\s*=\s*"([^"]*?)"/g, _replaceQuote)
     .replace(/\b([^= ]+)\s*=\s*'([^']*?)'/g, _replaceQuote)
     .split(/ +/)
-    .forEach(function (empty_attr) {
+    .forEach(empty_attr => {
       empty_attr = empty_attr.trim()
-      if( !empty_attr ) return
+      if (!empty_attr) return
       node.attrs[empty_attr] = ''
     })
 
@@ -45,19 +45,19 @@ function _trimText (text) {
 }
 
 function _fixTokens (tokens) {
-  var fixed_tokens = [ tokens[0] ],
-      close_double_quote = false,
-      close_single_quote = false
+  var fixed_tokens = [tokens[0]]
+  var close_double_quote = false
+  var close_single_quote = false
 
-  for( var i = 1, n = tokens.length; i < n ; i++ ) {
+  for (var i = 1, n = tokens.length; i < n; i++) {
     // if( /="[^"]+>$/.test(tokens[i]) ) {
     //   // fixed_tokens[fixed_tokens.length - 1] += tokens[i];
     //   fixed_tokens[fixed_tokens.length - 1] += tokens[i];
     //   close_next = true;
     // } else
 
-    if( close_single_quote ) {
-      if( /'/.test(tokens[i]) ) {
+    if (close_single_quote) {
+      if (/'/.test(tokens[i])) {
         close_double_quote = false
         tokens[i].replace(/([^']*'[^>]*>)(.*)/, function (_matched, tail, next) {
           fixed_tokens[fixed_tokens.length - 1] += tail
@@ -66,8 +66,8 @@ function _fixTokens (tokens) {
       } else {
         fixed_tokens[fixed_tokens.length - 1] += tokens[i]
       }
-    } else if( close_double_quote ) {
-      if( /"/.test(tokens[i]) ) {
+    } else if (close_double_quote) {
+      if (/"/.test(tokens[i])) {
         close_double_quote = false
         tokens[i].replace(/([^"]*"[^>]*>)(.*)/, function (_matched, tail, next) {
           fixed_tokens[fixed_tokens.length - 1] += tail
@@ -79,8 +79,8 @@ function _fixTokens (tokens) {
     } else {
       fixed_tokens.push(tokens[i])
     }
-    if( /="[^"]*>$/.test(tokens[i]) ) close_double_quote = true
-    else if( /='[^']*>$/.test(tokens[i]) ) close_single_quote = true
+    if (/="[^"]*>$/.test(tokens[i])) close_double_quote = true
+    else if (/='[^']*>$/.test(tokens[i])) close_single_quote = true
   }
 
   return fixed_tokens
@@ -89,7 +89,7 @@ function _fixTokens (tokens) {
 function _tokenize (html) {
   // var tokens = html.split(/(<[^>]+?>)/g);
 
-  return _fixTokens( html.split(/(<[^>]+?>)/g) )
+  return _fixTokens(html.split(/(<[^>]+?>)/g))
 }
 
 function _parseHTML (html, nodes, node_opened, options) {
@@ -98,19 +98,18 @@ function _parseHTML (html, nodes, node_opened, options) {
   const tokens = _tokenize(html)
 
   tokens.forEach(function (token, i) {
-
-    if( !(i%2) ) {
-      if( /\S/.test(token) ) node_opened.content.push( _trimText(token) )
+    if (!(i % 2)) {
+      if (/\S/.test(token)) node_opened.content.push(_trimText(token))
       return
     }
 
     const node = _parseTag(token, options)
 
-    if( node.closer ) {
-      if( node.tag !== node_opened.tag && !options.ignore_bad_closed ) throw new Error('tag closer \'' + node.tag + '\' for \'' + node_opened.tag + '\'' )
+    if (node.closer) {
+      if (node.tag !== node_opened.tag && !options.ignore_bad_closed) throw new Error('tag closer \'' + node.tag + '\' for \'' + node_opened.tag + '\'')
       delete node_opened.unclosed
       node_opened = node_opened._parent
-    } else if( node.self_closed ) {
+    } else if (node.self_closed) {
       node_opened.content.push(node)
     } else {
       node._parent = node_opened
@@ -118,7 +117,6 @@ function _parseHTML (html, nodes, node_opened, options) {
       node_opened.content.push(node)
       node_opened = node
     }
-
   })
 
   return {
@@ -133,7 +131,7 @@ var full_content_tags = [
   'code',
 ]
 
-var RE_full_content = new RegExp( '(' + '<!--|-->|' + full_content_tags.map(function (tag_name) {
+var RE_full_content = new RegExp('(' + '<!--|-->|' + full_content_tags.map(function (tag_name) {
   return '<' + tag_name + '[^>]*>|<\\/' + tag_name + '>'
 }).join('|') + ')', 'g')
 
@@ -146,66 +144,61 @@ function _cleanNodes (nodes) {
     delete node.match_closer
 
     // cleaning empty attributes
-    if( node.attrs && Object.keys(node.attrs).length === 0 ) delete node.attrs
+    if (node.attrs && Object.keys(node.attrs).length === 0) delete node.attrs
 
     // cleaning empty children
-    if( node.content instanceof Array ) {
-      if( !node.content.length ) delete node.content
+    if (node.content instanceof Array) {
+      if (!node.content.length) delete node.content
       // else if( node.content.length === 1 && typeof node.content[0] === 'string' ) node.content = node.content[0]
       else _cleanNodes(node.content)
     }
-
   })
   return nodes
 }
 
 export default function parseHTML (html, options) {
-
-  var tag_opened = null,
-      nodes = [],
-      last_parse = { node_opened: { content: nodes } }
+  var tag_opened = null
+  var nodes = []
+  var last_parse = { node_opened: { content: nodes } }
 
   options = options || {}
 
   _fixTokens(html.split(RE_full_content)).forEach(function (token, i) {
-
-    if( !(i%2) ) {
-      if( tag_opened ) {
-        if( 'comments' in tag_opened ) tag_opened.comments += token
+    if (!(i % 2)) {
+      if (tag_opened) {
+        if ('comments' in tag_opened) tag_opened.comments += token
         // else if( typeof tag_opened.content === 'string' ) tag_opened.content += token
         else tag_opened.content = [token]
       } else last_parse = _parseHTML(token, nodes, last_parse.node_opened || { tag: '__root__', content: nodes }, options)
       return
     }
 
-
-    if( tag_opened ) {
-      if( tag_opened.match_closer.test(token) ) {
+    if (tag_opened) {
+      if (tag_opened.match_closer.test(token)) {
         delete tag_opened.unclosed
         tag_opened = null
       } else {
-        if( 'comments' in tag_opened ) tag_opened.comments += token
+        if ('comments' in tag_opened) tag_opened.comments += token
         // else if( typeof tag_opened.content === 'string' ) tag_opened.content += token
         else tag_opened.content = [token]
       }
     } else {
-      if( token === '<!--' ) tag_opened = { comments: '', match_closer: /^-->$/, unclosed: true }
+      if (token === '<!--') tag_opened = { comments: '', match_closer: /^-->$/, unclosed: true }
       else {
         tag_opened = _parseTag(token, options)
         tag_opened.match_closer = new RegExp('^<\\/ *' + tag_opened.tag + ' *>$')
       }
 
-      if( token === '-->' && !options.ignore_bad_closed ) throw new Error('unexpected comments closer \'-->\'')
-      if( tag_opened.closer && !options.ignore_bad_closed ) throw new Error('unexpected tag closer \'' + token + '\'')
+      if (token === '-->' && !options.ignore_bad_closed) throw new Error('unexpected comments closer \'-->\'')
+      if (tag_opened.closer && !options.ignore_bad_closed) throw new Error('unexpected tag closer \'' + token + '\'')
 
-      if( !('comments' in tag_opened) || !options.remove_comments ){
+      if (!('comments' in tag_opened) || !options.remove_comments) {
         last_parse.node_opened.content.push(tag_opened)
       }
     }
-
   })
 
-  if( !options.ignore_unclosed && last_parse.node_opened && last_parse.node_opened.unclosed && !last_parse.node_opened.warn ) {
+  if (!options.ignore_unclosed && last_parse.node_opened && last_parse.node_opened.unclosed && !last_parse.node_opened.warn) {
     throw new Error('tag unclosed \'' + last_parse.node_opened.tag + '\'')
   }
 
