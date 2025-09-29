@@ -1,0 +1,30 @@
+{
+  "name": "triskel",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/triskeljs/triskel.git"
+  },
+  "author": "Jesús Germade <jesus@germade.es>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/triskeljs/triskel/issues"
+  },
+  "homepage": "https://github.com/triskeljs/triskel#readme",
+  "dependencies": {
+    "vitest": "^3.2.4"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.36.0",
+    "eslint": "^9.36.0",
+    "globals": "^16.4.0",
+    "jiti": "^2.6.0",
+    "typescript-eslint": "^8.44.1"
+  }
+}
