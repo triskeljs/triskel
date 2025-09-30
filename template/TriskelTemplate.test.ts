@@ -117,7 +117,7 @@ describe('TriskelTemplate', () => {
       type: 'expression',
       func: (expr, { evalExpression }) => (evalExpression(expr) as { firstName: string })['firstName'] || '',
     })
-    const result = tpl.eval('Hi $firstName{person}', { person: { firstName: 'Alice' } })
+    const result = tpl.evalSync('Hi $firstName{person}', { person: { firstName: 'Alice' } })
     expect(result).toBe('Hi Alice')
   })
 
@@ -127,7 +127,7 @@ describe('TriskelTemplate', () => {
       type: 'closure',
       func: (expr, { evalExpression, getContent }) => evalExpression(expr) ? getContent({}) : '',
     })
-    const result = tpl.eval(':if{true}Hello:end{if}')
+    const result = tpl.evalSync(':if{true}Hello:end{if}')
     expect(result).toBe('Hello')
   })
 
@@ -137,7 +137,23 @@ describe('TriskelTemplate', () => {
       type: 'closure',
       func: (expr, { evalExpression, getContent }) => evalExpression(expr) ? getContent({}) : '',
     })
-    const result = tpl.eval(':if{true}Yes :if{false}No:end{if} End:end{if}')
+    const result = tpl.evalSync(':if{true}Yes :if{false}No:end{if} End:end{if}')
     expect(result).toBe('Yes  End')
+  })
+
+  it('evaluates expression with filters', () => {
+    const tpl = new TriskelTemplate({
+      filters: {
+        upper: (str: unknown) => String(str).toUpperCase(),
+      },
+    })
+    tpl.defineCmd('greet', {
+      type: 'expression',
+      func: (expr, { evalExpression }) => `Hello ${String(evalExpression(expr) || '')}!`,
+    })
+    
+    expect(
+      tpl.evalSync('$greet{name | upper}', { name: 'world' })
+    ).toBe('Hello WORLD!')
   })
 })

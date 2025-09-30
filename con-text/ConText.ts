@@ -3,6 +3,7 @@
 import {
   parseExpression,
   evalExpression,
+  type ExpressionFilter,
 } from './expression.js'
 
 export interface FilterFunction {
@@ -56,19 +57,34 @@ export class ConText {
     this.filters[name] = func
   }
 
+  applyFilters (value: unknown, filters: ExpressionFilter[]): unknown {
+    return filters.reduce((acc, filter) => {
+      const filterFunc = this.filters[filter.name] || this.toPlainObject()[filter.name] as FilterFunction
+      if (!filterFunc) {
+        throw new Error(`Filter "${filter.name}" is not defined`)
+      }
+      const filterData = filter.expression ? evalExpression(filter.expression, this.toPlainObject()) : undefined
+      return filterFunc(acc, filterData as Record<string, unknown>)
+    }, value)
+  }
+
   eval (fullExpression: string): unknown {
     const { expression, filters } = parseExpression(fullExpression)
     const plainData = this.toPlainObject()
     const result = evalExpression(expression, plainData)
 
-    return filters.reduce((acc, filter) => {
-      const filterFunc = this.filters[filter.name] || plainData[filter.name] as FilterFunction
-      if (!filterFunc) {
-        throw new Error(`Filter "${filter.name}" is not defined`)
-      }
-      const filterData = filter.expression ? evalExpression(filter.expression, plainData) : undefined
-      return filterFunc(acc, filterData as Record<string, unknown>)
-    }, result)
+    return this.applyFilters(result, filters)
+  }
+
+  evalNoApplyFilters (fullExpression: string): unknown {
+    const { expression, filters } = parseExpression(fullExpression)
+    const plainData = this.toPlainObject()
+    const result = evalExpression(expression, plainData)
+
+    return {
+      result,
+      applyFilters: (value: unknown) => this.applyFilters(value, filters),
+    }
   }
 }
 

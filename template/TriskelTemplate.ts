@@ -138,17 +138,17 @@ export const raiseAST = (ast: TemplateAST, tt: TriskelTemplate): TemplateAST => 
 }
 
 interface CmdFunctionOptions {
-  evalExpression: (_expr: string) => unknown
-  getContent: (_data: Record<string, unknown>) => string
-  getAlt: (_name: string) => string
-  next: () => string
+  evalExpression: (_expr: string) => unknown | Promise<unknown>
+  getContent: (_data: Record<string, unknown>) => string | Promise<string>
+  getAlt: (_name: string) => string | Promise<string>
+  next: () => string | Promise<string>
 }
 
 export interface CmdFunction {
   (_expression: string, _options: CmdFunctionOptions): unknown
 }
 
-export const evalAST = (ast: TemplateAST, context: ConText, tt: TriskelTemplate, alts: TemplateCmd[] | null = null): string => {
+export const evalASTsync = (ast: TemplateAST, context: ConText, tt: TriskelTemplate, alts: TemplateCmd[] | null = null): string => {
   const runCmd = (node: TemplateCmd) => {
     const cmdDef = tt.cmds[node.cmd]
 
@@ -161,12 +161,17 @@ export const evalAST = (ast: TemplateAST, context: ConText, tt: TriskelTemplate,
     }
 
     return cmdDef.func(node.expression, {
+      // evalExpression: expression => {
+      //   const { result, applyFilters } = context.evalNoApplyFilters(expression)
+
+      //   return result
+      // },
       evalExpression: expression => context.eval(expression),
       getContent: (data) => {
         if (cmdDef.type === 'expression') return ''
 
         const subContext = context.extend(data)
-        return evalAST(node.children || [], subContext, tt)
+        return evalASTsync(node.children || [], subContext, tt)
       },
       getAlt: (name: string) => {
         if (cmdDef.type === 'expression') return ''
@@ -174,7 +179,7 @@ export const evalAST = (ast: TemplateAST, context: ConText, tt: TriskelTemplate,
         const [altNode, ...restAlts] = [...node.alts?.[name] || []]
 
         return altNode
-          ? evalAST(altNode.children || [], context, tt, restAlts)
+          ? evalASTsync(altNode.children || [], context, tt, restAlts)
           : ''
       },
       next: () => {
@@ -183,7 +188,7 @@ export const evalAST = (ast: TemplateAST, context: ConText, tt: TriskelTemplate,
         const [altNode, ...restAlts] = [...alts || []]
 
         return altNode
-          ? evalAST(altNode.children || [], context, tt, restAlts)
+          ? evalASTsync(altNode.children || [], context, tt, restAlts)
           : ''
       },
     })
@@ -193,6 +198,55 @@ export const evalAST = (ast: TemplateAST, context: ConText, tt: TriskelTemplate,
     if (typeof node === 'string') return node
     return runCmd(node)
   }).join('')
+}
+
+export const evalAST = async (ast: TemplateAST, context: ConText, tt: TriskelTemplate, alts: TemplateCmd[] | null = null): Promise<string> => {
+  const runCmd = async (node: TemplateCmd) => {
+    const cmdDef = tt.cmds[node.cmd]
+
+    if (!cmdDef) {
+      throw new Error(`Command "${node.cmd}" is not defined`)
+    }
+
+    if (cmdDef.type !== node.type) {
+      throw new Error(`Command "${node.cmd}" is not a ${node.type} command`)
+    }
+
+    return await cmdDef.func(node.expression, {
+      evalExpression: expression => context.eval(expression),
+      getContent: async (data) => {
+        if (cmdDef.type === 'expression') return ''
+
+        const subContext = context.extend(data)
+        return await evalAST(node.children || [], subContext, tt)
+      },
+      getAlt: async (name: string) => {
+        if (cmdDef.type === 'expression') return ''
+
+        const [altNode, ...restAlts] = [...node.alts?.[name] || []]
+
+        return altNode
+          ? await evalAST(altNode.children || [], context, tt, restAlts)
+          : ''
+      },
+      next: async () => {
+        if (cmdDef.type === 'expression') return ''
+
+        const [altNode, ...restAlts] = [...alts || []]
+
+        return altNode
+          ? await evalAST(altNode.children || [], context, tt, restAlts)
+          : ''
+      },
+    })
+  }
+
+  const results = await Promise.all(ast.map(async node => {
+    if (typeof node === 'string') return node
+    return await runCmd(node)
+  }))
+
+  return results.join('')
 }
 
 export interface TriskelCmdOptions {
@@ -233,13 +287,12 @@ export class TriskelTemplate {
     return this
   }
 
-  eval (expression: string, context: ConText | Record<string, unknown> = {}): string {
+  evalSync (expression: string, data = {}): string {
     const ast = raiseAST(splitTokens(expression), this)
-    const _context = context instanceof ConText ? context : new ConText(context)
-
-    return evalAST(
+    
+    return evalASTsync(
       ast,
-      _context,
+      this.context.extend(data),
       this,
     )
   }
