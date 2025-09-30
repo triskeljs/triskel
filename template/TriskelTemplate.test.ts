@@ -80,6 +80,32 @@ describe('splitTokens', () => {
       },
     ])
   })
+
+  // it('ignores js string literals', () => {
+  //   const template = '$cmd{ "string with } brace" } and more text'
+  //   const ast = splitTokens(template)
+  //   expect(ast).toEqual([
+  //     {
+  //       type: 'expression',
+  //       cmd: 'cmd',
+  //       expression: ` 'string with } brace' `,
+  //     },
+  //     ' and more text',
+  //   ])
+  // })
+
+  // it('ignores js string expressions', () => {
+  //   const template = '$cmd{ `template with ${value} and } brace` } and more text'
+  //   const ast = splitTokens(template)
+  //   expect(ast).toEqual([
+  //     {
+  //       type: 'expression',
+  //       cmd: 'cmd',
+  //       expression: ' `template with ${value} and } brace` ',
+  //     },
+  //     ' and more text',
+  //   ])
+  // })
 })
 
 describe('raiseAST', () => {
@@ -220,7 +246,7 @@ describe('TriskelTemplate', () => {
     })
     tpl.defineCmd('greet', {
       type: 'expression',
-      func: (expr, { evalExpression }) => `Hello ${String(evalExpression(expr) || '')}!`,
+      func: (expr, { evalExpression }) => `Hello ${evalExpression(expr) || ''}!`,
     })
     
     expect(

@@ -12,7 +12,7 @@ export interface TemplateCmd {
 type TemplateAST = (TemplateCmd | string)[]
 
 export const parseCmd = (token: string): TemplateCmd => {
-  const [, type, cmd, expression] = token.match(/^([:$])(\w*){(.*)}$/s) || []
+  const [, type, cmd, expression] = token.match(/^([:$])(\w+){(.*)}$/s) || []
 
   return {
     type: type === ':' ? 'closure' : 'expression',
@@ -21,7 +21,7 @@ export const parseCmd = (token: string): TemplateCmd => {
   } as TemplateCmd
 }
 
-export const splitTokens = (template: string, { regex = /([:$]\w*{|{|})/g } = {}): TemplateAST => {
+export const splitTokens = (template: string, { regex = /([:$]\w+{|{|})/g } = {}): TemplateAST => {
   const parts = template.split(regex)
   const result = []
 
