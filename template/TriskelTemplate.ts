@@ -67,13 +67,15 @@ export const splitTokens = (template: string, { regex = /([:$]\w*{|{|})/g } = {}
 export const raiseAST = (ast: TemplateAST, tt: TriskelTemplate): TemplateAST => {
   const raisedAST: TemplateAST = []
   let currentNode: TemplateCmd | null = null
+  let currentNodeAlt : TemplateCmd | null = null
   const previousNodes: TemplateCmd[] = []
 
   ast.forEach(node => {
     if (typeof node === 'string') {
-      if (currentNode) {
-        currentNode.children ||= []
-        currentNode.children.push(node)
+      const _cNode = currentNodeAlt || currentNode
+      if (_cNode) {
+        _cNode.children ||= []
+        _cNode.children.push(node)
         return
       }
       raisedAST.push(node)
@@ -93,6 +95,7 @@ export const raiseAST = (ast: TemplateAST, tt: TriskelTemplate): TemplateAST => 
         throw new Error(`Unexpected closing tag for command "${cmdEnd}"`)
       }
       currentNode = previousNodes.pop() || null
+      currentNodeAlt = null
       return
     }
 
@@ -107,9 +110,10 @@ export const raiseAST = (ast: TemplateAST, tt: TriskelTemplate): TemplateAST => 
     }
 
     if (node.type === 'expression') {
-      if (currentNode) {
-        currentNode.children ||= []
-        currentNode.children.push({ ...node })
+      const _cNode = currentNodeAlt || currentNode
+      if (_cNode) {
+        _cNode.children ||= []
+        _cNode.children.push({ ...node })
         return
       }
       raisedAST.push({ ...node })
@@ -119,13 +123,14 @@ export const raiseAST = (ast: TemplateAST, tt: TriskelTemplate): TemplateAST => 
     if (currentNode && tt.cmds[currentNode.cmd]?.altCmds?.includes(node.cmd)) {
       currentNode.alts ||= {}
       currentNode.alts[node.cmd] ||= []
-      currentNode.alts[node.cmd]?.push({
+
+      currentNodeAlt = {
         type: node.type,
         cmd: node.cmd,
         expression: node.expression,
         children: [],
-      } as TemplateCmd)
-
+      }
+      currentNode.alts[node.cmd]?.push(currentNodeAlt)
       return
     }
 
@@ -283,6 +288,12 @@ export class TriskelTemplate {
       : options
     this.cmds[cmd] = { type, altCmds, func }
     return this
+  }
+
+  async eval (expression: string, data = {}): Promise<string> {
+    const ast = raiseAST(splitTokens(expression), this)
+
+    return await evalAST(ast, this.context.extend(data), this)
   }
 
   evalSync (expression: string, data = {}): string {
