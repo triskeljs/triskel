@@ -1,5 +1,5 @@
 
-import ConText, { type FilterFunction } from '../con-text/ConText.js'
+import ConText, { type FilterFunction, type EvalNoApplyFiltersResult } from '../con-text/ConText.js'
 
 export interface TemplateCmd {
   type: 'closure' | 'expression'
@@ -139,6 +139,7 @@ export const raiseAST = (ast: TemplateAST, tt: TriskelTemplate): TemplateAST => 
 
 interface CmdFunctionOptions {
   evalExpression: (_expr: string) => unknown | Promise<unknown>
+  evalExpressionNoApplyFilters: (_expr: string) => EvalNoApplyFiltersResult | Promise<EvalNoApplyFiltersResult>
   getContent: (_data: Record<string, unknown>) => string | Promise<string>
   getAlt: (_name: string) => string | Promise<string>
   next: () => string | Promise<string>
@@ -161,12 +162,8 @@ export const evalASTsync = (ast: TemplateAST, context: ConText, tt: TriskelTempl
     }
 
     return cmdDef.func(node.expression, {
-      // evalExpression: expression => {
-      //   const { result, applyFilters } = context.evalNoApplyFilters(expression)
-
-      //   return result
-      // },
       evalExpression: expression => context.eval(expression),
+      evalExpressionNoApplyFilters: expression => context.evalNoApplyFilters(expression),
       getContent: (data) => {
         if (cmdDef.type === 'expression') return ''
 
@@ -213,7 +210,8 @@ export const evalAST = async (ast: TemplateAST, context: ConText, tt: TriskelTem
     }
 
     return await cmdDef.func(node.expression, {
-      evalExpression: expression => context.eval(expression),
+      evalExpression: async expression => await context.eval(expression),
+      evalExpressionNoApplyFilters: async expression => await context.evalNoApplyFilters(expression),
       getContent: async (data) => {
         if (cmdDef.type === 'expression') return ''
 

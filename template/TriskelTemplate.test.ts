@@ -1,6 +1,7 @@
 
 import { describe, it, expect } from 'vitest'
 import TriskelTemplate, { splitTokens, raiseAST, evalAST, TemplateCmd } from './TriskelTemplate.js'
+import { EvalNoApplyFiltersResult } from '../con-text/ConText.js'
 
 describe('splitTokens', () => {
   it('splits template into tokens and commands', () => {
@@ -155,5 +156,25 @@ describe('TriskelTemplate', () => {
     expect(
       tpl.evalSync('$greet{name | upper}', { name: 'world' })
     ).toBe('Hello WORLD!')
+  })
+
+  it('evaluates expression with post-filters', () => {
+    const tpl = new TriskelTemplate({
+      filters: {
+        upper: (str: unknown) => String(str).toUpperCase(),
+      },
+    })
+    tpl.defineCmd('greet', {
+      type: 'expression',
+      func: (expr, { evalExpressionNoApplyFilters }) => {
+        const { result, applyFilters } = evalExpressionNoApplyFilters(expr) as EvalNoApplyFiltersResult
+
+        return applyFilters(`Hello ${result}!`)
+      },
+    })
+    
+    expect(
+      tpl.evalSync('$greet{name | upper}', { name: 'world' })
+    ).toBe('HELLO WORLD!')
   })
 })

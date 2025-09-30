@@ -18,6 +18,11 @@ export function getPlainObject (obj: Record<string, unknown>): Record<string, un
     : { ...obj }
 }
 
+export type EvalNoApplyFiltersResult = {
+  result: unknown,
+  applyFilters: (_value: unknown) => unknown
+}
+
 export class ConText {
   data: Record<string, unknown>
   filters: Record<string, FilterFunction> = {}
@@ -76,7 +81,7 @@ export class ConText {
     return this.applyFilters(result, filters)
   }
 
-  evalNoApplyFilters (fullExpression: string): unknown {
+  evalNoApplyFilters (fullExpression: string): EvalNoApplyFiltersResult {
     const { expression, filters } = parseExpression(fullExpression)
     const plainData = this.toPlainObject()
     const result = evalExpression(expression, plainData)
